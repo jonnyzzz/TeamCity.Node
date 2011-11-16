@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="open_source" pattern="file[nuget-agent]:*/||file[nuget-common]:*/||file[nuget-server]:*/||file[nuget-tests]:*/" />
+</component>
