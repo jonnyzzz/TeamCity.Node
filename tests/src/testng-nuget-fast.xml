@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="PLUGIN tests">
+  <test name="PLUGIN tests">
+    <classes>
+      <class name="SimpleTest"/>
+    </classes>
+  </test>
+</suite>
+
