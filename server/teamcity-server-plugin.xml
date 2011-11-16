@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="urn:shemas-jetbrains-com:teamcity-plugin-v1-xml">
+  <info>
+    <name>PLUGIN_NAME</name>
+    <display-name>PLUGIN_DESCRIPTION</display-name>
+    <version>@Plugin_Version@</version> <!-- will be replaced from script -->
+    <vendor>
+      <name>@Plugin_Vendor@</name>  <!-- will be replaced from script -->
+      <url>@Plugin_Vendor_Url@</url> <!-- will be replaced from script -->
+    </vendor>
+  </info>
+  <deployment use-separate-classloader="true"/>
+</teamcity-plugin>

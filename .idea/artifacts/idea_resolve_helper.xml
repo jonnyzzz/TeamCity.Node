@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="idea-resolve-helper">
+    <output-path>$PROJECT_DIR$/out/artifacts/idea_resolve_helper</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="idea-resolve-helper/web/Web" />
+      <element id="module-output" name="idea-resolve-helper" />
+      <element id="javaee-facet-resources" facet="server/web/server" />
+    </root>
+  </artifact>
+</component>

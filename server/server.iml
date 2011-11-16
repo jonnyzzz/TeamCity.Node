@@ -4,7 +4,7 @@
     <facet type="Spring" name="Spring">
       <configuration />
     </facet>
-    <facet type="web" name="Web">
+    <facet type="web" name="server">
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/resources" relative="/plugins/SPECIAL_NAME" />
