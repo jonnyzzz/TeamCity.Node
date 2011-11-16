@@ -11,6 +11,7 @@ In this sample you will find:
 -- server plugin web resources (with pre-configured IDEA settings to support references to TeamCity)
 - Uses $TeamCityDistribution$ IDEA path variable as path to TeamCity home (unpacked .tar.gz or .exe distribution)
 - Bunch of libraries for most recent needed TeamCity APIs
+- Module with TestNG tests that uses TeamCity Tests API
 
 
 What's next? 
