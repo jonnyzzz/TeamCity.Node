@@ -22,7 +22,6 @@
     <orderEntry type="library" scope="RUNTIME" name="TeamCity agent runtime" level="project" />
     <orderEntry type="library" name="Common-Impl" level="project" />
     <orderEntry type="library" name="Server-Api" level="project" />
-    <orderEntry type="library" name="commons-http" level="project" />
     <orderEntry type="library" name="Idea-OpenApi" level="project" />
     <orderEntry type="library" name="Servlet Api" level="project" />
   </component>
