@@ -22,6 +22,17 @@ What's next?
  - Have fun!
 
 
+Steps to copy start with a given repository
+===========================================
+ - call git init or create new repo and local copy
+ - git remote add template git://github.com/jonnyzzz/TeamCity.PluginTemplate.git
+ - git fetch template
+ - git merge template/master
+ - git remote rm template
+Those steps makes you repo contain default template indise. 
+It's most easiest way to start.
+
+
 License:
 =========
 You may do what ever you like with those sources. 
