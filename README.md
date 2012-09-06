@@ -22,6 +22,7 @@ What's next?
  - Change project name in IDEA
  - Create 'src' folder in module 'server'
  - Create 'src/META-INF/build-server-plugin-PLUGIN_NAME.xml' to declare plugin spring beans
+ - Update plugin .jar file names in 'plugin' artifact
  - Have fun!
 
 
