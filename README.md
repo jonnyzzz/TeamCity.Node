@@ -1,6 +1,6 @@
 This is sample IDEA project for creating plugins for TeamCity.
 
-In this sample you will find:
+In this sample you will find
 =============================
 - TeamCity server plugin
 - With teamcity-plugin.xml
@@ -17,8 +17,11 @@ In this sample you will find:
 What's next? 
 =============
  - Fork this repository, 
- - Rename plugin jar's with right name 
-   (replace PLUGIN with your plugin name in artifacts and teamcity-server-plugin.xml)
+ - Rename plugin jar's name in 'plugin' artifact in IDEA
+ - Update teamcity-server-plugin.xml to put plugin name, plugin display name and description
+ - Change project name in IDEA
+ - Create 'src' folder in module 'server'
+ - Create 'src/META-INF/build-server-plugin-PLUGIN_NAME.xml' to declare plugin spring beans
  - Have fun!
 
 
@@ -33,7 +36,7 @@ Those steps makes you repo contain default template indise.
 It's most easiest way to start.
 
 
-License:
-=========
+License
+=======
 You may do what ever you like with those sources. 
 or I could also say the license is MIT.
