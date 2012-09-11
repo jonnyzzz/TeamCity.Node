@@ -1,4 +1,5 @@
-This is sample IDEA project for creating plugins for TeamCity.
+This is a IDEA project template to create a server-side only plugin for TeamCity
+For background information checkout any open-sourced plugins or see http://confluence.jetbrains.net/display/TCD65/Developing+TeamCity+Plugins
 
 In this sample you will find
 =============================
