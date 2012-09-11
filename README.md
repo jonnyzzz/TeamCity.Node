@@ -5,9 +5,7 @@ In this sample you will find
 - TeamCity server and agent plugin bindle
 - Plugin version will be patched if building with IDEA build runner in TeamCity
 - Run configuration `server` to run/debug plugin under TeamCity (use `http://localhost:8111/bs`)
-- One jar containing
--- server plugin classes
--- server plugin web resources (with pre-configured IDEA settings to support references to TeamCity)
+- pre-configured IDEA settings to support references to TeamCity
 - Uses `$TeamCityDistribution$` IDEA path variable as path to TeamCity home (unpacked .tar.gz or .exe distribution)
 - Bunch of libraries for most recent needed TeamCity APIs
 - Module with TestNG tests that uses TeamCity Tests API
@@ -30,7 +28,7 @@ Steps to fork template to a given repository
  - call git init or create new repo and local copy
  - git remote add template `git://github.com/jonnyzzz/TeamCity.PluginTemplate.git`
  - git fetch template
- - git merge template/master
+ - git merge template/serverAndAgent
  - git remote rm template
 
 Those steps makes you repo contain default template indise. 
