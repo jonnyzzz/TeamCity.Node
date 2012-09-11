@@ -43,6 +43,7 @@
     <orderEntry type="library" name="Idea-OpenApi" level="project" />
     <orderEntry type="library" name="Servlet Api" level="project" />
     <orderEntry type="library" name="spring" level="project" />
+    <orderEntry type="module" module-name="common" />
   </component>
 </module>
 

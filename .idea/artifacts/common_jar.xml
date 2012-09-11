@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="common-jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/common_jar</output-path>
+    <root id="root">
+      <element id="archive" name="PLUGIN_NAME-common.jar">
+        <element id="module-output" name="common" />
+      </element>
+    </root>
+  </artifact>
+</component>
