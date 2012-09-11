@@ -17,7 +17,6 @@
       <element id="directory" name="server">
         <element id="archive" name="PLUGIN_NAME-server.jar">
           <element id="module-output" name="server" />
-          <element id="javaee-facet-resources" facet="server/web/server" />
         </element>
         <element id="archive" name="PLUGIN_NAME-resources.jar">
           <element id="directory" name="buildServerResources">
