@@ -3,9 +3,9 @@ This is sample IDEA project for creating plugins for TeamCity.
 In this sample you will find
 =============================
 - TeamCity server plugin
-- With teamcity-plugin.xml
+- With `teamcity-plugin.xml`
 - Plugin version will be patched if building with IDEA build runner in TeamCity
-- Run configuration to run/debug plugin under TeamCity (use http://localhost:8111/bs)
+- Run configuration to run/debug plugin under TeamCity (use `http://localhost:8111/bs`)
 - One jar containing
 -- server plugin classes
 -- server plugin web resources (with pre-configured IDEA settings to support references to TeamCity)
@@ -18,17 +18,17 @@ What's next?
 =============
  - Fork this repository
  - Change project name in IDEA
- - Update 'teamcity-server-plugin.xml' to put plugin name, plugin display name and description
- - Rename 'server/src/META-INF/build-server-plugin-PLUGIN_NAME.xml' to put your plugin name here and update 'server/server.iml'
- - Update plugin .jar file name in 'plugin' artifact
- - Update plugin .zip file name in 'plugin-zip' artifact
+ - Update `teamcity-server-plugin.xml` to put plugin name, plugin display name and description
+ - Rename `server/src/META-INF/build-server-plugin-PLUGIN_NAME.xml` to put your plugin name here and update `server/server.iml`
+ - Update plugin .jar file name in `plugin` artifact
+ - Update plugin .zip file name in `plugin-zip` artifact
  - Have fun!
 
 
 Steps to fork template to a given repository
 ===========================================
  - call git init or create new repo and local copy
- - git remote add template git://github.com/jonnyzzz/TeamCity.PluginTemplate.git
+ - git remote add template `git://github.com/jonnyzzz/TeamCity.PluginTemplate.git`
  - git fetch template
  - git merge template/master
  - git remote rm template
