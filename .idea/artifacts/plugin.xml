@@ -9,11 +9,10 @@
     </properties>
     <root id="root">
       <element id="directory" name="server">
-        <element id="archive" name="sample-plugin-server.jar">
+        <element id="archive" name="PLUGIN_NAME-server.jar">
           <element id="module-output" name="server" />
-          <element id="javaee-facet-resources" facet="server/web/server" />
         </element>
-        <element id="archive" name="sample-plugin-resources.jar">
+        <element id="archive" name="PLUGIN_NAME-resources.jar">
           <element id="directory" name="buildServerResources">
             <element id="dir-copy" path="$PROJECT_DIR$/server/resources" />
           </element>
