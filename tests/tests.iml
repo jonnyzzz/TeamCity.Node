@@ -7,6 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="agent" />
+    <orderEntry type="module" module-name="common" />
     <orderEntry type="module" module-name="server" />
     <orderEntry type="library" name="Test-Api libs" level="project" />
     <orderEntry type="library" name="Test-Api" level="project" />
