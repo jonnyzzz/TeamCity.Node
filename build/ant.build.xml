@@ -6,7 +6,10 @@
 
     <echo message="replacing tokens in teamcity-plugin.xml file under ${home}"/>
 
-    <condition property="build.number" value="snapshot" else="${build.number}">
+    <tstamp>
+      <format property="current.time" pattern="yyyyMMddHHmm"/>
+    </tstamp>
+    <condition property="build.number" value="SNAPSHOT-${current.time}" else="${build.number}">
       <not>
         <isset property="build.number"/>
       </not>
