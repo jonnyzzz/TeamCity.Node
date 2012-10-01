@@ -1,12 +1,12 @@
 <project name="build hooks" default="replace-tokens-in-teamcity-plugin-xml" basedir=".">
 
 
-  <target name="replace-tokens-in-teamcity-plugin-xml">
+  <target name="replace-tokens-in-teamcity-plugin-xml" depends="define.version">
     <property name="home" value="${artifact.output.path}"/>
 
     <echo message="replacing tokens in teamcity-plugin.xml file under ${home}"/>
 
-    <condition property="build.number" value="snapshot" else="${build.number}">
+    <condition property="build.number" value="${plugin.version}" else="${build.number}">
       <not>
         <isset property="build.number"/>
       </not>
@@ -21,6 +21,13 @@
       <replacefilter token="@Plugin_Vendor@" value="JetBrains, s.r.o."/>
       <replacefilter token="@Plugin_Vendor_Url@" value="http://www.jetbrains.com"/>
     </replace>
+  </target>
+  
+  <target name="define.version">
+   <tstamp>
+    <format property="current.time" pattern="yyyyMMddHHmm"/>
+   </tstamp>
+   <property name="plugin.version" value="SNAPSHOT-${current.time}"/>
   </target>
 
 </project>
