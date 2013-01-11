@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="plugin-zip">
+    <output-path>$PROJECT_DIR$/out/artifacts/plugin_zip</output-path>
+    <root id="root">
+      <element id="archive" name="PLUGIN_NAME.zip">
+        <element id="artifact" artifact-name="plugin" />
+      </element>
+    </root>
+  </artifact>
+</component>

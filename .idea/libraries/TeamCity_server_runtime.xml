@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="TeamCity server runtime">
+    <CLASSES>
+      <root url="file://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib" recursive="false" />
+  </library>
+</component>

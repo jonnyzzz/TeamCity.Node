@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="log4j">
+    <CLASSES>
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

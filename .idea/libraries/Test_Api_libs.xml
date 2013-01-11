@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Test-Api libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jmock/jmock-core-1.2.0.jar!/" />
+      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/xmlrpc-2.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
