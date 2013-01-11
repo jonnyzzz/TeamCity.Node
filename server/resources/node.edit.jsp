@@ -19,5 +19,68 @@
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.server.NodeBean"/>
 
-edit form
+<forms:workingDirectory/>
+
+<tr>
+  <th>Script:</th>
+  <td>
+    <props:selectProperty name="${bean.executionModeKey}" id="nodeExecutionMode" className="longField">
+      <c:forEach var="mode" items="${bean.executionModeValues}">
+        <props:option value="${mode.value}"><c:out value="${mode.description}"/></props:option>
+      </c:forEach>
+    </props:selectProperty>
+    <span class="error" id="error_${bean.executionModeKey}"></span>
+  </td>
+</tr>
+
+<tr id="jonnyzzz_node_${bean.executionModeFile.parameter}">
+  <th><label for="${bean.executionModeFile.parameter}">Script file:</label></th>
+  <td>
+    <props:textProperty name="${bean.executionModeFile.parameter}" className="longField"/>
+    <span class="smallNote">Path to JavaScript, relative to the checkout directory</span>
+    <span class="error" id="error_${bean.executionModeFile.parameter}"></span>
+  </td>
+</tr>
+
+<tr id="jonnyzzz_node_${bean.executionModeScript.parameter}">
+  <th><label for="${bean.executionModeScript.parameter}">Script source:</label></th>
+  <td>
+    <props:multilineProperty name="${bean.executionModeScript.parameter}"
+                             linkTitle="JavaScript to Execute"
+                             cols="58" rows="10"
+                             expanded="${true}"/>
+    <span class="smallNote">Enter contents of a JavaScript. TeamCity references will be replaced in the code</span>
+    <span class="error" id="error_${bean.executionModeScript.parameter}"></span>
+  </td>
+</tr>
+
+<tr>
+  <th><label for="${bean.commandLineParameterKey}">Additional command line parameters:</label></th>
+  <td>
+    <props:multilineProperty name="${bean.commandLineParameterKey}"  cols="58" linkTitle="Expand" rows="5"/>
+    <span class="smallNote">Enter additional command line parameters to node.js. Put each parameter on a new line</span>
+    <span class="error" id="error_${bean.commandLineParameterKey}"></span>
+  </td>
+</tr>
+
+<script type="text/javascript">
+  (function() {
+    var update = function() {
+      var mode = $j("#nodeExecutionMode").val();
+
+      <c:forEach var="mode" items="${bean.executionModeValues}">
+        if (mode == "${mode.value}") {
+          $j("#jonnyzzz_node_${mode.parameter}").show();
+        } else {
+          $j("#jonnyzzz_node_${mode.parameter}").hide();
+        }
+      </c:forEach>
+      BS.MultilineProperties.updateVisible();
+    };
+
+    $j("#nodeExecutionMode").change(update);
+    $j(document).ready(update);
+  })();
+</script>
