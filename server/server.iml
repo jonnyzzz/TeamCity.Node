@@ -14,10 +14,10 @@
           <file>jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/common-impl.jar!/META-INF/shared-spring-sub-container.xml</file>
           <file>jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/common-impl.jar!/META-INF/plugin-model-shared-spring.xml</file>
           <file>file://$TeamCityDistribution$/webapps/ROOT/WEB-INF/buildServerSpringWeb.xml</file>
-          <file>file://$MODULE_DIR$/src/META-INF/build-server-plugin-PLUGIN_NAME.xml</file>
           <file>jar://$TeamCityDistribution$/buildAgent/lib/common-impl.jar!/META-INF/per-plugin-shared-spring.xml</file>
           <file>jar://$TeamCityDistribution$/buildAgent/lib/common-impl.jar!/META-INF/plugin-model-shared-spring.xml</file>
           <file>jar://$TeamCityDistribution$/buildAgent/lib/common-impl.jar!/META-INF/shared-spring-sub-container.xml</file>
+          <file>file://$MODULE_DIR$/src/META-INF/build-server-plugin-node.xml</file>
         </fileset>
       </configuration>
     </facet>
