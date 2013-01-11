@@ -8,12 +8,13 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor
 import jetbrains.buildServer.serverSide.RunType
 import jetbrains.buildServer.util.StringUtil
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
+import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 
 public open class NodeJsRunType(): RunTypeBase() {
   private val bean : NodeBean = NodeBean()
 
   public override fun getType(): String {
-    return NodeConstants.NODE_RUN_TYPE
+    return bean.RunType
   }
   public override fun getDisplayName(): String? {
     return "Node.js"

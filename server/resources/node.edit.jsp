@@ -19,9 +19,7 @@
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.server.NodeBean"/>
-
-<forms:workingDirectory/>
+<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NodeBean"/>
 
 <tr>
   <th>Script:</th>
@@ -55,6 +53,8 @@
     <span class="error" id="error_${bean.executionModeScript.parameter}"></span>
   </td>
 </tr>
+
+<forms:workingDirectory/>
 
 <tr>
   <th><label for="${bean.commandLineParameterKey}">Additional command line parameters:</label></th>

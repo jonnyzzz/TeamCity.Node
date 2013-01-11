@@ -1,4 +1,4 @@
-package com.jonnyzzz.teamcity.plugins.node.server
+package com.jonnyzzz.teamcity.plugins.node.common
 
 import org.springframework.ui.ExtendedModelMap
 
@@ -13,6 +13,7 @@ public class NodeBean {
   public val ExecutionModeFile: ExecutionModes = ExecutionModes.File
   public val ExecutionModeScript: ExecutionModes = ExecutionModes.Script
   public val CommandLineParameterKey : String = "node_execution_args"
+  public val RunType : String = "jonnyzzz.node"
 }
 
 public enum class ExecutionModes(val Value: String, val Parameter : String, val Description : String)
@@ -20,3 +21,5 @@ public enum class ExecutionModes(val Value: String, val Parameter : String, val 
   File : ExecutionModes("file", "node_file", "File");
   Script : ExecutionModes("script", "node_script_text", "Source Code")
 }
+
+val NodeJsConstants = NodeBean()

@@ -18,7 +18,7 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.server.NodeBean"/>
+<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NodeBean"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 <c:set var="nmode" value="${propertiesBean.properties[bean.executionModeKey]}"/>
 
