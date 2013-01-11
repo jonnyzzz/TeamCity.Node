@@ -37,6 +37,6 @@ public open class NodeJsRunType(): RunTypeBase() {
   }
 
   public override fun describeParameters(parameters: Map<String, String>): String {
-    return super<RunType>.describeParameters(parameters)
+    return super<RunTypeBase>.describeParameters(parameters)
   }
 }
