@@ -5,6 +5,7 @@
       <element id="archive" name="node-common.jar">
         <element id="module-output" name="common" />
       </element>
+      <element id="library" level="project" name="KotlinRuntime" />
     </root>
   </artifact>
 </component>
