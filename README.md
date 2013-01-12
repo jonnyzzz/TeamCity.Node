@@ -2,10 +2,13 @@ TeamCity Node plugin
 ====================
 
 This is a plugin for TeamCity that provides Node.js build runner. 
-
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
-
 Release builds are found under releases branch
+
+Features
+========
+Plugin detects system wide installed node.js and reports it's version as configuration parameter `node.js`
+There is also `node.js` build runner to run node.js on given .js file or javascript source code 
 
 License
 ==========
