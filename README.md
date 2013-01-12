@@ -20,6 +20,7 @@ Downloading Build
 =================
 
 There will be a build on TeamCity. TBD.
+For now, see `releases` branch for binary releases
 
 
 Building
