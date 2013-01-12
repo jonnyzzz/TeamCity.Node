@@ -1,8 +1,9 @@
 package com.jonnyzzz.teamcity.plugins.node.common
 
 import java.io.File
-import jetbrains.buildServer.util.FileUtil
 import org.apache.log4j.Logger
+import java.io.IOException
+
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -13,7 +14,12 @@ fun String?.isEmptyOrSpaces() : Boolean = com.intellij.openapi.util.text.StringU
 
 fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.StringUtil.splitHonorQuotes(this).filterNotNull()
 
-fun File.resolve(relativePath : String) : File = FileUtil.resolvePath(this, relativePath)
+fun File.resolve(relativePath : String) : File = jetbrains.buildServer.util.FileUtil.resolvePath(this, relativePath)
+
+data class TempFileName(val prefix : String, val suffix : String)
+fun File.tempFile(details : TempFileName) : File = com.intellij.openapi.util.io.FileUtil.createTempFile(this, details.prefix, details.suffix, true) ?: throw IOException("Failed to create temp file under ${this}")
+
+fun File.smartDelete() = com.intellij.openapi.util.io.FileUtil.delete(this)
 
 //we define this category to have plugin logging without logger configs patching
 inline fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
