@@ -1,5 +1,9 @@
 This is a plugin for TeamCity that provides Node.js build runner. 
 
+Plugin is implemented with (http://kotlin.jetbrains.org/)[JetBrains Kotlin]
+
+Release builds are found under releases branch
+
 License
 ==========
 Apache 2.0
