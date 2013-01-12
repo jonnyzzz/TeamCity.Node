@@ -1,7 +1,5 @@
 package com.jonnyzzz.teamcity.plugins.node.common
 
-import org.springframework.ui.ExtendedModelMap
-
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 11.01.13 23:44
@@ -13,7 +11,11 @@ public class NodeBean {
   public val ExecutionModeFile: ExecutionModes = ExecutionModes.File
   public val ExecutionModeScript: ExecutionModes = ExecutionModes.Script
   public val CommandLineParameterKey : String = "node_execution_args"
-  public val RunType : String = "jonnyzzz.node"
+  public val RunTypeName : String = "jonnyzzz.node"
+  public val NodeJSConfigurationParameter : String = "node.js"
+
+  public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
+   = ExecutionModeValues.filter { it.Value == parameters[ExecutionModeKey] }.first
 }
 
 public enum class ExecutionModes(val Value: String, val Parameter : String, val Description : String)
@@ -21,5 +23,3 @@ public enum class ExecutionModes(val Value: String, val Parameter : String, val 
   File : ExecutionModes("file", "node_file", "File");
   Script : ExecutionModes("script", "node_script_text", "Source Code")
 }
-
-val NodeJsConstants = NodeBean()

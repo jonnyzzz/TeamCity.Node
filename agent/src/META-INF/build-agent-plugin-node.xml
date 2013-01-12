@@ -7,12 +7,6 @@
         default-autowire="constructor"
         >
 
-  <!-- declare all beans you like Spring Dependency Injection to create -->
-  <!-- see http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/beans.html -->
-
-  <!-- sample: 
-  <bean class="bean class fully qualified name"/>
-  -->
-
-
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsService"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsDetector"/>
 </beans>

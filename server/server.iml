@@ -44,7 +44,6 @@
     <orderEntry type="library" name="Servlet Api" level="project" />
     <orderEntry type="library" name="spring" level="project" />
     <orderEntry type="module" module-name="common" />
-    <orderEntry type="library" name="KotlinRuntime" level="project" />
   </component>
 </module>
 

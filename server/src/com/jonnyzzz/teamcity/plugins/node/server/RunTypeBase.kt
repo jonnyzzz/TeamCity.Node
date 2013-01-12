@@ -9,11 +9,6 @@ public abstract class RunTypeBase(): RunType() {
   Autowired
   public var descriptor: PluginDescriptor? = null
 
-  public abstract override fun getType(): String
-  public abstract override fun getDisplayName(): String?
-  public abstract override fun getDescription(): String?
-  public abstract override fun getRunnerPropertiesProcessor(): PropertiesProcessor
-
   protected abstract fun getEditJsp(): String
   protected abstract fun getViewJsp(): String
 
