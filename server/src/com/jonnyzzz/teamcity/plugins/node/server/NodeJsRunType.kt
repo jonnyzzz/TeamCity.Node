@@ -10,7 +10,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 public class NodeJsRunType : RunTypeBase() {
   private val bean = NodeBean()
 
-  public override fun getType(): String = bean.RunTypeName
+  public override fun getType(): String = bean.runTypeName
   public override fun getDisplayName(): String? = "Node.js"
   public override fun getDescription(): String? = "Starts javascript files under Node.js runtime"
   protected override fun getEditJsp(): String = "node.edit.jsp"
@@ -24,11 +24,11 @@ public class NodeJsRunType : RunTypeBase() {
 
         val mode = bean.findExecutionMode(parameters)
         if (mode == null) {
-          result.add(InvalidProperty(bean.ExecutionModeKey, "Execution Mode must be selected"))
+          result.add(InvalidProperty(bean.executionModeKey, "Execution Mode must be selected"))
         } else {
-          val content = parameters[mode.Parameter]
+          val content = parameters[mode.parameter]
           if (content.isEmptyOrSpaces()) {
-            result.add(InvalidProperty(mode.Parameter, "${mode.Description} sbould not be empty"))
+            result.add(InvalidProperty(mode.parameter, "${mode.description} sbould not be empty"))
           }
         }
         return result;
@@ -40,10 +40,10 @@ public class NodeJsRunType : RunTypeBase() {
     var builder = StringBuilder()
     val mode = bean.findExecutionMode(parameters)
     if (mode != null) {
-      builder.append("Execute: ${mode.Description}\n")
+      builder.append("Execute: ${mode.description}\n")
 
-      if (mode == bean.ExecutionModeFile) {
-        builder.append("File: ${parameters[bean.ExecutionModeFile.Parameter]}")
+      if (mode == bean.executionModeFile) {
+        builder.append("File: ${parameters[bean.executionModeFile.parameter]}")
       }
     }
 
@@ -60,7 +60,7 @@ public class NodeJsRunType : RunTypeBase() {
     if (base != null) result.addAll(base)
 
     //for now there is the only option to use detected node.js
-    result.add(Requirement(bean.NodeJSConfigurationParameter, null, RequirementType.EXISTS))
+    result.add(Requirement(bean.nodeJSConfigurationParameter, null, RequirementType.EXISTS))
 
     return result
   }

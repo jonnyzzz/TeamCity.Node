@@ -40,7 +40,7 @@ public class NodeJsDetector(events : EventDispatcher<AgentLifeCycleListener>,
 
         val version = run.getStdout()//.trim()
         LOG.info("Node.js ${version} was detected")
-        config.addConfigurationParameter(bean.NodeJSConfigurationParameter, version)
+        config.addConfigurationParameter(bean.nodeJSConfigurationParameter, version)
       }
     })
   }

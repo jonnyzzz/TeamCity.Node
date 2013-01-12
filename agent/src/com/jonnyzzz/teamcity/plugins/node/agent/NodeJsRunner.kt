@@ -20,7 +20,7 @@ public class NodeJsRunnerService : CommandLineBuildServiceFactory {
   }
 
   public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
-    public override fun getType(): String = bean.RunTypeName
+    public override fun getType(): String = bean.runTypeName
     public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }

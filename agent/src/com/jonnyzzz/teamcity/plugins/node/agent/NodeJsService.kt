@@ -28,11 +28,11 @@ public class NodeJsService() : BuildServiceAdapter() {
     val arguments = arrayListOf<String>()
 
     //add [options section]
-    arguments.addAll(fetchArguments(bean.CommandLineParameterKey))
+    arguments.addAll(fetchArguments(bean.commandLineParameterKey))
 
     //add script file
     if (mode == ExecutionModes.File) {
-      val filePath = getRunnerParameters()[mode.Parameter]
+      val filePath = getRunnerParameters()[mode.parameter]
       if (filePath == null || filePath.isEmptyOrSpaces()) {
         throw RunBuildException("Script file path was not specified")
       }
@@ -44,7 +44,7 @@ public class NodeJsService() : BuildServiceAdapter() {
 
       arguments.add(file.getPath())
     } else if (mode == ExecutionModes.Script) {
-      //throw RunBuildException("Not Implemented yet for ${mode}")
+      throw RunBuildException("Not Implemented yet for ${mode}")
     } else {
       throw RunBuildException("Unknown exection mode: ${mode}")
     }
@@ -58,14 +58,11 @@ public class NodeJsService() : BuildServiceAdapter() {
     val custom = getRunnerParameters().get(runnerParametersKey);
     if (custom == null || custom.isEmptyOrSpaces()) return listOf<String>()
 
-    return listOf<String>()
-/*
-    return  custom
+    return custom
             .split("[\\r\\n]+")
             .map { it.trim() }
             .filter { it.isEmptyOrSpaces() }
             .flatMap{ it.splitHonorQuotes() }
-*/
   }
 
 }
