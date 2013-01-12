@@ -11,7 +11,7 @@ public class NodeBean {
   public val executionModeFile: ExecutionModes = ExecutionModes.File
   public val executionModeScript: ExecutionModes = ExecutionModes.Script
   public val commandLineParameterKey: String = "node_execution_args"
-  public var runTypeName: String = "jonnyzzz.node"
+  public val runTypeName: String = "jonnyzzz.node"
   public val nodeJSConfigurationParameter: String = "node.js"
 
   public fun findExecutionMode(parameters : Map<String?, String?>) : ExecutionModes?
