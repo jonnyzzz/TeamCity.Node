@@ -1,3 +1,6 @@
+TeamCity Node plugin
+====================
+
 This is a plugin for TeamCity that provides Node.js build runner. 
 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
