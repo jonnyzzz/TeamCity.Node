@@ -93,10 +93,9 @@ public class NodeJsService() : BuildServiceAdapter() {
     return custom
             .split("[\\r\\n]+")
             .map { it.trim() }
-            .filter { it.isEmptyOrSpaces() }
+            .filter { !it.isEmptyOrSpaces() }
             .flatMap{ it.splitHonorQuotes() }
   }
-
 
   private inline fun io<T>(errorMessage: String, body: () -> T): T {
     try {
