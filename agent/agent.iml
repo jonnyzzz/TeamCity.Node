@@ -19,6 +19,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="KotlinRuntime" level="project" />
     <orderEntry type="library" name="Agent-Api" level="project" />
     <orderEntry type="library" name="Common-Api" level="project" />
     <orderEntry type="library" name="log4j" level="project" />

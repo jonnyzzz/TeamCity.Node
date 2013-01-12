@@ -5,7 +5,7 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Date: 11.01.13 23:44
  */
 
-public class NodeBean {
+public open class NodeBean {
   public val ExecutionModeKey : String = "node_execution_mode"
   public val ExecutionModeValues: Array<ExecutionModes> = ExecutionModes.values()
   public val ExecutionModeFile: ExecutionModes = ExecutionModes.File
@@ -14,11 +14,13 @@ public class NodeBean {
   public val RunTypeName : String = "jonnyzzz.node"
   public val NodeJSConfigurationParameter : String = "node.js"
 
-  public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
-   = ExecutionModeValues.filter { it.Value == parameters[ExecutionModeKey] }.first
+  public fun findExecutionMode(parameters : Map<String?, String?>) : ExecutionModes?
+          = ExecutionModeValues.filter { it.Value == parameters[ExecutionModeKey] }.first
 }
 
-public enum class ExecutionModes(val Value: String, val Parameter : String, val Description : String)
+public enum class ExecutionModes(public val Value: String,
+                                 public val Parameter : String,
+                                 public val Description : String)
 {
   File : ExecutionModes("file", "node_file", "File");
   Script : ExecutionModes("script", "node_script_text", "Source Code")

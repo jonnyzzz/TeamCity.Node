@@ -7,10 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="KotlinRuntime" level="project" />
     <orderEntry type="library" name="idea annotations.jar" level="project" />
     <orderEntry type="library" name="Idea-OpenApi" level="project" />
     <orderEntry type="library" name="Common-Api" level="project" />
-    <orderEntry type="library" exported="" name="KotlinRuntime" level="project" />
   </component>
 </module>
 

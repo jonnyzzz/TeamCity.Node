@@ -37,14 +37,14 @@ public class NodeJsService() : BuildServiceAdapter() {
         throw RunBuildException("Script file path was not specified")
       }
 
-      val file = getCheckoutDirectory() resolve filePath
+      val file = getCheckoutDirectory().resolve(filePath)
       if (!file.isFile()) {
         throw RunBuildException("Failed to find File at path: ${filePath}")
       }
 
       arguments.add(file.getPath())
     } else if (mode == ExecutionModes.Script) {
-      throw RunBuildException("Not Implemented yet for ${mode}")
+      //throw RunBuildException("Not Implemented yet for ${mode}")
     } else {
       throw RunBuildException("Unknown exection mode: ${mode}")
     }
@@ -58,11 +58,14 @@ public class NodeJsService() : BuildServiceAdapter() {
     val custom = getRunnerParameters().get(runnerParametersKey);
     if (custom == null || custom.isEmptyOrSpaces()) return listOf<String>()
 
+    return listOf<String>()
+/*
     return  custom
             .split("[\\r\\n]+")
             .map { it.trim() }
             .filter { it.isEmptyOrSpaces() }
             .flatMap{ it.splitHonorQuotes() }
+*/
   }
 
 }
