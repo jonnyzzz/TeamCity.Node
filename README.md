@@ -30,7 +30,7 @@ Building
 =========
 
 Use IDEA build runner in TeamCity of
-Intellij IDEA 12 to develop
+Intellij IDEA 12 with Kotlin plugin to develop
 
 
 In this repo you will find
