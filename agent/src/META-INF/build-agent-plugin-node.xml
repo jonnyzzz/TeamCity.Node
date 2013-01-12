@@ -7,6 +7,6 @@
         default-autowire="constructor"
         >
 
-  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsService"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsRunnerService"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsDetector"/>
 </beans>

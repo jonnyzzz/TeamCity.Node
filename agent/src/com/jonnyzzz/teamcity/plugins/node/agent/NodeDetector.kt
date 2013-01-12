@@ -5,13 +5,13 @@ import jetbrains.buildServer.agent.AgentLifeCycleListener
 import jetbrains.buildServer.agent.AgentLifeCycleAdapter
 import jetbrains.buildServer.agent.BuildAgent
 import jetbrains.buildServer.agent.BuildAgentConfiguration
-import com.intellij.openapi.diagnostic.Logger
 import jetbrains.buildServer.SimpleCommandLineProcessRunner
 import java.io.File
 import com.intellij.execution.configurations.GeneralCommandLine
 import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallback
 import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallbackAdapter
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -20,7 +20,8 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 public class NodeJsDetector(events : EventDispatcher<AgentLifeCycleListener>,
                             config : BuildAgentConfiguration) {
   {
-
+    val LOG = log4j(javaClass<NodeJsDetector>())
+    val bean = NodeBean()
     events.addListener(object : AgentLifeCycleAdapter() {
       public override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
         val cmd = GeneralCommandLine()
@@ -38,13 +39,10 @@ public class NodeJsDetector(events : EventDispatcher<AgentLifeCycleListener>,
           return
         }
 
-        val version = run.getStdout()//.trim()
+        val version = run.getStdout().trim()
         LOG.info("Node.js ${version} was detected")
         config.addConfigurationParameter(bean.nodeJSConfigurationParameter, version)
       }
     })
   }
-
-  private val LOG : Logger = Logger.getInstance(javaClass.getName())!!
-  private val bean = NodeBean()
 }

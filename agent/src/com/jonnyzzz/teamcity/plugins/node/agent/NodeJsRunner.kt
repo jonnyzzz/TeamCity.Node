@@ -7,13 +7,14 @@ import jetbrains.buildServer.agent.BuildAgentConfiguration
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 0:52
  */
-public class NodeJsRunnerService : CommandLineBuildServiceFactory {
-  private val bean : NodeBean = NodeBean()
+public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
+  val bean = NodeBean()
 
   public override fun createService(): CommandLineBuildService {
     return NodeJsService()

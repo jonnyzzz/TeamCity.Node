@@ -49,10 +49,12 @@ public class NodeJsService() : BuildServiceAdapter() {
       throw RunBuildException("Unknown exection mode: ${mode}")
     }
 
+    //add script options
+    arguments.addAll(fetchArguments(bean.scriptParameterKey))
+
     //TODO: commandline arguments
     return createProgramCommandline("node", arguments)
   }
-
 
   private fun fetchArguments(runnerParametersKey : String) : Collection<String> {
     val custom = getRunnerParameters().get(runnerParametersKey);

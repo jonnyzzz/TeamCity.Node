@@ -36,5 +36,11 @@
 </c:choose>
 
 <div class="parameter">
-  Additional Command Line Arguments: <props:displayValue name="${bean.commandLineParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
+  Script arguments: <props:displayValue name="${bean.scriptParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
+</div>
+
+<props:viewWorkingDirectory/>
+
+<div class="parameter">
+  Additional command line arguments: <props:displayValue name="${bean.commandLineParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
 </div>

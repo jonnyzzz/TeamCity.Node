@@ -54,6 +54,17 @@
   </td>
 </tr>
 
+<tr>
+  <th><label for="${bean.scriptParameterKey}">Script arguments:</label></th>
+  <td>
+    <props:multilineProperty name="${bean.scriptParameterKey}"  cols="58" linkTitle="Expand" rows="5" expanded="${true}"/>
+    <span class="smallNote">Enter arguments for script</span>
+    <span class="error" id="error_${bean.scriptParameterKey}"></span>
+  </td>
+</tr>
+
+<l:settingsGroup title="Execution">
+  <!-- here goes node.js runtime selector, that is not jet here -->
 <forms:workingDirectory/>
 
 <tr>
@@ -64,6 +75,7 @@
     <span class="error" id="error_${bean.commandLineParameterKey}"></span>
   </td>
 </tr>
+</l:settingsGroup>
 
 <script type="text/javascript">
   (function() {
