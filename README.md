@@ -14,19 +14,22 @@ License
 ==========
 Apache 2.0
 
-
 Supported Versions
 ==================
 
 Plugin is test to work with TeamCity 7.1. 
 It should work with 7.0 (and maybe 6.5) under JDK 1.6
 
-
 Downloading Build
 =================
 
 There will be a build on TeamCity. TBD.
 For now, see `releases` branch for binary releases
+
+Installation
+============
+To install plugin, simply put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
+For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
 
 Building
