@@ -8,6 +8,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -18,6 +19,20 @@ public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
 
   public override fun createService(): CommandLineBuildService {
     return NodeJsService()
+  }
+
+  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
+    public override fun getType(): String = bean.runTypeName
+    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  }
+}
+
+
+public class NodeJsNPMRunnerService() : CommandLineBuildServiceFactory {
+  val bean = NPMBean()
+
+  public override fun createService(): CommandLineBuildService {
+    return NPMService()
   }
 
   public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{

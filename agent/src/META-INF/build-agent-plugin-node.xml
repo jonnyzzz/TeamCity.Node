@@ -8,5 +8,7 @@
         >
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsRunnerService"/>
-  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsDetector"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsNPMRunnerService"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeToolsDetector"/>
 </beans>

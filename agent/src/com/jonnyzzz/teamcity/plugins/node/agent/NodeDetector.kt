@@ -12,37 +12,49 @@ import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallback
 import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallbackAdapter
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 1:04
  */
-public class NodeJsDetector(events : EventDispatcher<AgentLifeCycleListener>,
-                            config : BuildAgentConfiguration) {
+public class NodeToolsDetector(events : EventDispatcher<AgentLifeCycleListener>,
+                               config : BuildAgentConfiguration) {
   {
-    val LOG = log4j(javaClass<NodeJsDetector>())
+    val LOG = log4j(this.javaClass)
     val bean = NodeBean()
     events.addListener(object : AgentLifeCycleAdapter() {
       public override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
-        val cmd = GeneralCommandLine()
-        cmd.setExePath("node")
-        cmd.addParameter("--version")
+        fun detectNodeTool(executable : String, configParameterName : String) {
+          val cmd = GeneralCommandLine()
+          cmd.setExePath("cmd")
+          cmd.addParameter("/c")
+          cmd.addParameter(executable)
+          cmd.addParameter("--version")
 
-        val array = JavaHelper.EMPTY_BYTES
-        val run = SimpleCommandLineProcessRunner.runCommand(
-                cmd, array, object : ProcessRunCallbackAdapter() {
-          public override fun getOutputIdleSecondsTimeout(): Int? = 1
-        })
+          val array = JavaHelper.EMPTY_BYTES
+          val run = SimpleCommandLineProcessRunner.runCommand(
+                  cmd, array, object : ProcessRunCallbackAdapter() {
+            public override fun getOutputIdleSecondsTimeout(): Int? = 1
+          })
 
-        if (run == null || run.getExitCode() != 0) {
-          LOG.info("Node.js was not found")
-          return
+          if (run == null || run.getExitCode() != 0) {
+            LOG.info("${executable} was not found")
+            return
+          }
+
+          var version = run.getStdout().trim()
+          if (version.startsWith("v")) {
+            version = version.substring(1)
+          }
+          LOG.info("${executable} ${version} was detected")
+          config.addConfigurationParameter(configParameterName, version)
         }
 
-        val version = run.getStdout().trim()
-        LOG.info("Node.js ${version} was detected")
-        config.addConfigurationParameter(bean.nodeJSConfigurationParameter, version)
+        detectNodeTool("node", NodeBean().nodeJSConfigurationParameter)
+        detectNodeTool("npm", NPMBean().nodeJSNPMConfigurationParameter)
       }
+
     })
   }
 }

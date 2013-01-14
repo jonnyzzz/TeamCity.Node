@@ -21,9 +21,8 @@ import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
  * Date: 12.01.13 0:58
  */
 
-public class NodeJsService() : BuildServiceAdapter() {
+public class NodeJsService() : ServiceBase() {
   private val bean = NodeBean()
-  private val disposables = linkedListOf<() -> Unit>()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine {
     val mode = bean.findExecutionMode(getRunnerParameters())
@@ -60,7 +59,7 @@ public class NodeJsService() : BuildServiceAdapter() {
         getAgentTempDirectory() tempFile TempFileName("node", ".js")
       }
 
-      disposables add { tempScript.smartDelete()}
+      disposeLater { tempScript.smartDelete() }
 
       io("Failed to write script to temp file") {
         FileUtil.writeFileAndReportErrors(tempScript, scriptText);
@@ -79,31 +78,4 @@ public class NodeJsService() : BuildServiceAdapter() {
     //TODO: commandline arguments
     return createProgramCommandline("node", arguments)
   }
-
-  public override fun afterProcessFinished() {
-    super<BuildServiceAdapter>.afterProcessFinished()
-
-    disposables.forEach { it() }
-  }
-
-  private fun fetchArguments(runnerParametersKey : String) : Collection<String> {
-    val custom = getRunnerParameters().get(runnerParametersKey);
-    if (custom == null || custom.isEmptyOrSpaces()) return listOf<String>()
-
-    return custom
-            .split("[\\r\\n]+")
-            .map { it.trim() }
-            .filter { !it.isEmptyOrSpaces() }
-            .flatMap{ it.splitHonorQuotes() }
-  }
-
-  private inline fun io<T>(errorMessage: String, body: () -> T): T {
-    try {
-      return body()
-    } catch (e: IOException) {
-      throw RunBuildException("${errorMessage}. ${e.getMessage()}", e)
-    }
-  }
-
-  val LOG = log4j(javaClass<NodeJsService>())
 }
