@@ -10,4 +10,16 @@ public class NPMBean {
 
   public val runTypeName: String = "jonnyzzz.npm"
   public val commandLineParameterKey: String = "npm_execution_args"
+  public val npmCommandsKey: String = "npm_commands"
+  public val npmCommandsDefault: String = "install\r\ntest"
+
+  public fun parseCommands(text: String?): Collection<String> {
+    if (text == null)
+      return listOf<String>()
+    else
+      return text
+              .split("[\r\n]+")
+              .map { it.trim() }
+              .filterNot { it.isEmpty() }
+  }
 }

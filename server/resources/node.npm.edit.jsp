@@ -13,6 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
+
 <%@ include file="/include.jsp"%>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
@@ -22,11 +23,16 @@
 <jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NPMBean"/>
 
 <tr>
-  <td colspan="2">Specify working directory to call <em>npm install</em> command</td>
+  <th><label for="${bean.npmCommandsKey}">npm commands:</label></th>
+  <td>
+    <props:multilineProperty name="${bean.npmCommandsKey}" linkTitle="Commands" cols="58" rows="5" expanded="${true}"/>
+    <span class="smallNote">Specify npm commands to run</span>
+    <span class="error" id="error_${bean.npmCommandsKey}"></span>
+  </td>
 </tr>
 
 <l:settingsGroup title="Execution">
-  <!-- here goes node.js runtime selector, that is not jet here -->
+  <!-- here goes npm runtime selector, that is not jet here -->
 <forms:workingDirectory/>
 
 <tr>

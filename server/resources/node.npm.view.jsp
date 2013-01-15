@@ -13,6 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
+
 <%@ include file="/include.jsp"%>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
@@ -20,6 +21,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NPMBean"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+
+<div class="parameter">
+  <!-- TODO: introduce controller to present targets in more readable way -->
+  Run targets: <props:displayValue name="${bean.npmCommandsKey}" showInPopup="${true}" emptyValue="${bean.npmCommandsDefault}"/>
+</div>
 
 <props:viewWorkingDirectory/>
 

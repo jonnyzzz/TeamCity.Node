@@ -17,6 +17,16 @@ fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.String
 fun Collection<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 fun Array<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 
+fun String?.fetchArguments() : Collection<String> {
+  if (this == null || this.isEmptyOrSpaces()) return listOf<String>()
+
+  return this
+          .split("[\\r\\n]+")
+          .map { it.trim() }
+          .filter { !it.isEmptyOrSpaces() }
+          .flatMap{ it.splitHonorQuotes() }
+}
+
 
 fun File.resolve(relativePath : String) : File = jetbrains.buildServer.util.FileUtil.resolvePath(this, relativePath)
 

@@ -41,15 +41,3 @@ public class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
 }
 
 
-public class NodeJsNPMRunnerService() : CommandLineBuildServiceFactory {
-  val bean = NPMBean()
-
-  public override fun createService(): CommandLineBuildService {
-    return NPMService()
-  }
-
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
-    public override fun getType(): String = bean.runTypeName
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
-  }
-}
