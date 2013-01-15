@@ -8,6 +8,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -38,3 +39,5 @@ public class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
     public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }
+
+

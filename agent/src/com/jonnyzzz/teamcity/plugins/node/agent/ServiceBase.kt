@@ -7,6 +7,7 @@ import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
+import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -34,15 +35,8 @@ public abstract class ServiceBase : BuildServiceAdapter() {
     }
   }
 
-  protected inline fun fetchArguments(runnerParametersKey : String) : Collection<String> {
-    val custom = getRunnerParameters().get(runnerParametersKey);
-    if (custom == null || custom.isEmptyOrSpaces()) return listOf<String>()
-
-    return custom
-            .split("[\\r\\n]+")
-            .map { it.trim() }
-            .filter { !it.isEmptyOrSpaces() }
-            .flatMap{ it.splitHonorQuotes() }
+  protected fun fetchArguments(runnerParametersKey : String) : Collection<String> {
+    return getRunnerParameters().get(runnerParametersKey).fetchArguments()
   }
 
   val LOG = log4j(this.javaClass)
