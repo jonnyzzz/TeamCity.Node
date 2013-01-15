@@ -13,6 +13,10 @@ public class NodeBean {
   public val commandLineParameterKey: String = "node_execution_args"
   public val scriptParameterKey: String = "node_script_args"
   public val runTypeName: String = "jonnyzzz.node"
+  public val toolPathKey: String = "node_toolPath"
+
+  public val runTypeNameNodeJs: String = "jonnyzzz.node"
+  public val runTypeNamePhantomJs: String = "jonnyzzz.phantom"
 
   public val nodeJSConfigurationParameter: String = "node.js"
 
