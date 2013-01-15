@@ -1,15 +1,15 @@
 TeamCity Node plugin
 ====================
 
-This is a plugin for TeamCity that provides Node.js and Phantom.js build runners. 
+This is a plugin for TeamCity that provides [Node.js](http://nodejs.org/) and [Phantom.JS](http://phantomjs.org) build runners. 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
 Release builds are found under releases branch
 
 Features
 ========
 Plugin detects system wide installed node.js and reports it's version as configuration parameter `node.js`
-There is also `node.js` build runner to run node.js on given .js file or javascript source code 
-It also provides [Phantom.JS](http://phantomjs.org) build runner to run from given .js or .coffee file or source code
+There is also `node.js` build runner to run node.js on given `.js` file or javascript source code 
+It also provides Phantom.JS build runner to run from given `.js` or `.coffee` file or source code
 
 
 License
