@@ -28,9 +28,8 @@ public class NodeJsDetector(events : EventDispatcher<AgentLifeCycleListener>,
         cmd.setExePath("node")
         cmd.addParameter("--version")
 
-        val array = JavaHelper.EMPTY_BYTES
         val run = SimpleCommandLineProcessRunner.runCommand(
-                cmd, array, object : ProcessRunCallbackAdapter() {
+                cmd, byteArray(), object : ProcessRunCallbackAdapter() {
           public override fun getOutputIdleSecondsTimeout(): Int? = 1
         })
 
