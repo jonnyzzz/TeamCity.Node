@@ -6,7 +6,8 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
         default-autowire="constructor"
         >
+
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.RunTypesRegistrar"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.NodeJsRunType"/>
-
+  <bean class="com.jonnyzzz.teamcity.plugins.node.server.PhantomJsRunType"/>
 </beans>
