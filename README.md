@@ -7,8 +7,8 @@ Release builds are found under releases branch
 
 Features
 ========
-Plugin detects system wide installed node.js and reports it's version as configuration parameter `node.js`
-There is also `node.js` build runner to run node.js on given `.js` file or javascript source code 
+Plugin detects system wide installed node.js and reports it's version as configuration parameter `node.js`.
+There is also `node.js` build runner to run node.js on given `.js` file or javascript source code. 
 It also provides Phantom.JS build runner to run from given `.js` or `.coffee` file or source code
 
 
@@ -37,9 +37,7 @@ For more details, there is [documentation](http://confluence.jetbrains.net/displ
 Building
 =========
 
-Use IDEA build runner in TeamCity of
-Intellij IDEA 12 with Kotlin plugin to develop
-
+Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
 
 In this repo you will find
 =============================
