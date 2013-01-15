@@ -7,9 +7,13 @@ Release builds are found under releases branch
 
 Features
 ========
-Plugin detects system wide installed node.js and reports it's version as configuration parameter `node.js`.
-There is also `node.js` build runner to run node.js on given `.js` file or javascript source code. 
-It also provides Phantom.JS build runner to run from given `.js` or `.coffee` (or other script) file  or source code
+- Environment detection
+ - Plugin detects node.js in system PATH `node.js` and reports it's version as configuration parameter `node.js`.
+ - Plugin detects system wide installed `npm` and reports it's version as configuration parameter `node.js.npm`
+- Build Runners
+ - `node.js` build runner to run `.js` file or source code
+ - `node.js NPM` build runner to execute NPM commands
+ - `Phantom.JS` build runner to run `.js`, `.coffee` (or other script) file or source code.
 
 
 License
