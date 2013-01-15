@@ -19,8 +19,8 @@ public class NodeJsRunType : JsRunTypeBase() {
 
 public class PhantomJsRunType : JsRunTypeBase() {
   public override fun getType(): String = bean.runTypeNamePhantomJs
-  public override fun getDisplayName(): String? = "Phantom.js"
-  public override fun getDescription(): String? = "Starts javascript files under Phantom.js runtime"
+  public override fun getDisplayName(): String? = "Phantom.JS"
+  public override fun getDescription(): String? = "Starts javascript files under Phantom.JS runtime"
   protected override fun getEditJsp(): String = "phantom.edit.jsp"
   protected override fun getViewJsp(): String = "phantom.view.jsp"
 
@@ -29,7 +29,7 @@ public class PhantomJsRunType : JsRunTypeBase() {
 
     if (parameters != null) {
       if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
-        result add InvalidProperty(bean.toolPathKey, "Path to Phantom.js sould be specified")
+        result add InvalidProperty(bean.toolPathKey, "Path to Phantom.JS sould be specified")
       }
     }
 

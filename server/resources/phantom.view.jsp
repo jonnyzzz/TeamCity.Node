@@ -41,7 +41,7 @@
 </div>
 
 <div class="parameter">
-  Phantom.js: <props:displayValue name="${bean.toolPathKey}" showInPopup="${true}" emptyValue="<empty>"/>
+  Phantom.JS: <props:displayValue name="${bean.toolPathKey}" showInPopup="${true}" emptyValue="<empty>"/>
 </div>
 
 <props:viewWorkingDirectory/>

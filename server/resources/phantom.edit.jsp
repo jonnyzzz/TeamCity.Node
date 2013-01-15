@@ -69,7 +69,7 @@
   <th><label for="${bean.toolPathKey}">Phantom js<l:star/>:</label></th>
   <td>
     <props:textProperty name="${bean.toolPathKey}" className="longField"/>
-    <span class="smallNote">Specify path to Phantom.js executable</span>
+    <span class="smallNote">Specify path to Phantom.JS executable</span>
     <span class="error" id="error_${bean.toolPathKey}"></span>
   </td>
 </tr>
