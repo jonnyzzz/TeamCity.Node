@@ -29,12 +29,11 @@ It should work with 7.0 (and maybe 6.5) under JDK 1.6
 Downloading Build
 =================
 
-There will be a build on TeamCity. TBD.
-For now, see `releases` branch for binary releases
+Download the latest build from [TeamCity](http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt434) 
 
 Installation
 ============
-To install plugin, simply put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
+To install plugin, put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
 For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
 
@@ -47,6 +46,7 @@ In this repo you will find
 =============================
 - TeamCity server and agent plugin bindle
 - Plugin version will be patched if building with IDEA build runner in TeamCity
+- Add tomcat application server into IDEA settings from TeamCity distribution path
 - Run configuration `server` to run/debug plugin under TeamCity (use `http://localhost:8111/bs`)
 - pre-configured IDEA settings to support references to TeamCity
 - Uses `$TeamCityDistribution$` IDEA path variable as path to TeamCity home (unpacked .tar.gz or .exe distribution)
