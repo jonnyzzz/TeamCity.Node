@@ -39,14 +39,14 @@ For more details, there is [documentation](http://confluence.jetbrains.net/displ
 
 Building
 =========
-
-Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
+- Define `$TeamCityDistribution$` IDEA path variable with path to TeamCity home (unpacked `.tar.gz` or installed `.exe` distribution).
+- Add tomcat application server named `Tomcat 7` into IDEA settings from TeamCity distribution path
+- Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
 
 In this repo you will find
 =============================
 - TeamCity server and agent plugin bindle
 - Plugin version will be patched if building with IDEA build runner in TeamCity
-- Add tomcat application server into IDEA settings from TeamCity distribution path
 - Run configuration `server` to run/debug plugin under TeamCity (use `http://localhost:8111/bs`)
 - pre-configured IDEA settings to support references to TeamCity
 - Uses `$TeamCityDistribution$` IDEA path variable as path to TeamCity home (unpacked .tar.gz or .exe distribution)
