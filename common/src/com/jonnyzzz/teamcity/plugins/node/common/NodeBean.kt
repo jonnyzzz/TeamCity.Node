@@ -15,6 +15,9 @@ public class NodeBean {
   public val runTypeName: String = "jonnyzzz.node"
   public val toolPathKey: String = "node_toolPath"
 
+  public val phantomJsExtensionKey : String = "phantom_extension"
+  public val phantomJsExtensionDefault : String = "js"
+
   public val runTypeNameNodeJs: String = "jonnyzzz.node"
   public val runTypeNamePhantomJs: String = "jonnyzzz.phantom"
 

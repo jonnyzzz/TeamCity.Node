@@ -7,6 +7,7 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import java.util.InvalidPropertiesFormatException
+import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
 
 public class NodeJsRunType : JsRunTypeBase() {
   public override fun getType(): String = bean.runTypeNameNodeJs
@@ -30,8 +31,17 @@ public class PhantomJsRunType : JsRunTypeBase() {
       if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
         result add InvalidProperty(bean.toolPathKey, "Path to Phantom.JS sould be specified")
       }
+
+      val mode = bean.findExecutionMode(parameters)
+      if (mode == ExecutionModes.Script && parameters[bean.phantomJsExtensionKey].isEmptyOrSpaces()) {
+        result add InvalidProperty(bean.phantomJsExtensionKey, "Extension for generated script is not defined")
+      }
     }
 
     return result
+  }
+
+  public override fun getDefaultRunnerProperties(): MutableMap<String?, String?>? {
+    return hashMapOf(bean.phantomJsExtensionKey to bean.phantomJsExtensionDefault)
   }
 }

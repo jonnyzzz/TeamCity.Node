@@ -55,7 +55,7 @@ public open abstract class JsService() : ServiceBase() {
       }
 
       val tempScript = io("Failed to create temp file") {
-        getAgentTempDirectory() tempFile TempFileName(getToolName(), ".js")
+        getAgentTempDirectory() tempFile TempFileName(getToolName(), getGeneratedScriptExtImpl())
       }
 
       disposeLater { tempScript.smartDelete() }
@@ -84,4 +84,12 @@ public open abstract class JsService() : ServiceBase() {
 
   protected abstract fun getToolPath() : String?
   protected abstract fun getToolName() : String
+  protected abstract fun getGeneratedScriptExt() : String
+
+  private fun getGeneratedScriptExtImpl() : String {
+    var ext = getGeneratedScriptExt()
+    while(ext.startsWith(".")) ext = ext.substring(1)
+    return "." + ext
+  }
+
 }

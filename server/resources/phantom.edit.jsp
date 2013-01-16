@@ -34,7 +34,7 @@
   </td>
 </tr>
 
-<tr id="jonnyzzz_node_${bean.executionModeFile.parameter}">
+<tr class="jonnyzzz_node_${bean.executionModeFile.parameter}">
   <th><label for="${bean.executionModeFile.parameter}">Script file:</label></th>
   <td>
     <props:textProperty name="${bean.executionModeFile.parameter}" className="longField"/>
@@ -43,7 +43,16 @@
   </td>
 </tr>
 
-<tr id="jonnyzzz_node_${bean.executionModeScript.parameter}">
+<tr class="jonnyzzz_node_${bean.executionModeScript.parameter}">
+  <th><label for="${bean.phantomJsExtensionKey}">File Type<l:star/>:</label></th>
+  <td>
+    <props:textProperty name="${bean.phantomJsExtensionKey}" className="longField"/>
+    <span class="smallNote">Select script file extension, use 'js' by default</span>
+    <span class="error" id="error_${bean.phantomJsExtensionKey}"></span>
+  </td>
+</tr>
+
+<tr class="jonnyzzz_node_${bean.executionModeScript.parameter}">
   <th><label for="${bean.executionModeScript.parameter}">Script source:</label></th>
   <td>
     <props:multilineProperty name="${bean.executionModeScript.parameter}"
@@ -93,9 +102,9 @@
 
       <c:forEach var="mode" items="${bean.executionModeValues}">
         if (mode == "${mode.value}") {
-          $j("#jonnyzzz_node_${mode.parameter}").show();
+          $j("tr.jonnyzzz_node_${mode.parameter}").show();
         } else {
-          $j("#jonnyzzz_node_${mode.parameter}").hide();
+          $j("tr.jonnyzzz_node_${mode.parameter}").hide();
         }
       </c:forEach>
       BS.MultilineProperties.updateVisible();
