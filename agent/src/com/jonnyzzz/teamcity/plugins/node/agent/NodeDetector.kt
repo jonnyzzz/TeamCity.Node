@@ -20,7 +20,6 @@ import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
 import jetbrains.buildServer.SimpleCommandLineProcessRunner
-import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallbackAdapter
 import jetbrains.buildServer.agent.AgentLifeCycleAdapter
 import jetbrains.buildServer.agent.AgentLifeCycleListener
 import jetbrains.buildServer.agent.BuildAgent
