@@ -120,11 +120,11 @@ public class DelegatingBuildProcessTest(): BuildProcessTestCase() {
     Assert.assertTrue(aaa.isFinished())
   }
 
-  private open class LoggingAction(val status: BuildFinishedStatus): LoggingActionBase() {
+  private open inner class LoggingAction(val status: BuildFinishedStatus): LoggingActionBase() {
     protected override fun createSub(): RecordingBuildProcess = RecordingBuildProcess("i", status)
   }
 
-  private abstract class LoggingActionBase(): DelegatingProcessAction {
+  private abstract inner class LoggingActionBase(): DelegatingProcessAction {
     public override fun startImpl(): BuildProcess {
       log("start-impl")
       return createSub()

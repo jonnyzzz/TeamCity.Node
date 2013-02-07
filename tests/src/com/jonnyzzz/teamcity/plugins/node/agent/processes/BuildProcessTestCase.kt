@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable
 import org.testng.Assert
 import org.testng.annotations.DataProvider
 
-public open class BuildProcessTestCase(): LoggingTestCase() {
+public open class BuildProcessTestCase() : LoggingTestCase() {
   DataProvider(name = "buildFinishStatuses")
   public open fun buildStatuses(): Array<Array<Any>> {
     val list = arrayListOf<Array<Any>>()
@@ -43,7 +43,7 @@ public open class BuildProcessTestCase(): LoggingTestCase() {
     }
   }
 
-  public open class RecordingBuildProcess(val id: String,
+  public open inner class RecordingBuildProcess(val id: String,
                                      val resultStatus: BuildFinishedStatus,
                                      val startException: Throwable? = null,
                                      val finishException: Throwable? = null): BuildProcess {
