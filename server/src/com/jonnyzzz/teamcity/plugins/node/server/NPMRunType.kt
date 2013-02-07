@@ -40,22 +40,21 @@ public class NPMRunType : RunTypeBase() {
 
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
     return object : PropertiesProcessor {
-      public override fun process(parameters: Map<String?, String?>?): MutableCollection<InvalidProperty?>?
-        = arrayListOf<InvalidProperty?>()
+      public override fun process(parameters: Map<String, String>?): MutableCollection<InvalidProperty>?
+              = arrayListOf()
     }
   }
 
-  public override fun describeParameters(parameters: Map<String?, String?>): String {
+  public override fun describeParameters(parameters: Map<String, String>): String {
     return "Run targets: ${bean.parseCommands(parameters[bean.npmCommandsKey]) join ", "}"
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String?, String?>? {
-    return hashMapOf<String?, String?>(bean.npmCommandsKey to bean.npmCommandsDefault)
-  }
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
+          = hashMapOf(bean.npmCommandsKey to bean.npmCommandsDefault)
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String?, String?>): MutableList<Requirement?>? {
-    val result = arrayListOf<Requirement?>()
-    val base = super<RunTypeBase>.getRunnerSpecificRequirements(runParameters)
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
+    val result = arrayListOf<Requirement>()
+    val base = super.getRunnerSpecificRequirements(runParameters)
     if (base != null) result.addAll(base)
 
     //for now there is the only option to use detected node.js

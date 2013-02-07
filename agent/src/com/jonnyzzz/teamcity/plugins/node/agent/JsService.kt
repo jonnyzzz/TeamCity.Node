@@ -37,7 +37,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
  */
 
 
-public open abstract class JsService() : ServiceBase() {
+public abstract class JsService() : ServiceBase() {
   protected val bean : NodeBean = NodeBean()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine {

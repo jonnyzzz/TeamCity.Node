@@ -38,6 +38,9 @@ public class NodeBean {
 
   public val nodeJSConfigurationParameter: String = "node.js"
 
+  public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
+          = executionModeValues.filter { it.value == parameters[executionModeKey] }.first
+
   public fun findExecutionMode(parameters : Map<String?, String?>) : ExecutionModes?
           = executionModeValues.filter { it.value == parameters[executionModeKey] }.first
 }

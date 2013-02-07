@@ -39,24 +39,21 @@ public class PhantomJsRunType : JsRunTypeBase() {
   protected override fun getEditJsp(): String = "phantom.edit.jsp"
   protected override fun getViewJsp(): String = "phantom.view.jsp"
 
-  protected override fun validateParameters(parameters: Map<String?, String?>?): MutableCollection<InvalidProperty?> {
+  protected override fun validateParameters(parameters: Map<String, String>): MutableCollection<InvalidProperty> {
     val result = super<JsRunTypeBase>.validateParameters(parameters)
 
-    if (parameters != null) {
-      if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
-        result add InvalidProperty(bean.toolPathKey, "Path to Phantom.JS sould be specified")
-      }
-
-      val mode = bean.findExecutionMode(parameters)
-      if (mode == ExecutionModes.Script && parameters[bean.phantomJsExtensionKey].isEmptyOrSpaces()) {
-        result add InvalidProperty(bean.phantomJsExtensionKey, "Extension for generated script is not defined")
-      }
+    if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
+      result add InvalidProperty(bean.toolPathKey, "Path to Phantom.JS sould be specified")
     }
 
-    return result
+    val mode = bean.findExecutionMode(parameters)
+    if (mode == ExecutionModes.Script && parameters[bean.phantomJsExtensionKey].isEmptyOrSpaces()) {
+      result add InvalidProperty(bean.phantomJsExtensionKey, "Extension for generated script is not defined")
+    }
+
+    return result;
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String?, String?>? {
-    return hashMapOf(bean.phantomJsExtensionKey to bean.phantomJsExtensionDefault)
-  }
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
+          = hashMapOf(bean.phantomJsExtensionKey to bean.phantomJsExtensionDefault)
 }

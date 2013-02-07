@@ -37,16 +37,15 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
     val that = this;
     return object : PropertiesProcessor {
-      public override fun process(p0: Map<String?, String?>?): MutableCollection<InvalidProperty?>? {
-        if (p0 == null) return arrayListOf<InvalidProperty?>()
+      public override fun process(p0: Map<String, String>?): MutableCollection<InvalidProperty>? {
+        if (p0 == null) return arrayListOf<InvalidProperty>()
         return that.validateParameters(p0)
       }
     }
   }
 
-  protected open fun validateParameters(parameters: Map<String?, String?>?): MutableCollection<InvalidProperty?> {
-    val result = arrayListOf<InvalidProperty?>()
-    if (parameters == null) return result
+  protected open fun validateParameters(parameters: Map<String, String>): MutableCollection<InvalidProperty> {
+    val result = arrayListOf<InvalidProperty>()
 
     val mode = bean.findExecutionMode(parameters)
     if (mode == null) {
@@ -61,7 +60,7 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   }
 
 
-  public override fun describeParameters(parameters: Map<String?, String?>): String {
+  public override fun describeParameters(parameters: Map<String, String>): String {
     var builder = StringBuilder()
     val mode = bean.findExecutionMode(parameters)
     if (mode != null) {
@@ -75,12 +74,10 @@ public abstract class JsRunTypeBase : RunTypeBase() {
     return builder.toString()
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String?, String?>? {
-    return hashMapOf<String?, String?>()
-  }
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf<String, String>()
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String?, String?>): MutableList<Requirement?>? {
-    val result = arrayListOf<Requirement?>()
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
+    val result = arrayListOf<Requirement>()
     val base = super<RunTypeBase>.getRunnerSpecificRequirements(runParameters)
     if (base != null) result.addAll(base)
 
