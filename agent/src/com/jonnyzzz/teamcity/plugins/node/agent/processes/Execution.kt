@@ -18,7 +18,7 @@ package com.jonnyzzz.teamcity.plugins.node.agent.processes
 import jetbrains.buildServer.agent.BuildAgentConfiguration
 import com.intellij.execution.configurations.GeneralCommandLine
 import jetbrains.buildServer.SimpleCommandLineProcessRunner
-import jetbrains.buildServer.SimpleCommandLineProcessRunner.ProcessRunCallbackAdapter
+import jetbrains.buildServer.SimpleCommandLineProcessRunner.RunCommandEventsAdapter
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
 
 /**
@@ -75,7 +75,7 @@ public class ProcessExecutorImpl : ProcessExecutor {
     cmd.setExePath(p.program)
     cmd.addParameters(p.arguments);
     val run = SimpleCommandLineProcessRunner.runCommand(
-            cmd, byteArray(), object : ProcessRunCallbackAdapter() {
+            cmd, byteArray(), object : RunCommandEventsAdapter() {
       public override fun getOutputIdleSecondsTimeout(): Int? = 1
     })!!
 
