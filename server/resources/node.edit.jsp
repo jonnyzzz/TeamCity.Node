@@ -65,7 +65,15 @@
 </tr>
 
 <l:settingsGroup title="Execution">
-  <!-- here goes node.js runtime selector, that is not jet here -->
+<tr>
+  <th><label for="${bean.toolPathKey}">Path to Node.js:</label></th>
+  <td>
+    <props:textProperty name="${bean.toolPathKey}" className="longField"/>
+    <span class="smallNote">Specify path to Node.js executable. Leave blank to use agent-installed one</span>
+    <span class="error" id="error_${bean.toolPathKey}"></span>
+  </td>
+</tr>
+
 <forms:workingDirectory/>
 
 <tr>

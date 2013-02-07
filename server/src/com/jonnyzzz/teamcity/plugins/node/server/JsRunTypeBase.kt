@@ -75,15 +75,4 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   }
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf<String, String>()
-
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
-    val result = arrayListOf<Requirement>()
-    val base = super<RunTypeBase>.getRunnerSpecificRequirements(runParameters)
-    if (base != null) result.addAll(base)
-
-    //for now there is the only option to use detected node.js
-    result.add(Requirement(bean.nodeJSConfigurationParameter, null, RequirementType.EXISTS))
-
-    return result
-  }
 }

@@ -27,6 +27,10 @@
   Run targets: <props:displayValue name="${bean.npmCommandsKey}" showInPopup="${true}" emptyValue="${bean.npmCommandsDefault}"/>
 </div>
 
+<div class="parameter">
+  NPM: <props:displayValue name="${bean.toolPathKey}" emptyValue="<default>"/>
+</div>
+
 <props:viewWorkingDirectory/>
 
 <div class="parameter">

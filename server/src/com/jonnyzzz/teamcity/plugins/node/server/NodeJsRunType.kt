@@ -30,6 +30,19 @@ public class NodeJsRunType : JsRunTypeBase() {
   public override fun getDescription(): String? = "Starts javascript files under Node.js runtime"
   protected override fun getEditJsp(): String = "node.edit.jsp"
   protected override fun getViewJsp(): String = "node.view.jsp"
+
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
+    val result = arrayListOf<Requirement>()
+    val base = super.getRunnerSpecificRequirements(runParameters)
+    if (base != null) result.addAll(base)
+
+    if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
+      //for now there is the only option to use detected node.js
+      result.add(Requirement(bean.nodeJSConfigurationParameter, null, RequirementType.EXISTS))
+    }
+
+    return result
+  }
 }
 
 public class PhantomJsRunType : JsRunTypeBase() {

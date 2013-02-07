@@ -57,8 +57,10 @@ public class NPMRunType : RunTypeBase() {
     val base = super.getRunnerSpecificRequirements(runParameters)
     if (base != null) result.addAll(base)
 
-    //for now there is the only option to use detected node.js
-    result.add(Requirement(bean.nodeJSNPMConfigurationParameter, null, RequirementType.EXISTS))
+    if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
+      //for now there is the only option to use detected node.js
+      result.add(Requirement(bean.nodeJSNPMConfigurationParameter, null, RequirementType.EXISTS))
+    }
     return result
   }
 }

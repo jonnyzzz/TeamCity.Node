@@ -36,6 +36,7 @@ import jetbrains.buildServer.serverSide.BuildTypeOptions
 import jetbrains.buildServer.agent.impl.buildStages.BuildFinishStage
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.Execution
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
+import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -59,10 +60,17 @@ public class NPMSession(val proxy : ExecutorProxy,
   private var iterator : Iterator<NPMCommandExecution> = listOf<NPMCommandExecution>().iterator()
   private var previousStatus = BuildFinishedStatus.FINISHED_SUCCESS
 
+  private fun resolveNpmExecutable() : String {
+    val path = runner.getRunnerParameters()[bean.toolPathKey]
+    if (path == null || path.isEmptyOrSpaces()) return "npm"
+    return path.trim()
+  }
+
   public override fun sessionStarted() {
     val logger = runner.getBuild().getBuildLogger()
     val extra = runner.getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     val checkExitCode = runner.getBuild().getBuildTypeOptionValue(BuildTypeOptions.BT_FAIL_ON_EXIT_CODE) ?: true
+    val npm = resolveNpmExecutable()
     val onExitCode : (Int) -> Unit =
         if (!checkExitCode)
           {code -> }
@@ -78,7 +86,7 @@ public class NPMSession(val proxy : ExecutorProxy,
                     .map{ NPMCommandExecution(
                     logger,
                     "npm ${it}",
-                    commandline(runner, Execution("npm", extra + it)),
+                    commandline(runner, Execution(npm, extra + it)),
                     onExitCode)
             }.iterator()
   }
