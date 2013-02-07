@@ -29,19 +29,19 @@ It should work with 7.0 (and maybe 6.5) under JDK 1.6
 Downloading Build
 =================
 
-There will be a build on TeamCity. TBD.
-For now, see `releases` branch for binary releases
+Download the latest build from [TeamCity](http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt434) 
 
 Installation
 ============
-To install plugin, simply put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
+To install plugin, put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
 For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
 
 Building
 =========
-
-Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
+- Define `$TeamCityDistribution$` IDEA path variable with path to TeamCity home (unpacked `.tar.gz` or installed `.exe` distribution).
+- Add tomcat application server named `Tomcat 7` into IDEA settings from TeamCity distribution path
+- Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
 
 In this repo you will find
 =============================

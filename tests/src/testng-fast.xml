@@ -1,10 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="PLUGIN tests">
-  <test name="PLUGIN tests">
+<suite name="TeamCity.Node tests">
+  <test name="fast">
     <classes>
       <class name="SimpleTest"/>
-      <class name="com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeBuildProcessTest"/>
-      <class name="com.jonnyzzz.teamcity.plugins.node.agent.processes.DelegatingBuildProcessTest"/>
     </classes>
   </test>
 </suite>
