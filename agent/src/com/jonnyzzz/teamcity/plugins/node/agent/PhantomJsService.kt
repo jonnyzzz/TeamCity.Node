@@ -33,11 +33,15 @@ import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
- * Date: 12.01.13 0:58
+ * Date: 15.01.13 0:56
  */
 
-public class NodeJsService() : JsService() {
-  protected override fun getToolPath(): String? = "node"
-  protected override fun getToolName(): String  = "node"
-  protected override fun getGeneratedScriptExt(): String = ".js"
+
+public class PhantomJsService() : JsService() {
+  protected override fun getToolPath(): String? = getRunnerParameters()[bean.toolPathKey]
+
+  protected override fun getToolName(): String = "phantom"
+
+  protected override fun getGeneratedScriptExt(): String
+          = "." + (getRunnerParameters()[bean.phantomJsExtensionKey] ?: bean.phantomJsExtensionDefault)
 }

@@ -31,13 +31,20 @@
   </c:when>
   <c:when test="${nmode eq bean.executionModeScript.value}">
     <div class="parameter">
-      Script: <props:displayValue name="${bean.executionModeScript.parameter}" showInPopup="${true}" emptyValue="<empty>"/>
+      Script Type: <props:displayValue name="${bean.phantomJsExtensionKey}" emptyValue="<empty>"/>
+    </div>
+    <div class="parameter">
+      Script Source: <props:displayValue name="${bean.executionModeScript.parameter}" showInPopup="${true}" emptyValue="<empty>"/>
     </div>
   </c:when>
 </c:choose>
 
 <div class="parameter">
   Script arguments: <props:displayValue name="${bean.scriptParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
+</div>
+
+<div class="parameter">
+  Phantom.JS: <props:displayValue name="${bean.toolPathKey}" emptyValue="<empty>"/>
 </div>
 
 <props:viewWorkingDirectory/>

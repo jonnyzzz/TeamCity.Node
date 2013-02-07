@@ -8,5 +8,15 @@
         >
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsRunnerService"/>
-  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsDetector"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.npm.NPMServiceFactory"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeToolsDetector"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.PhantomJsRunnerService"/>
+
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ShellBasedExecutionProxy"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ProxyAwareExecutorImpl">
+    <constructor-arg>
+      <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutorImpl"/>
+    </constructor-arg>
+  </bean>
 </beans>

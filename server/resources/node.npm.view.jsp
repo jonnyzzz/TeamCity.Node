@@ -19,25 +19,12 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NodeBean"/>
+<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NPMBean"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
-<c:set var="nmode" value="${propertiesBean.properties[bean.executionModeKey]}"/>
-
-<c:choose>
-  <c:when test="${nmode eq bean.executionModeFile.value}">
-    <div class="parameter">
-      File: <props:displayValue name="${bean.executionModeFile.parameter}"/>
-    </div>
-  </c:when>
-  <c:when test="${nmode eq bean.executionModeScript.value}">
-    <div class="parameter">
-      Script: <props:displayValue name="${bean.executionModeScript.parameter}" showInPopup="${true}" emptyValue="<empty>"/>
-    </div>
-  </c:when>
-</c:choose>
 
 <div class="parameter">
-  Script arguments: <props:displayValue name="${bean.scriptParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
+  <!-- TODO: introduce controller to present targets in more readable way -->
+  Run targets: <props:displayValue name="${bean.npmCommandsKey}" showInPopup="${true}" emptyValue="${bean.npmCommandsDefault}"/>
 </div>
 
 <props:viewWorkingDirectory/>

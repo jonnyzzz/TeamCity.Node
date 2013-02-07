@@ -1,13 +1,24 @@
-This is a plugin for TeamCity that provides Node.js build runner. 
+TeamCity Node plugin
+====================
 
+This is a plugin for TeamCity that provides [Node.js](http://nodejs.org/) and [Phantom.JS](http://phantomjs.org) build runners. 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
-
 Release builds are found under releases branch
+
+Features
+========
+- Environment detection
+ - Plugin detects node.js in system PATH `node.js` and reports it's version as configuration parameter `node.js`.
+ - Plugin detects system wide installed `npm` and reports it's version as configuration parameter `node.js.npm`
+- Build Runners
+ - `node.js` build runner to run `.js` file or source code
+ - `node.js NPM` build runner to execute NPM commands
+ - `Phantom.JS` build runner to run `.js`, `.coffee` (or other script) file or source code.
+
 
 License
 ==========
 Apache 2.0
-
 
 Supported Versions
 ==================
@@ -15,19 +26,22 @@ Supported Versions
 Plugin is test to work with TeamCity 7.1. 
 It should work with 7.0 (and maybe 6.5) under JDK 1.6
 
-
 Downloading Build
 =================
 
 There will be a build on TeamCity. TBD.
+For now, see `releases` branch for binary releases
+
+Installation
+============
+To install plugin, simply put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server. 
+For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
 
 Building
 =========
 
-Use IDEA build runner in TeamCity of
-Intellij IDEA 12 to develop
-
+Use IDEA build runner in TeamCity of Intellij IDEA 12 with Kotlin plugin to develop
 
 In this repo you will find
 =============================

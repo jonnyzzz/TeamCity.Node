@@ -34,23 +34,32 @@
   </td>
 </tr>
 
-<tr id="jonnyzzz_node_${bean.executionModeFile.parameter}">
+<tr class="jonnyzzz_node_${bean.executionModeFile.parameter}">
   <th><label for="${bean.executionModeFile.parameter}">Script file:</label></th>
   <td>
     <props:textProperty name="${bean.executionModeFile.parameter}" className="longField"/>
-    <span class="smallNote">Path to JavaScript, relative to the checkout directory</span>
+    <span class="smallNote">Path to JavaScript or CoffeeScript, relative to the checkout directory</span>
     <span class="error" id="error_${bean.executionModeFile.parameter}"></span>
   </td>
 </tr>
 
-<tr id="jonnyzzz_node_${bean.executionModeScript.parameter}">
+<tr class="jonnyzzz_node_${bean.executionModeScript.parameter}">
+  <th><label for="${bean.phantomJsExtensionKey}">File Type<l:star/>:</label></th>
+  <td>
+    <props:textProperty name="${bean.phantomJsExtensionKey}" className="longField"/>
+    <span class="smallNote">Select script file extension, use 'js' by default</span>
+    <span class="error" id="error_${bean.phantomJsExtensionKey}"></span>
+  </td>
+</tr>
+
+<tr class="jonnyzzz_node_${bean.executionModeScript.parameter}">
   <th><label for="${bean.executionModeScript.parameter}">Script source:</label></th>
   <td>
     <props:multilineProperty name="${bean.executionModeScript.parameter}"
                              linkTitle="JavaScript to Execute"
                              cols="58" rows="10"
                              expanded="${true}"/>
-    <span class="smallNote">Enter contents of a JavaScript. TeamCity references will be replaced in the code</span>
+    <span class="smallNote">Enter contents of a JavaScript or CoffeeScript. TeamCity references will be replaced in the code</span>
     <span class="error" id="error_${bean.executionModeScript.parameter}"></span>
   </td>
 </tr>
@@ -65,14 +74,22 @@
 </tr>
 
 <l:settingsGroup title="Execution">
-  <!-- here goes node.js runtime selector, that is not jet here -->
+<tr>
+  <th><label for="${bean.toolPathKey}">Phantom js<l:star/>:</label></th>
+  <td>
+    <props:textProperty name="${bean.toolPathKey}" className="longField"/>
+    <span class="smallNote">Specify path to Phantom.JS executable</span>
+    <span class="error" id="error_${bean.toolPathKey}"></span>
+  </td>
+</tr>
+
 <forms:workingDirectory/>
 
 <tr>
   <th><label for="${bean.commandLineParameterKey}">Additional command line parameters:</label></th>
   <td>
     <props:multilineProperty name="${bean.commandLineParameterKey}"  cols="58" linkTitle="Expand" rows="5"/>
-    <span class="smallNote">Enter additional command line parameters to node.js. Put each parameter on a new line</span>
+    <span class="smallNote">Enter additional command line parameters. Put each parameter on a new line</span>
     <span class="error" id="error_${bean.commandLineParameterKey}"></span>
   </td>
 </tr>
@@ -85,9 +102,9 @@
 
       <c:forEach var="mode" items="${bean.executionModeValues}">
         if (mode == "${mode.value}") {
-          $j("#jonnyzzz_node_${mode.parameter}").show();
+          $j("tr.jonnyzzz_node_${mode.parameter}").show();
         } else {
-          $j("#jonnyzzz_node_${mode.parameter}").hide();
+          $j("tr.jonnyzzz_node_${mode.parameter}").hide();
         }
       </c:forEach>
       BS.MultilineProperties.updateVisible();
