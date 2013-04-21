@@ -43,7 +43,9 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
     val run = exec runProcess execution(executable, "--version")
 
     if (!run.succeeded()) {
-      LOG.info("${executable} was not found or failed")
+      LOG.info("${executable} was not found or failed, exitcode: ${run.exitCode}")
+      LOG.info("StdOut: ${run.stdOut}")
+      LOG.info("StdErr: ${run.stdErr}")
       return
     }
 
