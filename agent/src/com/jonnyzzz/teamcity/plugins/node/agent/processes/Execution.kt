@@ -79,11 +79,14 @@ public class ProcessExecutorImpl : ProcessExecutor {
       public override fun getOutputIdleSecondsTimeout(): Int? = 1
     })!!
 
-    return ExecutionResult(
+    val result = ExecutionResult(
             run.getStdout().trim(),
             run.getStderr().trim(),
             run.getExitCode(),
             run.getException())
+
+    LOG.debug("Execution completed: ${result}")
+    return result;
   }
 }
 
