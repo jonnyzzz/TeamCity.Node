@@ -26,15 +26,14 @@ import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
 
 public class NodeJsRunType : JsRunTypeBase() {
   public override fun getType(): String = bean.runTypeNameNodeJs
-  public override fun getDisplayName(): String? = "Node.js"
-  public override fun getDescription(): String? = "Starts javascript files under Node.js runtime"
+  public override fun getDisplayName(): String = "Node.js"
+  public override fun getDescription(): String = "Starts javascript files under Node.js runtime"
   protected override fun getEditJsp(): String = "node.edit.jsp"
   protected override fun getViewJsp(): String = "node.view.jsp"
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
-    val base = super.getRunnerSpecificRequirements(runParameters)
-    if (base != null) result.addAll(base)
+    result addAll super.getRunnerSpecificRequirements(runParameters)
 
     if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
       //for now there is the only option to use detected node.js
@@ -47,8 +46,8 @@ public class NodeJsRunType : JsRunTypeBase() {
 
 public class PhantomJsRunType : JsRunTypeBase() {
   public override fun getType(): String = bean.runTypeNamePhantomJs
-  public override fun getDisplayName(): String? = "Phantom.JS"
-  public override fun getDescription(): String? = "Starts javascript files under Phantom.JS runtime"
+  public override fun getDisplayName(): String = "Phantom.JS"
+  public override fun getDescription(): String = "Starts javascript files under Phantom.JS runtime"
   protected override fun getEditJsp(): String = "phantom.edit.jsp"
   protected override fun getViewJsp(): String = "phantom.view.jsp"
 

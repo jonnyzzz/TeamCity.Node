@@ -31,8 +31,8 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   protected val bean : NodeBean = NodeBean()
 
   public abstract override fun getType(): String
-  public abstract override fun getDisplayName(): String?
-  public abstract override fun getDescription(): String?
+  public abstract override fun getDisplayName(): String
+  public abstract override fun getDescription(): String
 
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
     val that = this;

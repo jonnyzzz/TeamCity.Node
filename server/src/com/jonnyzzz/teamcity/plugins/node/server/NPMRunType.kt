@@ -33,8 +33,8 @@ public class NPMRunType : RunTypeBase() {
   private val bean = NPMBean()
 
   public override fun getType(): String = bean.runTypeName
-  public override fun getDisplayName(): String? = "Node.js NPM"
-  public override fun getDescription(): String? = "Starts NPM"
+  public override fun getDisplayName(): String = "Node.js NPM"
+  public override fun getDescription(): String = "Starts NPM"
   protected override fun getEditJsp(): String = "node.npm.edit.jsp"
   protected override fun getViewJsp(): String = "node.npm.view.jsp"
 
@@ -52,10 +52,9 @@ public class NPMRunType : RunTypeBase() {
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
           = hashMapOf(bean.npmCommandsKey to bean.npmCommandsDefault)
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
-    val base = super.getRunnerSpecificRequirements(runParameters)
-    if (base != null) result.addAll(base)
+    result addAll super.getRunnerSpecificRequirements(runParameters)
 
     if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
       //for now there is the only option to use detected node.js
