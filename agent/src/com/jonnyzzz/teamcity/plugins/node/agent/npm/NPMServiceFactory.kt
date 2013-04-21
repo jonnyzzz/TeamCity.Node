@@ -19,6 +19,7 @@ import jetbrains.buildServer.serverSide.BuildTypeOptions
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.Execution
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
+import org.apache.log4j.Logger
 
 /*
  * Copyright 2000-2013 Eugene Petrenko
@@ -105,11 +106,30 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
                                  val blockName : String,
                                  val cmd : ProgramCommandLine,
                                  val onFinished : (Int) -> Unit) : LoggingProcessListener(logger), CommandExecution {
+  private val OUT_LOG : Logger? = Logger.getLogger("teamcity.out")
 
   public override fun makeProgramCommandLine(): ProgramCommandLine = cmd
 
   public override fun beforeProcessStarted() {
     logger.activityStarted(blockName, "npm");
+  }
+
+  public override fun onStandardOutput(text: String) {
+    if (text.contains("npm ERR!")){
+      logger.error(text)
+      OUT_LOG?.warn(text)
+      return
+    }
+    super<LoggingProcessListener>.onStandardOutput(text)
+  }
+
+  public override fun onErrorOutput(text: String) {
+    if (text.contains("npm ERR!")){
+      logger.error(text)
+      OUT_LOG?.warn(text)
+      return
+    }
+    super<LoggingProcessListener>.onErrorOutput(text)
   }
 
   public override fun processFinished(exitCode: Int) {
