@@ -7,6 +7,8 @@
         default-autowire="constructor"
         >
 
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.grunt.GruntServiceFactory"/>
+
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.NodeJsRunnerService"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.npm.NPMServiceFactory"/>
 

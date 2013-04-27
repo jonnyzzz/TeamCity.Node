@@ -52,3 +52,5 @@ fun File.smartDelete() = com.intellij.openapi.util.io.FileUtil.delete(this)
 
 //we define this category to have plugin logging without logger configs patching
 inline fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
+
+inline fun File.div(child : String) : File = File(this, child)
