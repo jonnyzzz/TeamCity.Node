@@ -33,7 +33,8 @@ public class NodeJsRunType : JsRunTypeBase() {
 
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
-    result addAll super.getRunnerSpecificRequirements(runParameters)
+    val list = super.getRunnerSpecificRequirements(runParameters)
+    if (list != null) result addAll list
 
     if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
       //for now there is the only option to use detected node.js
