@@ -45,28 +45,3 @@ public class NodeJsRunType : JsRunTypeBase() {
   }
 }
 
-public class PhantomJsRunType : JsRunTypeBase() {
-  public override fun getType(): String = bean.runTypeNamePhantomJs
-  public override fun getDisplayName(): String = "Phantom.JS"
-  public override fun getDescription(): String = "Starts javascript files under Phantom.JS runtime"
-  protected override fun getEditJsp(): String = "phantom.edit.jsp"
-  protected override fun getViewJsp(): String = "phantom.view.jsp"
-
-  protected override fun validateParameters(parameters: Map<String, String>): MutableCollection<InvalidProperty> {
-    val result = super<JsRunTypeBase>.validateParameters(parameters)
-
-    if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
-      result add InvalidProperty(bean.toolPathKey, "Path to Phantom.JS sould be specified")
-    }
-
-    val mode = bean.findExecutionMode(parameters)
-    if (mode == ExecutionModes.Script && parameters[bean.phantomJsExtensionKey].isEmptyOrSpaces()) {
-      result add InvalidProperty(bean.phantomJsExtensionKey, "Extension for generated script is not defined")
-    }
-
-    return result;
-  }
-
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
-          = hashMapOf(bean.phantomJsExtensionKey to bean.phantomJsExtensionDefault)
-}
