@@ -1,7 +1,11 @@
 TeamCity Node plugin
 ====================
 
-This is a plugin for TeamCity that provides [Node.js](http://nodejs.org/) and [Phantom.JS](http://phantomjs.org) build runners. 
+This is a plugin for TeamCity that provides following build runners
+- [Node.js](http://nodejs.org/) 
+- [NPM](https://npmjs.org/)
+- [Phantom.JS](http://phantomjs.org) 
+- [Grunt](http://gruntjs.com) 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
 Release builds are found under releases branch
 
@@ -14,6 +18,7 @@ Features
  - `node.js` build runner to run `.js` file or source code
  - `node.js NPM` build runner to execute NPM commands
  - `Phantom.JS` build runner to run `.js`, `.coffee` (or other script) file or source code.
+ - `Grunt` build runner to run your grunt scripts. It's assumes you have `grunt` and `grunt-cli` NPM packages installed to local repo
 
 
 License
@@ -23,7 +28,7 @@ Apache 2.0
 Supported Versions
 ==================
 
-Plugin is test to work with TeamCity 7.1. 
+Plugin is test to work with TeamCity 7.1 and 8.0. 
 It should work with 7.0 (and maybe 6.5) under JDK 1.6
 
 Downloading Build
