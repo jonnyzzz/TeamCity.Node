@@ -38,7 +38,7 @@
   <th><label for="${bean.targets}">Grunt Tasks:</label></th>
   <td>
     <props:multilineProperty name="${bean.targets}" linkTitle="Commands" cols="58" rows="5" expanded="${true}"/>
-    <span class="smallNote">Specify npm commands to run</span>
+    <span class="smallNote">Specify grunt tasks to run (new-line separated)</span>
     <span class="error" id="error_${bean.targets}"></span>
   </td>
 </tr>
