@@ -27,10 +27,10 @@ import java.io.IOException
 
 fun String?.isEmptyOrSpaces() : Boolean = com.intellij.openapi.util.text.StringUtil.isEmptyOrSpaces(this)
 
-fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.StringUtil.splitHonorQuotes(this).filterNotNull()
+fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.StringUtil.splitHonorQuotes(this)
 
-fun Collection<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
-fun Array<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
+fun Collection<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)
+fun Array<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)
 
 fun String?.fetchArguments() : Collection<String> {
   if (this == null || this.isEmptyOrSpaces()) return listOf<String>()

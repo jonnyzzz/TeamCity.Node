@@ -1,0 +1,13 @@
+<root>
+  <item name='jetbrains.buildServer.util.StringUtil java.lang.String join(java.lang.String, java.lang.Iterable)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='jetbrains.buildServer.util.StringUtil java.lang.String join(java.lang.String, java.lang.Object...)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='jetbrains.buildServer.util.StringUtil java.util.List&lt;java.lang.String&gt; splitHonorQuotes(java.lang.String)'>
+    <annotation name='jet.runtime.typeinfo.KotlinSignature'>
+      <val name="value" val="&quot;fun splitHonorQuotes(s: String): MutableList&lt;String&gt;&quot;"/>
+    </annotation>
+  </item>
+</root>
