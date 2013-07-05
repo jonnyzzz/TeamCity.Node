@@ -19,10 +19,10 @@ package com.jonnyzzz.teamcity.plugins.node.server
 import jetbrains.buildServer.requirements.Requirement
 import jetbrains.buildServer.requirements.RequirementType
 import jetbrains.buildServer.serverSide.PropertiesProcessor
-import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
 import com.jonnyzzz.teamcity.plugins.node.common.join
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
 
 /*
  * Copyright 2000-2013 Eugene Petrenko
@@ -67,8 +67,11 @@ public class GruntRunType : RunTypeBase() {
     val list = super.getRunnerSpecificRequirements(runParameters)
     if (list != null) result addAll list
 
-    //TODO: make Node.js/NPM optional
-    result.add(Requirement(NodeBean().nodeJSConfigurationParameter, null, RequirementType.EXISTS))
+    result add Requirement(NodeBean().nodeJSConfigurationParameter, null, RequirementType.EXISTS)
+
+    if (bean.parseMode(runParameters[bean.gruntMode]) == GruntExecutionMode.GLOBAL) {
+      result add Requirement(bean.gruntConfigurationParameter, null, RequirementType.EXISTS)
+    }
 
     return result
   }

@@ -21,6 +21,8 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Date: 27.04.13 9:58
  */
 public class GruntBean {
+  public val gruntConfigurationParameter : String = "grunt"
+
   public val runTypeName: String = "jonnyzzz.grunt"
   public val file: String = "jonnyzzz.grunt.file"
   public val targets: String = "jonnyzzz.grunt.tasks"

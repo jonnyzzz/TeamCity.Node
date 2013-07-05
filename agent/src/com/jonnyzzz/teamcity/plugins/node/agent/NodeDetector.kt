@@ -1,4 +1,19 @@
 package com.jonnyzzz.teamcity.plugins.node.agent
+
+import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
+import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import jetbrains.buildServer.agent.AgentLifeCycleAdapter
+import jetbrains.buildServer.agent.AgentLifeCycleListener
+import jetbrains.buildServer.agent.BuildAgent
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import jetbrains.buildServer.util.EventDispatcher
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutor
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.succeeded
+import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
+import com.jonnyzzz.teamcity.plugins.node.common.trimStart
+
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -14,21 +29,6 @@ package com.jonnyzzz.teamcity.plugins.node.agent
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import com.intellij.execution.configurations.GeneralCommandLine
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import jetbrains.buildServer.SimpleCommandLineProcessRunner
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter
-import jetbrains.buildServer.agent.AgentLifeCycleListener
-import jetbrains.buildServer.agent.BuildAgent
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import jetbrains.buildServer.util.EventDispatcher
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutor
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.succeeded
-
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 1:04
@@ -68,9 +68,14 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
     events.addListener(object : AgentLifeCycleAdapter() {
       public override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
         detectNodeTool("node", NodeBean().nodeJSConfigurationParameter) {
-          if (it.startsWith("v")) it.substring(1) else it
+          it trimStart "v"
         }
+
         detectNodeTool("npm", NPMBean().nodeJSNPMConfigurationParameter)
+
+        detectNodeTool("grunt", GruntBean().gruntConfigurationParameter) {
+          it.trimStart("grunt-cli").trim().trimStart("v")
+        }
       }
     })
   }
