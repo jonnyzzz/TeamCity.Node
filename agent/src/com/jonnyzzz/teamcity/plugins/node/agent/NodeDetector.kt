@@ -42,16 +42,26 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
   fun detectNodeTool(executable: String, configParameterName: String, versionPreprocess : (String) -> String = {it}) {
     val run = exec runProcess execution(executable, "--version")
 
-    if (!run.succeeded()) {
-      LOG.info("${executable} was not found or failed, exitcode: ${run.exitCode}")
-      LOG.info("StdOut: ${run.stdOut}")
-      LOG.info("StdErr: ${run.stdErr}")
-      return
+    var toLog : Runnable = Runnable {}
+    for(x in 1..3) {
+      when {
+        run.succeeded() -> {
+          val version = versionPreprocess(run.stdOut.trim())
+          LOG.info("${executable} ${version} was detected")
+          config.addConfigurationParameter(configParameterName, version)
+          return
+        }
+        else -> {
+          toLog = Runnable {
+            LOG.info("${executable} was not found or failed, exitcode: ${run.exitCode}")
+            LOG.info("StdOut: ${run.stdOut}")
+            LOG.info("StdErr: ${run.stdErr}")
+          }
+          Thread.sleep(100)
+        }
+      }
     }
-
-    val version = versionPreprocess(run.stdOut.trim())
-    LOG.info("${executable} ${version} was detected")
-    config.addConfigurationParameter(configParameterName, version)
+    toLog.run()
   }
 
   {
