@@ -28,6 +28,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.div
 import jetbrains.buildServer.RunBuildException
 import com.jonnyzzz.teamcity.plugins.node.common.resolve
 import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
+import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -54,13 +55,30 @@ public class GruntSession : BuildServiceAdapter() {
           else
             "grunt"
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine {
-    val grunt = getWorkingDirectory() / "node_modules" / ".bin" / gruntExecutable()
+  private fun gruntExecutablePath() : String {
+    val mode = bean.parseMode(getRunnerParameters()[bean.gruntMode])
+    val cmd = gruntExecutable()
 
-    if (!grunt.isFile()) {
-      throw RunBuildException("Failed to find ${gruntExecutable()} under ${getWorkingDirectory()}.\n" +
-                              "Please install grunt and grunt-cli local Node NPM pachages")
+    when(mode) {
+      GruntExecutionMode.NPM -> {
+        val grunt = getWorkingDirectory() / "node_modules" / ".bin" / cmd
+
+        if (!grunt.isFile()) {
+          throw RunBuildException(
+                  "Failed to find ${gruntExecutable()} under ${getWorkingDirectory()}.\n" +
+                  "Please install grunt and grunt-cli as project-local Node.js NPM packages")
+        }
+        return grunt.getPath()
+      }
+
+      GruntExecutionMode.GLOBAL -> return cmd
+
+      else ->
+        throw RunBuildException("Unexpected execution mode ${mode}")
     }
+  }
+
+  public override fun makeProgramCommandLine(): ProgramCommandLine {
     val arguments = arrayListOf<String>()
     arguments add "--no-color"
 
@@ -77,7 +95,7 @@ public class GruntSession : BuildServiceAdapter() {
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
 
-    return createProgramCommandline(grunt.getPath(), arguments)
+    return createProgramCommandline(gruntExecutablePath(), arguments)
   }
 }
 

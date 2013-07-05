@@ -23,6 +23,21 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
+  Execution mode:
+  <strong>
+    <c:set var="nmode" value="${propertiesBean.properties[bean.gruntMode]}"/>
+    <c:forEach var="it" items="${bean.gruntModes}">
+      <c:if test="${nmode eq it.value}">
+        <c:out value="${it.value}"/>
+      </c:if>
+    </c:forEach>
+    <c:if test="${empty nmode}">
+      <c:out value="${bean.gruntModeDefault.title}"/>
+    </c:if>
+  </strong>
+</div>
+
+<div class="parameter">
   File: <props:displayValue name="${bean.file}" showInPopup="${true}" emptyValue="<default>"/>
 </div>
 

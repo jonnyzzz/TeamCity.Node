@@ -25,6 +25,14 @@ public class GruntBean {
   public val file: String = "jonnyzzz.grunt.file"
   public val targets: String = "jonnyzzz.grunt.tasks"
   public val commandLineParameterKey : String = "jonnyzzz.commandLine"
+  public val gruntMode : String = "jonnyzzz.grunt.mode"
+  public val gruntModeDefault : GruntExecutionMode = GruntExecutionMode.NPM
+
+  public val gruntModes : List<GruntExecutionMode>
+          get() = arrayListOf(*GruntExecutionMode.values())
+
+  public fun parseMode(text : String?) : GruntExecutionMode?
+         = gruntModes.find { text == it.value } ?: gruntModeDefault
 
   public fun parseCommands(text: String?): Collection<String> {
     if (text == null)
@@ -35,5 +43,10 @@ public class GruntBean {
               .map { it.trim() }
               .filterNot { it.isEmpty() }
   }
+}
 
+public enum class GruntExecutionMode(val title : String,
+                                     val value : String) {
+  NPM : GruntExecutionMode("NPM package from project", "npm")
+  GLOBAL : GruntExecutionMode("System-wide grunt", "global")
 }

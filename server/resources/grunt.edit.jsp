@@ -21,6 +21,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.GruntBean"/>
+<jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+
+<tr>
+  <th><label for="${bean.targets}">Grunt:</label></th>
+  <td>
+    <props:selectProperty name="${bean.gruntMode}">
+      <c:forEach var="it" items="${bean.gruntModes}">
+        <props:option value="${it.value}"><c:out value="${it.title}"/></props:option>
+      </c:forEach>
+    </props:selectProperty>
+    <span class="smallNote">
+      Specify weather you like to use system-wide or project's npm installed grunt
+    </span>
+    <span class="error" id="error_${bean.gruntMode}"></span>
+  </td>
+</tr>
 
 <tr>
   <th><label for="${bean.targets}">Grunt File:</label></th>
