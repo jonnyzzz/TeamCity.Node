@@ -1,5 +1,8 @@
 <component name="libraryTable">
   <library name="log4j">
+    <ANNOTATIONS>
+      <root url="file://$PROJECT_DIR$/lib/annotations" />
+    </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
     </CLASSES>

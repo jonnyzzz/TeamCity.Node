@@ -1,0 +1,14 @@
+<root>
+  <item name='org.apache.log4j.Logger org.apache.log4j.Logger getLogger(java.lang.Class)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='org.apache.log4j.Logger org.apache.log4j.Logger getLogger(java.lang.String)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='org.apache.log4j.Logger org.apache.log4j.Logger getLogger(java.lang.String, org.apache.log4j.spi.LoggerFactory)'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+  <item name='org.apache.log4j.Logger org.apache.log4j.Logger getRootLogger()'>
+    <annotation name='org.jetbrains.annotations.NotNull'/>
+  </item>
+</root>
