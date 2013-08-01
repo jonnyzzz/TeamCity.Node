@@ -76,7 +76,7 @@ public class ProcessExecutorImpl : ProcessExecutor {
     cmd.addParameters(p.arguments);
     val run = SimpleCommandLineProcessRunner.runCommand(
             cmd, byteArray(), object : RunCommandEventsAdapter() {
-      public override fun getOutputIdleSecondsTimeout(): Int? = 1
+      public override fun getOutputIdleSecondsTimeout(): Int? = 10
     })!!
 
     val result = ExecutionResult(
