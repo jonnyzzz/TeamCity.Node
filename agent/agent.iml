@@ -26,6 +26,7 @@
     <orderEntry type="library" name="Idea-OpenApi" level="project" />
     <orderEntry type="module" module-name="common" />
     <orderEntry type="library" name="TeamCity agent runtime" level="project" />
+    <orderEntry type="library" name="httpclient" level="project" />
   </component>
 </module>
 

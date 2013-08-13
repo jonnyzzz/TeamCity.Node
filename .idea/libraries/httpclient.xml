@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="httpclient">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/httpmime-4.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/httpcore-4.2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/httpclient-cache-4.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/commons-codec-1.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/httpclient-4.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/fluent-hc-4.2.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpmime/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpmime/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpmime/src/examples" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/fluent-hc/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/fluent-hc/src/examples" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient/src/examples" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-cache/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-cache/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-contrib/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-benchmark/src/main/java" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/httpcore-4.2.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

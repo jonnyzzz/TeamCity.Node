@@ -15,6 +15,7 @@
           </element>
           <element id="file-copy" path="$PROJECT_DIR$/agent/teamcity-agent-plugin.xml" output-file-name="teamcity-plugin.xml" />
           <element id="artifact" artifact-name="common-jar" />
+          <element id="library" level="project" name="httpclient" />
         </element>
       </element>
       <element id="directory" name="server">

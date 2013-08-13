@@ -1,4 +1,11 @@
 package com.jonnyzzz.teamcity.plugins.node.common
+
+import java.io.File
+import org.apache.log4j.Logger
+import java.io.IOException
+import java.io.InputStream
+import jetbrains.buildServer.util.FileUtil
+
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -14,12 +21,6 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import java.io.File
-import org.apache.log4j.Logger
-import java.io.IOException
-
-
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 0:41
@@ -56,3 +57,21 @@ inline fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.bui
 inline fun File.div(child : String) : File = File(this, child)
 
 inline fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()) else this
+
+inline fun <T>using(stream:InputStream, action:(InputStream)->T) : T {
+  try {
+    return action(stream)
+  } finally {
+    FileUtil.close(stream)
+  }
+}
+
+inline fun <T>catchIO(stream:InputStream, error:(IOException) -> Throwable, action:(InputStream)->T) : T =
+  using(stream) {
+    try {
+      action(stream)
+    } catch(e: IOException) {
+      throw error(e)
+    }
+  }
+

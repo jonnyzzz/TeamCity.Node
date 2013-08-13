@@ -21,4 +21,8 @@
       <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutorImpl"/>
     </constructor-arg>
   </bean>
+
+
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl"/>
 </beans>
