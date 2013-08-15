@@ -21,7 +21,12 @@ import org.apache.http.client.methods.HttpGet
 import jetbrains.buildServer.RunBuildException
 import com.jonnyzzz.teamcity.plugins.node.common.catchIO
 import java.util.zip.ZipInputStream
-import jetbrains.buildServer.util.ArchiveUtil
+import jetbrains.buildServer.util.FileUtil
+import com.jonnyzzz.teamcity.plugins.node.common.div
+import java.io.FileOutputStream
+import java.io.BufferedOutputStream
+import com.jonnyzzz.teamcity.plugins.node.common.trimStart
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -30,6 +35,7 @@ import jetbrains.buildServer.util.ArchiveUtil
 ///https://github.com/creationix/nvm
 ///http://ghb.freshblurbs.com/blog/2011/05/07/install-node-js-and-express-js-nginx-debian-lenny.html
 public class NVMDownloader(val http:HttpClientWrapper) {
+  private val LOG = log4j(javaClass<NVMDownloader>())
   private val url = "https://github.com/creationix/nvm/archive/master.zip"
 
   private fun error(message:String, e:Throwable? = null) : Throwable {
@@ -50,9 +56,24 @@ public class NVMDownloader(val http:HttpClientWrapper) {
       val contentType = entity.getContentType()?.getValue()
       if ("application/zip" != contentType) throw error("Invalid content-type: ${contentType}")
 
-      catchIO(entity.getContent()!!, {error("Failed to extract NVM", it)}) {
-        val zip = ZipInputStream(it)
-        ArchiveUtil.unpackZip(zip, dest)
+      catchIO(ZipInputStream(entity.getContent()!!), {error("Failed to extract NVM", it)}) { zip ->
+        FileUtil.createEmptyDir(dest)
+
+        while(true) {
+          val ze = zip.getNextEntry()
+          if (ze == null) break
+          if (ze.isDirectory()) continue
+          val name = ze.getName().replace("\\", "/").trimStart("/").trimStart("nvm-master/")
+          LOG.debug("nvm content: ${name}")
+
+          if (name startsWith ".") continue
+          if (name startsWith "test/") continue
+
+          val file = dest / name
+          catchIO(BufferedOutputStream(FileOutputStream(file)), {error("Failed to create ${file}", it)}) {
+            zip.copyTo(it)
+          }
+        }
       }
     }
   }

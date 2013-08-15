@@ -5,6 +5,7 @@ import org.apache.log4j.Logger
 import java.io.IOException
 import java.io.InputStream
 import jetbrains.buildServer.util.FileUtil
+import java.io.Closeable
 
 /*
  * Copyright 2000-2013 Eugene Petrenko
@@ -58,7 +59,7 @@ inline fun File.div(child : String) : File = File(this, child)
 
 inline fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()) else this
 
-inline fun <T>using(stream:InputStream, action:(InputStream)->T) : T {
+inline fun <T, S:Closeable>using(stream:S, action:(S)->T) : T {
   try {
     return action(stream)
   } finally {
@@ -66,7 +67,7 @@ inline fun <T>using(stream:InputStream, action:(InputStream)->T) : T {
   }
 }
 
-inline fun <T>catchIO(stream:InputStream, error:(IOException) -> Throwable, action:(InputStream)->T) : T =
+inline fun <T, S:Closeable>catchIO(stream:S, error:(IOException) -> Throwable, action:(S)->T) : T =
   using(stream) {
     try {
       action(stream)

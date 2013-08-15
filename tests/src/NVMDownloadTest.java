@@ -17,10 +17,12 @@
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl;
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader;
 import jetbrains.buildServer.BaseTestCase;
+import junit.framework.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -31,5 +33,13 @@ public class NVMDownloadTest extends BaseTestCase {
   public void test() throws IOException {
     File dir = createTempDir();
     new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir);
+
+    File[] files = dir.listFiles();
+    Assert.assertNotNull(files);
+
+    System.out.println("result: " + Arrays.toString(files));
+
+    Assert.assertTrue(files.length > 0);
+    Assert.assertTrue(new File(dir, "nvm.sh").isFile());
   }
 }
