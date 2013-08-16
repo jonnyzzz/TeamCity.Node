@@ -32,7 +32,7 @@ public abstract class BuildProcessBase: BuildProcess {
     return myIsFinished.get()
   }
 
-  public override fun interrupt(): Unit {
+  public override fun interrupt() {
     myIsInterrupted.set(true)
     interruptImpl()
   }

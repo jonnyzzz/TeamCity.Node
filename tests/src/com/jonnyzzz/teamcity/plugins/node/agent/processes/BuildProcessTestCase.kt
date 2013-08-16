@@ -52,14 +52,14 @@ public open class BuildProcessTestCase() : LoggingTestCase() {
       throwExceptionIfPossible(startException)
     }
 
-    private fun throwExceptionIfPossible(ex: Throwable?): Unit {
+    private fun throwExceptionIfPossible(ex: Throwable?) {
       if (ex != null) throw ex
     }
 
     public override fun isInterrupted(): Boolean = false
     public override fun isFinished(): Boolean = false
 
-    public override fun interrupt(): Unit {
+    public override fun interrupt() {
       log("interrupt-" + id)
     }
 

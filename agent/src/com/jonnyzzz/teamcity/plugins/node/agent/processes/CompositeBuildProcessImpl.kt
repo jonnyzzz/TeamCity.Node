@@ -22,22 +22,21 @@ import java.util.concurrent.atomic.AtomicReference
 import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.BuildProcess
 
-public open class CompositeBuildProcessImpl() : BuildProcessBase(), CompositeBuildProcess {
+public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuildProcess {
   private val myProcessList: BlockingQueue<BuildProcess> = LinkedBlockingQueue<BuildProcess>()
   private val myCurrentProcess: AtomicReference<BuildProcess> = AtomicReference<BuildProcess>()
 
-  public override fun pushBuildProcess(process: BuildProcess): Unit {
+  public override fun pushBuildProcess(process: BuildProcess) {
     myProcessList.add(process)
   }
 
-  protected override fun interruptImpl(): Unit {
+  protected override fun interruptImpl() {
     val process: BuildProcess? = myCurrentProcess.get()
     if (process != null)
       process.interrupt()
   }
 
-  public override fun start(): Unit {
-
+  public override fun start() {
   }
 
   protected override fun waitForImpl(): BuildFinishedStatus {

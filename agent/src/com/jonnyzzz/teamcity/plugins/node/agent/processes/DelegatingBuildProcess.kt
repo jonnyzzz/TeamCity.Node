@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference
 public open class DelegatingBuildProcess(val action: DelegatingProcessAction): BuildProcessBase() {
   private val myReference = AtomicReference<BuildProcess>()
 
-  protected override fun interruptImpl(): Unit {
+  protected override fun interruptImpl() {
     super.interruptImpl()
 
     val process = myReference.get()
