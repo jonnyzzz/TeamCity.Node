@@ -37,6 +37,7 @@ public class NVMFeature(val plugin : PluginDescriptor) : BuildFeature() {
   public override fun getEditParametersUrl(): String? = plugin.getPluginResourcesPath("node.nvm.jsp")
   public override fun describeParameters(params: Map<String, String>): String = "Node.js v" + params[bean.NVMVersion]
   public override fun getDefaultParameters(): MutableMap<String, String> = hashMapOf(bean.NVMVersion to "0.10.0")
+  public override fun isMultipleFeaturesPerBuildTypeAllowed(): Boolean = false
 }
 
 public class NVMParametersProvider : AbstractBuildParametersProvider() {

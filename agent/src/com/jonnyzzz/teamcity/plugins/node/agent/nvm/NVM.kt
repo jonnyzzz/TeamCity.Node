@@ -19,14 +19,22 @@ package com.jonnyzzz.teamcity.plugins.node.agent.nvm
 import java.io.File
 import org.apache.http.client.methods.HttpGet
 import jetbrains.buildServer.RunBuildException
-import com.jonnyzzz.teamcity.plugins.node.common.catchIO
 import java.util.zip.ZipInputStream
 import jetbrains.buildServer.util.FileUtil
-import com.jonnyzzz.teamcity.plugins.node.common.div
 import java.io.FileOutputStream
 import java.io.BufferedOutputStream
-import com.jonnyzzz.teamcity.plugins.node.common.trimStart
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import jetbrains.buildServer.util.EventDispatcher
+import jetbrains.buildServer.agent.AgentLifeCycleListener
+import jetbrains.buildServer.agent.AgentLifeCycleAdapter
+import jetbrains.buildServer.agent.AgentRunningBuild
+import jetbrains.buildServer.agent.BuildRunnerContext
+import com.jonnyzzz.teamcity.plugins.node.common.*
+import jetbrains.buildServer.agent.AgentBuildFeature
+import com.jonnyzzz.teamcity.plugins.node.agent.block
+import jetbrains.buildServer.agent.plugins.beans.PluginDescriptor
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import jetbrains.buildServer.agent.BuildProcessFacade
+import jetbrains.buildServer.runner.SimpleRunnerConstants
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -76,5 +84,68 @@ public class NVMDownloader(val http:HttpClientWrapper) {
         }
       }
     }
+  }
+}
+
+
+public class NVMListener(val events:EventDispatcher<AgentLifeCycleListener>,
+                         val processor : NVMProcessor) {
+  private val bean = NVMBean();
+
+  {
+    events.addListener(object: AgentLifeCycleAdapter() {
+      private fun AgentRunningBuild.feature() = getBuildFeaturesOfType(bean.NVMFeatureType).firstOrEmpty()
+      private fun BuildRunnerContext.feature() = getBuild().feature()
+
+        public override fun buildStarted(runningBuild: AgentRunningBuild) {
+          val feature = runningBuild.feature()
+          if (feature != null) processor.buildStarted(runningBuild, feature)
+        }
+
+        public override fun beforeRunnerStart(runner: BuildRunnerContext) {
+          val feature = runner.feature()
+          if (feature != null) processor.runnerStarted(runner, feature)
+
+        }
+      }
+    )
+  }
+}
+
+public class NVMProcessor(val downloader : NVMDownloader,
+                          val plugin : PluginDescriptor,
+                          val config : BuildAgentConfiguration,
+                          val facade : BuildProcessFacade) {
+  private val bean = NVMBean();
+  private val LOG = log4j(javaClass<NVMProcessor>());
+
+  public fun buildStarted(build : AgentRunningBuild, feature : AgentBuildFeature ) {
+    val nvmHome = config.getCacheDirectory("nvm")
+    val version = feature.getParameters()[bean.NVMVersion]
+
+    val logger = build.getBuildLogger()
+    logger.block("NVM") {
+      block("Download", "Fetching NVM") {
+        message("Downloading creatonix/nvm...")
+        downloader.downloadNVM(nvmHome)
+        message("NVM downloaded into ${nvmHome}")
+      }
+
+      block("Install", "Installing Node.js ${version}") {
+        val commandLine = "!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
+        LOG.info("Executing NVM command: ${commandLine}")
+        val ctx = facade.createBuildRunnerContext(build, SimpleRunnerConstants.TYPE, nvmHome.getPath())
+        ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
+        ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
+
+        val callable = facade.createExecutable(build, ctx)
+        callable.start()
+        callable.waitFor()
+      }
+    }
+  }
+
+  public fun runnerStarted(runner : BuildRunnerContext, feature : AgentBuildFeature ) {
+
   }
 }

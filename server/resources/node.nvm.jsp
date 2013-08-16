@@ -23,7 +23,7 @@
 
 <tr>
   <td colspan="2">
-    Installs and configures specified Node.js version via NVM
+    Installs and configures specified Node.js version via NVM. Only for Linux and Mac OS
   </td>
 </tr>
 <tr>

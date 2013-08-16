@@ -76,7 +76,12 @@ inline fun <T, S:Closeable>catchIO(stream:S, error:(IOException) -> Throwable, a
     }
   }
 
-inline fun <T:MutableMap<K, V>, K, V> T.plus(m:Map<out K, V>) : T {
+inline fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
   this.putAll(m)
   return this
+}
+
+inline fun <K, T:Iterable<K>> T.firstOrEmpty() : K? {
+  for(k in this) return k
+  return null
 }
