@@ -11,4 +11,5 @@
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.NodeJsRunType"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.NPMRunType"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.PhantomJsRunType"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.server.GruntRunType"/>
 </beans>

@@ -40,6 +40,10 @@
   Script arguments: <props:displayValue name="${bean.scriptParameterKey}" showInPopup="${true}" emptyValue="<empty>"/>
 </div>
 
+<div class="parameter">
+  Node.js: <props:displayValue name="${bean.toolPathKey}" emptyValue="<default>"/>
+</div>
+
 <props:viewWorkingDirectory/>
 
 <div class="parameter">

@@ -40,9 +40,6 @@ public class NodeBean {
 
   public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
           = executionModeValues.filter { it.value == parameters[executionModeKey] }.first
-
-  public fun findExecutionMode(parameters : Map<String?, String?>) : ExecutionModes?
-          = executionModeValues.filter { it.value == parameters[executionModeKey] }.first
 }
 
 public enum class ExecutionModes(public val value: String,

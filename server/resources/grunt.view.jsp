@@ -19,16 +19,31 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NPMBean"/>
+<jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.GruntBean"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
-  <!-- TODO: introduce controller to present targets in more readable way -->
-  Run targets: <props:displayValue name="${bean.npmCommandsKey}" showInPopup="${true}" emptyValue="${bean.npmCommandsDefault}"/>
+  Execution mode:
+  <strong>
+    <c:set var="nmode" value="${propertiesBean.properties[bean.gruntMode]}"/>
+    <c:forEach var="it" items="${bean.gruntModes}">
+      <c:if test="${nmode eq it.value}">
+        <c:out value="${it.value}"/>
+      </c:if>
+    </c:forEach>
+    <c:if test="${empty nmode}">
+      <c:out value="${bean.gruntModeDefault.title}"/>
+    </c:if>
+  </strong>
 </div>
 
 <div class="parameter">
-  NPM: <props:displayValue name="${bean.toolPathKey}" emptyValue="<default>"/>
+  File: <props:displayValue name="${bean.file}" showInPopup="${true}" emptyValue="<default>"/>
+</div>
+
+<div class="parameter">
+  <!-- TODO: introduce controller to present targets in more readable way -->
+  Run targets: <props:displayValue name="${bean.targets}" showInPopup="${true}" emptyValue="${bean.targets}"/>
 </div>
 
 <props:viewWorkingDirectory/>

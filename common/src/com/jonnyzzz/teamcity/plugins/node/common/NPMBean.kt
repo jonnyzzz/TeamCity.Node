@@ -27,6 +27,7 @@ public class NPMBean {
   public val commandLineParameterKey: String = "npm_execution_args"
   public val npmCommandsKey: String = "npm_commands"
   public val npmCommandsDefault: String = "install\r\ntest"
+  public val toolPathKey : String = "npm_toolPath"
 
   public fun parseCommands(text: String?): Collection<String> {
     if (text == null)

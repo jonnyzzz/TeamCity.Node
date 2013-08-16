@@ -31,8 +31,8 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   protected val bean : NodeBean = NodeBean()
 
   public abstract override fun getType(): String
-  public abstract override fun getDisplayName(): String?
-  public abstract override fun getDescription(): String?
+  public abstract override fun getDisplayName(): String
+  public abstract override fun getDescription(): String
 
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
     val that = this;
@@ -75,15 +75,4 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   }
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf<String, String>()
-
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement>? {
-    val result = arrayListOf<Requirement>()
-    val base = super<RunTypeBase>.getRunnerSpecificRequirements(runParameters)
-    if (base != null) result.addAll(base)
-
-    //for now there is the only option to use detected node.js
-    result.add(Requirement(bean.nodeJSConfigurationParameter, null, RequirementType.EXISTS))
-
-    return result
-  }
 }
