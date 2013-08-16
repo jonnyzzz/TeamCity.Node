@@ -1,3 +1,4 @@
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -13,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
 
 import jetbrains.buildServer.RunBuildException
 import jetbrains.buildServer.agent.BuildFinishedStatus
@@ -51,5 +50,5 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
 
 public trait DelegatingProcessAction {
   open fun startImpl(): BuildProcess
-  open fun finishedImpl(): Unit
+  open fun finishedImpl()
 }

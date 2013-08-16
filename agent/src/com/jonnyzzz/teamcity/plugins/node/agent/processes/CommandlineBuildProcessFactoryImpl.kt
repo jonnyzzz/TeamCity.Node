@@ -1,3 +1,4 @@
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -13,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
 
 import java.io.File
 import jetbrains.buildServer.agent.BuildProcess

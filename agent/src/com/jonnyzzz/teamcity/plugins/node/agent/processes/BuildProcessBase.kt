@@ -1,3 +1,4 @@
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -14,14 +15,12 @@
  * limitations under the License.
  */
 
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
-
 import jetbrains.buildServer.RunBuildException
 import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.BuildProcess
 import java.util.concurrent.atomic.AtomicBoolean
 
-public abstract class BuildProcessBase(): BuildProcess {
+public abstract class BuildProcessBase: BuildProcess {
   private val myIsInterrupted: AtomicBoolean = AtomicBoolean()
   private val myIsFinished: AtomicBoolean = AtomicBoolean()
 
@@ -55,6 +54,6 @@ public abstract class BuildProcessBase(): BuildProcess {
   }
   protected abstract fun waitForImpl(): BuildFinishedStatus
 
-  protected open fun interruptImpl(): Unit { }
-  public override fun start(): Unit { }
+  protected open fun interruptImpl() { }
+  public override fun start() { }
 }

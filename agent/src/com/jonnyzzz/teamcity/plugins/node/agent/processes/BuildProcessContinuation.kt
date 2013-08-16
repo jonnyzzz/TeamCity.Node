@@ -1,3 +1,4 @@
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -14,7 +15,8 @@
  * limitations under the License.
  */
 
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
-
 import jetbrains.buildServer.agent.BuildProcess
 
+public trait BuildProcessContinuation {
+  fun pushBuildProcess(process:BuildProcess)
+}
