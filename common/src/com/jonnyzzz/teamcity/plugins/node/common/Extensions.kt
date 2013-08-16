@@ -3,9 +3,9 @@ package com.jonnyzzz.teamcity.plugins.node.common
 import java.io.File
 import org.apache.log4j.Logger
 import java.io.IOException
-import java.io.InputStream
 import jetbrains.buildServer.util.FileUtil
 import java.io.Closeable
+import java.util.HashMap
 
 /*
  * Copyright 2000-2013 Eugene Petrenko
@@ -76,3 +76,7 @@ inline fun <T, S:Closeable>catchIO(stream:S, error:(IOException) -> Throwable, a
     }
   }
 
+inline fun <T:MutableMap<K, V>, K, V> T.plus(m:Map<out K, V>) : T {
+  this.putAll(m)
+  return this
+}
