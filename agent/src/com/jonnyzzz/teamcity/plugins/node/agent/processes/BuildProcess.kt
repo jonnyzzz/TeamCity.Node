@@ -1,4 +1,10 @@
 package com.jonnyzzz.teamcity.plugins.node.agent.processes
+
+import jetbrains.buildServer.agent.BuildFinishedStatus
+import jetbrains.buildServer.agent.BuildProcess
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -14,14 +20,6 @@ package com.jonnyzzz.teamcity.plugins.node.agent.processes
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import jetbrains.buildServer.RunBuildException
-import jetbrains.buildServer.agent.BuildFinishedStatus
-import jetbrains.buildServer.agent.BuildProcess
-import java.util.concurrent.atomic.AtomicBoolean
-import jetbrains.buildServer.RunBuildException
-
-
 public abstract class BuildProcessBase: BuildProcess {
   private val myIsInterrupted: AtomicBoolean = AtomicBoolean()
   private val myIsFinished: AtomicBoolean = AtomicBoolean()
@@ -90,5 +88,5 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
 
 public trait DelegatingProcessAction {
   open fun startImpl(): BuildProcess
-  open fun finishedImpl()
+  open fun finishedImpl() { }
 }

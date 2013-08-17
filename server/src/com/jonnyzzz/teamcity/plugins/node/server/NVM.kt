@@ -16,31 +16,41 @@
 
 package com.jonnyzzz.teamcity.plugins.node.server
 
-import jetbrains.buildServer.serverSide.BuildFeature
-import com.jonnyzzz.teamcity.plugins.node.common.NVMBean
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.serverSide.parameters.AbstractBuildParametersProvider
 import jetbrains.buildServer.serverSide.SBuild
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 import com.jonnyzzz.teamcity.plugins.node.common.*
+import jetbrains.buildServer.serverSide.PropertiesProcessor
+import jetbrains.buildServer.serverSide.InvalidProperty
+import jetbrains.buildServer.requirements.Requirement
+import jetbrains.buildServer.agent.AgentRuntimeProperties
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 16.08.13 21:43
  */
-public class NVMFeature(val plugin : PluginDescriptor) : BuildFeature() {
+public class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
   private val bean = NVMBean()
 
   public override fun getType(): String = bean.NVMFeatureType
-  public override fun getDisplayName(): String = "Install Node.js and NPM"
-  public override fun getEditParametersUrl(): String? = plugin.getPluginResourcesPath("node.nvm.jsp")
-  public override fun describeParameters(params: Map<String, String>): String = "Node.js v" + params[bean.NVMVersion]
-  public override fun getDefaultParameters(): MutableMap<String, String> = hashMapOf(bean.NVMVersion to "0.10.0")
-  public override fun isMultipleFeaturesPerBuildTypeAllowed(): Boolean = false
+  public override fun getDisplayName(): String = "Node.js NVM"
+
+  protected override fun getEditJsp(): String = "node.nvm.edit.jsp"
+  protected override fun getViewJsp(): String = "node.nvm.view.jsp"
+  public override fun getDescription(): String = getDisplayName()
+
+  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor{ arrayListOf<InvalidProperty>() }
+
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf(bean.NVMVersion to "0.10.0")
+  public override fun describeParameters(parameters: Map<String, String>): String = "Node.js v" + parameters[bean.NVMVersion]
+
+  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
+    //TODO: check OS is linux or Mac OS
+    return arrayListOf()
+  }
 }
 
-public class NVMParametersProvider : AbstractBuildParametersProvider() {
+public class NVMParametersProvider() : AbstractBuildParametersProvider() {
   private val bean = NVMBean()
 
   public override fun getParameters(build: SBuild, emulationMode: Boolean): MutableMap<String, String> {
@@ -49,7 +59,7 @@ public class NVMParametersProvider : AbstractBuildParametersProvider() {
     val bt = build.getBuildType()
     if (bt == null) return def
 
-    val feature = bt.getResolvedSettings().getBuildFeatures().find { it.getType() == bean.NVMFeatureType }
+    val feature = bt.getResolvedSettings().getBuildRunners().find { it.getType() == bean.NVMFeatureType }
     if (feature == null) return def
 
     val version = feature.getParameters()[bean.NVMVersion]

@@ -18,18 +18,48 @@ package com.jonnyzzz.teamcity.plugins.node.agent
 
 import jetbrains.buildServer.agent.BuildProgressLogger
 import jetbrains.buildServer.messages.DefaultMessagesInfo
+import jetbrains.buildServer.agent.BuildRunnerContext
+import jetbrains.buildServer.agent.AgentRunningBuild
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.DelegatingProcessAction
+import jetbrains.buildServer.agent.BuildProcess
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 16.08.13 22:40
  */
-inline fun <T> BuildProgressLogger.block(name:String, description:String = name, action:BuildProgressLogger.() -> T) : T {
-  val blockType = "jonnyzzz"
 
-  this.logMessage(DefaultMessagesInfo.createBlockStart(name, description, blockType))
+inline fun BuildProgressLogger.block(name: String, description: String = name): () -> Unit {
+  this.logMessage(DefaultMessagesInfo.createBlockStart(name, description, "jonnyzzz"))
+
+  return{
+    this.logMessage(DefaultMessagesInfo.createBlockEnd(name, "jonnyzzz"))
+  }
+}
+
+inline fun BuildProgressLogger.block(name: String, description: String = name, a: DelegatingProcessAction): DelegatingProcessAction {
+  return object:DelegatingProcessAction {
+    private var action: () -> Unit = { };
+    override fun finishedImpl() {
+      action()
+      a.finishedImpl()
+    }
+
+    override fun startImpl(): BuildProcess {
+      action = block(name, description)
+      a.startImpl()
+    }
+  }
+}
+
+
+inline fun <T> BuildProgressLogger.block(name: String, description: String = name, action: BuildProgressLogger.() -> T): T {
+  val d = this.block(name, description)
   try {
     return action()
   } finally {
-    this.logMessage(DefaultMessagesInfo.createBlockEnd(name, blockType))
+    d()
   }
 }
+
+inline fun <T> AgentRunningBuild.logging(f: BuildProgressLogger.() -> T): T = getBuildLogger().f()
+inline fun <T> BuildRunnerContext.logging(f: BuildProgressLogger.() -> T): T = getBuild().logging(f)

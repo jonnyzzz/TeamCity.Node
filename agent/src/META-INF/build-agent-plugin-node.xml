@@ -25,6 +25,5 @@
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl"/>
-  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMListener"/>
-  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMProcessor"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMRunner"/>
 </beans>
