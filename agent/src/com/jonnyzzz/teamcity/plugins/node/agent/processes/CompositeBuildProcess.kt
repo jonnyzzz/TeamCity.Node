@@ -21,38 +21,6 @@ import jetbrains.buildServer.agent.BuildProcess
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public trait CompositeProcessBuilder {
-  fun step(p: () -> Unit)
-  fun step(p: BuildProcess)
-  fun step(p: DelegatingProcessAction)
-}
-
-public fun action(p:() -> BuildProcess) : DelegatingProcessAction = object:DelegatingProcessAction {
-  override fun startImpl(): BuildProcess = p()
-}
-
-public fun compositeBuildProcess(builder: CompositeProcessBuilder.() -> Unit): BuildProcess {
-  val proc = CompositeBuildProcessImpl()
-  object:CompositeProcessBuilder {
-    override fun step(p: () -> Unit) {
-      step(object:BuildProcessBase() {
-        protected override fun waitForImpl(): BuildFinishedStatus {
-          p()
-          BuildFinishedStatus.FINISHED_SUCCESS
-        }
-      })
-    }
-
-    override fun step(p: DelegatingProcessAction) {
-      step(DelegatingBuildProcess(p))
-    }
-
-    override fun step(p: BuildProcess) {
-      proc.pushBuildProcess(p)
-    }
-  }.builder()
-  return proc
-}
 
 public trait BuildProcessContinuation {
   fun pushBuildProcess(process: BuildProcess)
