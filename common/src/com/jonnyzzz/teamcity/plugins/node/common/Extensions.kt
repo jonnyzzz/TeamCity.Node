@@ -34,6 +34,8 @@ fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.String
 fun Collection<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 fun Array<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 
+inline fun String.n(s:String) : String = this + "\n" + s
+
 fun String?.fetchArguments() : Collection<String> {
   if (this == null || this.isEmptyOrSpaces()) return listOf<String>()
 

@@ -98,20 +98,17 @@ public class NVMRunner(val downloader : NVMDownloader,
     val version = context.getRunnerParameters()[bean.NVMVersion]
 
     return context.logging {
-      compositeBuildProcess(runningBuild) {
+      compositeBuildProcess(runningBuild, facade) {
         execute("Download", "Fetching NVM") {
           message("Downloading creatonix/nvm...")
           downloader.downloadNVM(nvmHome)
           message("NVM downloaded into ${nvmHome}")
         }
-        delegate("Install", "Installing Node.js v${version}") {
-          val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm install ${version}\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
-          LOG.info("Executing NVM command: ${commandLine}")
-          val ctx = facade.createBuildRunnerContext(runningBuild, SimpleRunnerConstants.TYPE, nvmHome.getPath())
-          ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
-          ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
-
-          facade.createExecutable(runningBuild, ctx)
+        script("Install", "Installing Node.js v${version}",nvmHome.getPath()) {
+          ". ${nvmHome}/nvm.sh" n "nvm install ${version}"
+        }
+        script("Use", "Selecting Node.js v${version}",nvmHome.getPath()) {
+          ". ${nvmHome}/nvm.sh" n "nvm use ${version}" n "\${TEAMCITY_CAPTURE_ENV}"
         }
       }
     }

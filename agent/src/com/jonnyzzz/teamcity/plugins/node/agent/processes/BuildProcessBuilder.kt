@@ -20,8 +20,10 @@ import jetbrains.buildServer.agent.BuildProcess
 import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.AgentRunningBuild
 import com.jonnyzzz.teamcity.plugins.node.agent.block
-import jetbrains.buildServer.agent.SimpleBuildLogger
 import jetbrains.buildServer.agent.BuildProgressLogger
+import jetbrains.buildServer.agent.BuildProcessFacade
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import jetbrains.buildServer.runner.SimpleRunnerConstants
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -32,11 +34,14 @@ import jetbrains.buildServer.agent.BuildProgressLogger
 public trait CompositeProcessBuilder<R> {
   fun execute(blockName : String, blockDescription : String = blockName, p: () -> Unit) : R
   fun delegate(blockName : String, blockDescription : String = blockName, p: () -> BuildProcess) : R
+  fun script(blockName : String, blockDescription : String = blockName, workingDir:String, script: () -> String) : R
 }
 
-public fun compositeBuildProcess(build : AgentRunningBuild, builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
+public fun compositeBuildProcess(build : AgentRunningBuild,
+                                 facade : BuildProcessFacade
+                                 builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
   val proc = CompositeBuildProcessImpl()
-  object:CompositeProcessBuilderImpl<Unit>(build) {
+  object:CompositeProcessBuilderImpl<Unit>(build, facade) {
     override fun push(p: BuildProcess) {
       proc.pushBuildProcess(p)
     }
@@ -45,9 +50,26 @@ public fun compositeBuildProcess(build : AgentRunningBuild, builder: CompositePr
 }
 
 
-abstract class CompositeProcessBuilderImpl<R>(val build : AgentRunningBuild) : CompositeProcessBuilder<R> {
+abstract class CompositeProcessBuilderImpl<R>(val build : AgentRunningBuild,
+                                              val facade : BuildProcessFacade) : CompositeProcessBuilder<R> {
   private val logger: BuildProgressLogger
     get() = build.getBuildLogger()
+
+  override fun script(blockName: String, blockDescription: String, workingDir:String, script : () -> String) =
+          delegate(blockName, blockDescription) {
+            val commandLine = (
+              if(build.getAgentConfiguration().getSystemInfo().isWindows())
+                ""
+              else "#!/bin/bash\n\n"
+            ) + script()
+
+            log4j(javaClass).info("Executing shell command:\n${commandLine}")
+            val ctx = facade.createBuildRunnerContext(build, SimpleRunnerConstants.TYPE, workingDir)
+            ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
+            ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
+
+            facade.createExecutable(build, ctx)
+          }
 
   override fun execute(blockName: String, blockDescription: String, p: () -> Unit): R =
           delegate(blockName, blockDescription) {
