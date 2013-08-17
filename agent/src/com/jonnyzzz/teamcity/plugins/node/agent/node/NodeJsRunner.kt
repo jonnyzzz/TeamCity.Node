@@ -1,12 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.agent
-
-import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
-import jetbrains.buildServer.agent.runner.CommandLineBuildService
-import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
-
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -22,6 +13,16 @@ import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.jonnyzzz.teamcity.plugins.node.agent.node
+
+import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
+import jetbrains.buildServer.agent.runner.CommandLineBuildService
+import jetbrains.buildServer.agent.AgentBuildRunnerInfo
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.agent.JsService
+import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
+
 public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
   val bean = NodeBean()
 

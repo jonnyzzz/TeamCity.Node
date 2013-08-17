@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-package com.jonnyzzz.teamcity.plugins.node.agent
+package com.jonnyzzz.teamcity.plugins.node.agent.phantom
+
+import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
+import jetbrains.buildServer.agent.runner.CommandLineBuildService
+import jetbrains.buildServer.agent.AgentBuildRunnerInfo
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.agent.JsService
+
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -30,17 +38,6 @@ package com.jonnyzzz.teamcity.plugins.node.agent
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
-import jetbrains.buildServer.agent.runner.CommandLineBuildService
-import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import jetbrains.buildServer.agent.runner.BuildServiceAdapter
-import jetbrains.buildServer.agent.runner.ProgramCommandLine
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 0:52
