@@ -36,22 +36,6 @@ inline fun BuildProgressLogger.block(name: String, description: String = name): 
   }
 }
 
-inline fun BuildProgressLogger.block(name: String, description: String = name, a: DelegatingProcessAction): DelegatingProcessAction {
-  return object:DelegatingProcessAction {
-    private var action: () -> Unit = { };
-    override fun finishedImpl() {
-      action()
-      a.finishedImpl()
-    }
-
-    override fun startImpl(): BuildProcess {
-      action = block(name, description)
-      a.startImpl()
-    }
-  }
-}
-
-
 inline fun <T> BuildProgressLogger.block(name: String, description: String = name, action: BuildProgressLogger.() -> T): T {
   val d = this.block(name, description)
   try {

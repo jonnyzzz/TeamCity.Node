@@ -34,7 +34,6 @@ import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.compositeBuildProcess
 import jetbrains.buildServer.agent.BuildProcess
 import com.jonnyzzz.teamcity.plugins.node.agent.logging
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.action
 import jetbrains.buildServer.runner.SimpleRunnerConstants
 import jetbrains.buildServer.parameters.ReferencesResolverUtil
 
@@ -99,25 +98,21 @@ public class NVMRunner(val downloader : NVMDownloader,
     val version = context.getRunnerParameters()[bean.NVMVersion]
 
     return context.logging {
-      compositeBuildProcess {
-        step {
-          block("Download", "Fetching NVM") {
-            message("Downloading creatonix/nvm...")
-            downloader.downloadNVM(nvmHome)
-            message("NVM downloaded into ${nvmHome}")
-          }
+      compositeBuildProcess(runningBuild) {
+        execute("Download", "Fetching NVM") {
+          message("Downloading creatonix/nvm...")
+          downloader.downloadNVM(nvmHome)
+          message("NVM downloaded into ${nvmHome}")
         }
-        step (
-          block("Install", "Installing Node.js v${version}", action() {
-            val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm install ${version}\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
-            LOG.info("Executing NVM command: ${commandLine}")
-            val ctx = facade.createBuildRunnerContext(runningBuild, SimpleRunnerConstants.TYPE, nvmHome.getPath())
-            ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
-            ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
+        delegate("Install", "Installing Node.js v${version}") {
+          val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm install ${version}\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
+          LOG.info("Executing NVM command: ${commandLine}")
+          val ctx = facade.createBuildRunnerContext(runningBuild, SimpleRunnerConstants.TYPE, nvmHome.getPath())
+          ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
+          ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
 
-            facade.createExecutable(runningBuild, ctx)
-          })
-        )
+          facade.createExecutable(runningBuild, ctx)
+        }
       }
     }
   }
