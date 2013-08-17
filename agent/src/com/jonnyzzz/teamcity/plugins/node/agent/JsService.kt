@@ -1,4 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.agent
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -14,6 +13,7 @@ package com.jonnyzzz.teamcity.plugins.node.agent
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.jonnyzzz.teamcity.plugins.node.agent
 
 import jetbrains.buildServer.RunBuildException
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
@@ -23,21 +23,22 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.resolve
-import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
 import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
 import com.jonnyzzz.teamcity.plugins.node.common.tempFile
 import java.io.IOException
-import java.io.File
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
 import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
+import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
+import org.apache.log4j.Logger
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 15.01.13 1:00
  */
 
-
-public abstract class JsService() : ServiceBase() {
+public abstract class JsService() : BuildServiceAdapter() {
+  private val disposables = linkedListOf<() -> Unit>()
+  protected val LOG : Logger = log4j(this.javaClass)
   protected val bean : NodeBean = NodeBean()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine {
@@ -109,4 +110,25 @@ public abstract class JsService() : ServiceBase() {
     return "." + ext
   }
 
+  protected fun disposeLater(action : () -> Unit) {
+    disposables add action
+  }
+
+  public override fun afterProcessFinished() {
+    super<BuildServiceAdapter>.afterProcessFinished()
+
+    disposables.forEach { it() }
+  }
+
+  protected inline fun io<T>(errorMessage: String, body: () -> T): T {
+    try {
+      return body()
+    } catch (e: IOException) {
+      throw RunBuildException("${errorMessage}. ${e.getMessage()}", e)
+    }
+  }
+
+  protected fun fetchArguments(runnerParametersKey : String) : Collection<String> {
+    return getRunnerParameters().get(runnerParametersKey).fetchArguments()
+  }
 }
