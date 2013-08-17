@@ -107,7 +107,7 @@ public class NVMRunner(val downloader : NVMDownloader,
           }
         }
         step (
-          block("Install", "Installing Node.js ${version}", action() {
+          block("Install", "Installing Node.js v${version}", action() {
             val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
             LOG.info("Executing NVM command: ${commandLine}")
             val ctx = facade.createBuildRunnerContext(runningBuild, SimpleRunnerConstants.TYPE, nvmHome.getPath())
