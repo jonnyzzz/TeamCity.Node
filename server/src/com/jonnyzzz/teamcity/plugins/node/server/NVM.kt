@@ -67,6 +67,7 @@ public class NVMParametersProvider() : AbstractBuildParametersProvider() {
 
     val v : String = version
     return hashMapOf(
+            bean.NVMUsed to v,
             NodeBean().nodeJSConfigurationParameter to v,
             NPMBean().nodeJSNPMConfigurationParameter to v
     ) + def

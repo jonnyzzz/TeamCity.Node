@@ -36,6 +36,7 @@ import jetbrains.buildServer.agent.BuildProcess
 import com.jonnyzzz.teamcity.plugins.node.agent.logging
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.action
 import jetbrains.buildServer.runner.SimpleRunnerConstants
+import jetbrains.buildServer.parameters.ReferencesResolverUtil
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -108,7 +109,7 @@ public class NVMRunner(val downloader : NVMDownloader,
         }
         step (
           block("Install", "Installing Node.js v${version}", action() {
-            val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
+            val commandLine = "#!/bin/bash\n. ${nvmHome}/nvm.sh\nnvm install ${version}\nnvm use ${version}\n\${TEAMCITY_CAPTURE_ENV}"
             LOG.info("Executing NVM command: ${commandLine}")
             val ctx = facade.createBuildRunnerContext(runningBuild, SimpleRunnerConstants.TYPE, nvmHome.getPath())
             ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
@@ -130,6 +131,9 @@ public class NVMRunner(val downloader : NVMDownloader,
                 log4j(javaClass).info("Node NVM installer runner is not availabe")
                 false
               } else {
+                val ref = ReferencesResolverUtil.makeReference(bean.NVMUsed)
+                agentConfiguration.addConfigurationParameter(NPMBean().nodeJSNPMConfigurationParameter, ref)
+                agentConfiguration.addConfigurationParameter(NodeBean().nodeJSConfigurationParameter, ref)
                 true
               }
             }
