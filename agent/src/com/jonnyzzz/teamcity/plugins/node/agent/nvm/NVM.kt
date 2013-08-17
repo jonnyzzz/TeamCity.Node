@@ -26,16 +26,13 @@ import java.io.BufferedOutputStream
 import jetbrains.buildServer.agent.AgentRunningBuild
 import jetbrains.buildServer.agent.BuildRunnerContext
 import com.jonnyzzz.teamcity.plugins.node.common.*
-import com.jonnyzzz.teamcity.plugins.node.agent.block
 import jetbrains.buildServer.agent.BuildAgentConfiguration
-import jetbrains.buildServer.agent.BuildProcessFacade
 import jetbrains.buildServer.agent.AgentBuildRunner
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.compositeBuildProcess
 import jetbrains.buildServer.agent.BuildProcess
 import com.jonnyzzz.teamcity.plugins.node.agent.logging
-import jetbrains.buildServer.runner.SimpleRunnerConstants
 import jetbrains.buildServer.parameters.ReferencesResolverUtil
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeProcessFactory
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -89,7 +86,7 @@ public class NVMDownloader(val http:HttpClientWrapper) {
 }
 
 public class NVMRunner(val downloader : NVMDownloader,
-                       val facade : BuildProcessFacade) : AgentBuildRunner {
+                       val facade : CompositeProcessFactory) : AgentBuildRunner {
   private val bean = NVMBean();
   private val LOG = log4j(javaClass<NVMRunner>());
 
@@ -98,7 +95,7 @@ public class NVMRunner(val downloader : NVMDownloader,
     val version = context.getRunnerParameters()[bean.NVMVersion]
 
     return context.logging {
-      compositeBuildProcess(runningBuild, facade) {
+      facade.compositeBuildProcess(runningBuild) {
         execute("Download", "Fetching NVM") {
           message("Downloading creatonix/nvm...")
           downloader.downloadNVM(nvmHome)

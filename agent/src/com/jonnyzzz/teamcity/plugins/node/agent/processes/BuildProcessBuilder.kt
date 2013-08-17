@@ -30,37 +30,41 @@ import jetbrains.buildServer.runner.SimpleRunnerConstants
  * Date: 17.08.13 12:31
  */
 
+public trait CompositeProcessFactory {
+  fun compositeBuildProcess(build: AgentRunningBuild,
+                            builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess
+}
+
+public class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : CompositeProcessFactory {
+  override fun compositeBuildProcess(build: AgentRunningBuild,
+                                     builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
+    val proc = CompositeBuildProcessImpl()
+    object:CompositeProcessBuilderImpl<Unit>(build, facade) {
+      override fun push(p: BuildProcess) {
+        proc.pushBuildProcess(p)
+      }
+    }.builder()
+    return proc
+  }
+}
 
 public trait CompositeProcessBuilder<R> {
-  fun execute(blockName : String, blockDescription : String = blockName, p: () -> Unit) : R
-  fun delegate(blockName : String, blockDescription : String = blockName, p: () -> BuildProcess) : R
-  fun script(blockName : String, blockDescription : String = blockName, workingDir:String, script: () -> String) : R
+  fun execute(blockName: String, blockDescription: String = blockName, p: () -> Unit): R
+  fun delegate(blockName: String, blockDescription: String = blockName, p: () -> BuildProcess): R
+  fun script(blockName: String, blockDescription: String = blockName, workingDir: String, script: () -> String): R
 }
 
-public fun compositeBuildProcess(build : AgentRunningBuild,
-                                 facade : BuildProcessFacade
-                                 builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
-  val proc = CompositeBuildProcessImpl()
-  object:CompositeProcessBuilderImpl<Unit>(build, facade) {
-    override fun push(p: BuildProcess) {
-      proc.pushBuildProcess(p)
-    }
-  }.builder()
-  return proc
-}
-
-
-abstract class CompositeProcessBuilderImpl<R>(val build : AgentRunningBuild,
-                                              val facade : BuildProcessFacade) : CompositeProcessBuilder<R> {
+abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
+                                              val facade: BuildProcessFacade) : CompositeProcessBuilder<R> {
   private val logger: BuildProgressLogger
     get() = build.getBuildLogger()
 
-  override fun script(blockName: String, blockDescription: String, workingDir:String, script : () -> String) =
+  override fun script(blockName: String, blockDescription: String, workingDir: String, script: () -> String) =
           delegate(blockName, blockDescription) {
             val commandLine = (
-              if(build.getAgentConfiguration().getSystemInfo().isWindows())
-                ""
-              else "#!/bin/bash\n\n"
+            if(build.getAgentConfiguration().getSystemInfo().isWindows())
+              ""
+            else "#!/bin/bash\n\n"
             ) + script()
 
             log4j(javaClass).info("Executing shell command:\n${commandLine}")

@@ -26,4 +26,5 @@
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMRunner"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeProcessFactoryImpl"/>
 </beans>
