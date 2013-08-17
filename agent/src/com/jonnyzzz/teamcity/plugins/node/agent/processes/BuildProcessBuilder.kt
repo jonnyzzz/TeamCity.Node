@@ -46,26 +46,26 @@ public fun compositeBuildProcess(build : AgentRunningBuild, builder: CompositePr
 
 
 abstract class CompositeProcessBuilderImpl<R>(val build : AgentRunningBuild) : CompositeProcessBuilder<R> {
-  private val logger :BuildProgressLogger
+  private val logger: BuildProgressLogger
     get() = build.getBuildLogger()
 
-  override fun execute(blockName: String, blockDescription: String, p : () -> Unit) : R =
-    delegate(blockName, blockDescription) {
-      process(p)
-    }
+  override fun execute(blockName: String, blockDescription: String, p: () -> Unit): R =
+          delegate(blockName, blockDescription) {
+            process(p)
+          }
 
-  override fun delegate(blockName: String, blockDescription: String, p : () -> BuildProcess) : R =
-    push(logger.block(blockName, blockDescription, action(p)))
+  override fun delegate(blockName: String, blockDescription: String, p: () -> BuildProcess): R =
+          push(logger.block(blockName, blockDescription, action(p)))
 
 
-  fun push(p: DelegatingProcessAction) : R = push(DelegatingBuildProcess(p))
-  protected abstract fun push(p: BuildProcess) : R
+  fun push(p: DelegatingProcessAction): R = push(DelegatingBuildProcess(p))
+  protected abstract fun push(p: BuildProcess): R
 
-  private fun process(p : () -> Unit) : BuildProcess = object:BuildProcessBase() {
-    protected override fun waitForImpl(): BuildFinishedStatus = with(p()) {BuildFinishedStatus.FINISHED_SUCCESS}
+  private fun process(p: () -> Unit): BuildProcess = object:BuildProcessBase() {
+    protected override fun waitForImpl(): BuildFinishedStatus = with(p()) { BuildFinishedStatus.FINISHED_SUCCESS }
   }
 
-  private fun action(p:() -> BuildProcess) : DelegatingProcessAction = object:DelegatingProcessAction {
+  private fun action(p: () -> BuildProcess): DelegatingProcessAction = object:DelegatingProcessAction {
     override fun startImpl(): BuildProcess = p()
   }
 
