@@ -59,4 +59,11 @@ public class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
   }
 }
 
+public class PhantomJsService() : JsService() {
+  protected override fun getToolPath(): String? = getRunnerParameters()[bean.toolPathKey]
 
+  protected override fun getToolName(): String = "phantom"
+
+  protected override fun getGeneratedScriptExt(): String
+          = "." + (getRunnerParameters()[bean.phantomJsExtensionKey] ?: bean.phantomJsExtensionDefault)
+}

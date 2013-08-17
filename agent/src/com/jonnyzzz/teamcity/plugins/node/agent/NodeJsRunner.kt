@@ -1,4 +1,12 @@
 package com.jonnyzzz.teamcity.plugins.node.agent
+
+import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
+import jetbrains.buildServer.agent.runner.CommandLineBuildService
+import jetbrains.buildServer.agent.AgentBuildRunnerInfo
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
+import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
+
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -14,17 +22,6 @@ package com.jonnyzzz.teamcity.plugins.node.agent
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
-import jetbrains.buildServer.agent.runner.CommandLineBuildService
-import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import jetbrains.buildServer.agent.runner.BuildServiceAdapter
-import jetbrains.buildServer.agent.runner.ProgramCommandLine
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-
 public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
   val bean = NodeBean()
 
@@ -36,4 +33,15 @@ public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
     public override fun getType(): String = bean.runTypeNameNodeJs
     public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
+}
+
+public class NodeJsService() : JsService() {
+  protected override fun getToolPath(): String? {
+    val path = getRunnerParameters()[bean.toolPathKey]
+    if (path == null || path.isEmptyOrSpaces()) return "node"
+    return path.trim()
+  }
+
+  protected override fun getToolName(): String  = "node"
+  protected override fun getGeneratedScriptExt(): String = ".js"
 }
