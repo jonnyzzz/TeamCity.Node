@@ -25,20 +25,44 @@ import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.resolve
 import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
 import com.jonnyzzz.teamcity.plugins.node.common.tempFile
-import java.io.IOException
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
 import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
 import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import org.apache.log4j.Logger
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
+import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 15.01.13 1:00
  */
 
-public abstract class JsService() : BuildServiceAdapter() {
+public abstract class BaseService : BuildServiceAdapter() {
   private val disposables = linkedListOf<() -> Unit>()
   protected val LOG : Logger = log4j(this.javaClass)
+
+  protected fun disposeLater(action : () -> Unit) {
+    disposables add action
+  }
+
+  override fun afterProcessFinished() {
+    super<BuildServiceAdapter>.afterProcessFinished()
+
+    disposables.forEach { it() }
+  }
+
+  protected fun execute(executable:String, arguments:List<String>) : ProgramCommandLine {
+    val that = this
+    return object:ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
+      override fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
+              = SimpleProgramCommandLine(getRunnerContext(), executable, args)
+
+      override fun disposeLater(action: () -> Unit) = that.disposeLater(action)
+    }.createProgramCommandline(executable, arguments)
+  }
+}
+
+public abstract class JsService() : BaseService() {
   protected val bean : NodeBean = NodeBean()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine {
@@ -97,7 +121,7 @@ public abstract class JsService() : BuildServiceAdapter() {
       throw RunBuildException("Path to tool was not specified")
     }
 
-    return createProgramCommandline(executable, arguments)
+    return execute(executable, arguments)
   }
 
   protected abstract fun getToolPath() : String?
@@ -108,24 +132,6 @@ public abstract class JsService() : BuildServiceAdapter() {
     var ext = getGeneratedScriptExt()
     while(ext.startsWith(".")) ext = ext.substring(1)
     return "." + ext
-  }
-
-  protected fun disposeLater(action : () -> Unit) {
-    disposables add action
-  }
-
-  public override fun afterProcessFinished() {
-    super<BuildServiceAdapter>.afterProcessFinished()
-
-    disposables.forEach { it() }
-  }
-
-  protected inline fun io<T>(errorMessage: String, body: () -> T): T {
-    try {
-      return body()
-    } catch (e: IOException) {
-      throw RunBuildException("${errorMessage}. ${e.getMessage()}", e)
-    }
   }
 
   protected fun fetchArguments(runnerParametersKey : String) : Collection<String> {

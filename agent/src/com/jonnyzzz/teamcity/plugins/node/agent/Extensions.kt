@@ -22,6 +22,9 @@ import jetbrains.buildServer.agent.BuildRunnerContext
 import jetbrains.buildServer.agent.AgentRunningBuild
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.DelegatingProcessAction
 import jetbrains.buildServer.agent.BuildProcess
+import java.io.IOException
+import jetbrains.buildServer.RunBuildException
+
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -47,3 +50,18 @@ inline fun <T> BuildProgressLogger.block(name: String, description: String = nam
 
 inline fun <T> AgentRunningBuild.logging(f: BuildProgressLogger.() -> T): T = getBuildLogger().f()
 inline fun <T> BuildRunnerContext.logging(f: BuildProgressLogger.() -> T): T = getBuild().logging(f)
+
+
+/**
+ * @author Eugene Petrenko (eugene.petrenko@gmail.com)
+ * Date: 18.08.13 22:38
+ */
+
+inline fun io<T>(errorMessage: String, body: () -> T): T {
+  try {
+    return body()
+  } catch (e: IOException) {
+    throw RunBuildException("${errorMessage}. ${e.getMessage()}", e)
+  }
+}
+

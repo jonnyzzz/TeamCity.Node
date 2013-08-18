@@ -23,12 +23,12 @@ import jetbrains.buildServer.agent.BuildAgentConfiguration
 import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
 import jetbrains.buildServer.agent.runner.CommandLineBuildService
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
-import jetbrains.buildServer.agent.runner.BuildServiceAdapter
-import com.jonnyzzz.teamcity.plugins.node.common.div
 import jetbrains.buildServer.RunBuildException
-import com.jonnyzzz.teamcity.plugins.node.common.resolve
-import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
+import com.jonnyzzz.teamcity.plugins.node.agent.BaseService
+import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
+import com.jonnyzzz.teamcity.plugins.node.common.resolve
+import com.jonnyzzz.teamcity.plugins.node.common.div
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -46,7 +46,7 @@ public class GruntServiceFactory(val proxy: ExecutorProxy): CommandLineBuildServ
   public override fun createService(): CommandLineBuildService = GruntSession()
 }
 
-public class GruntSession : BuildServiceAdapter() {
+public class GruntSession : BaseService() {
   private val bean = GruntBean()
 
   private fun gruntExecutable() : String =
@@ -95,7 +95,7 @@ public class GruntSession : BuildServiceAdapter() {
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
 
-    return createProgramCommandline(gruntExecutablePath(), arguments)
+    return execute(gruntExecutablePath(), arguments)
   }
 }
 
