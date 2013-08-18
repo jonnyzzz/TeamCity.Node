@@ -39,7 +39,7 @@ public class NodeBean {
   public val nodeJSConfigurationParameter: String = "node.js"
 
   public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
-          = executionModeValues.filter { it.value == parameters[executionModeKey] }.first
+          = executionModeValues.find { it.value == parameters[executionModeKey] }
 }
 
 public enum class ExecutionModes(public val value: String,
