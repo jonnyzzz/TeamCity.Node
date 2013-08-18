@@ -3,6 +3,7 @@
   <test name="fast">
     <classes>
       <class name="SimpleTest"/>
+      <class name="NVMDownloadTest"/>
     </classes>
   </test>
 </suite>
