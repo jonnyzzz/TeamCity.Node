@@ -30,19 +30,39 @@ import com.jonnyzzz.teamcity.plugins.node.common.log4j
 import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
 import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import org.apache.log4j.Logger
+import java.io.File
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 15.01.13 1:00
  */
 
-public abstract class JsService() : BuildServiceAdapter() {
-  private val disposables = linkedListOf<() -> Unit>()
-  protected val LOG : Logger = log4j(this.javaClass)
-  protected val bean : NodeBean = NodeBean()
+public trait NodePhantomInfo {
+  public fun getToolPath(): String?
+  public fun getToolName(): String
+  public fun getGeneratedScriptExt(): String
+}
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine {
-    val mode = bean.findExecutionMode(getRunnerParameters())
+public trait NodePhantomContext {
+  fun getRunnerParameters(): Map<String, String>
+  fun getCheckoutDirectory(): File
+  fun getAgentTempDirectory(): File
+}
+
+public trait NodePhantomBuilder<ProgramCommandLine> {
+  fun disposeLater(action: () -> Unit)
+  fun createProgramCommandline(file: String, args: List<String>): ProgramCommandLine
+}
+
+public class NodePhantomStrategy<ProgramCommandLine>(val info: NodePhantomInfo,
+                                                     val context: NodePhantomContext,
+                                                     val builder: NodePhantomBuilder<ProgramCommandLine>) {
+  private val bean: NodeBean = NodeBean()
+  private val LOG: Logger = log4j(javaClass)
+
+
+  public fun makeProgramCommandLine(): ProgramCommandLine {
+    val mode = bean.findExecutionMode(context.getRunnerParameters())
 
     if (mode == null) {
       throw RunBuildException("Execution mode was not specified")
@@ -55,28 +75,28 @@ public abstract class JsService() : BuildServiceAdapter() {
 
     //add script file
     if (mode == ExecutionModes.File) {
-      val filePath = getRunnerParameters()[mode.parameter]
+      val filePath = context.getRunnerParameters()[mode.parameter]
       if (filePath == null || filePath.isEmptyOrSpaces()) {
         throw RunBuildException("Script file path was not specified")
       }
 
-      val file = getCheckoutDirectory().resolve(filePath)
+      val file = context.getCheckoutDirectory().resolve(filePath)
       if (!file.isFile()) {
         throw RunBuildException("Failed to find File at path: ${filePath}")
       }
 
       arguments.add(file.getPath())
     } else if (mode == ExecutionModes.Script) {
-      val scriptText = getRunnerParameters()[mode.parameter]
+      val scriptText = context.getRunnerParameters()[mode.parameter]
       if (scriptText == null || scriptText.isEmptyOrSpaces()) {
         throw RuntimeException("Script was not defined or empty")
       }
 
       val tempScript = io("Failed to create temp file") {
-        getAgentTempDirectory() tempFile TempFileName(getToolName(), getGeneratedScriptExtImpl())
+        context.getAgentTempDirectory() tempFile TempFileName(info.getToolName(), getGeneratedScriptExtImpl())
       }
 
-      disposeLater { tempScript.smartDelete() }
+      builder disposeLater { tempScript.smartDelete() }
 
       io("Failed to write script to temp file") {
         FileUtil.writeFileAndReportErrors(tempScript, scriptText);
@@ -92,35 +112,15 @@ public abstract class JsService() : BuildServiceAdapter() {
     //add script options
     arguments addAll fetchArguments(bean.scriptParameterKey)
 
-    val executable = getToolPath()
+    val executable = info.getToolPath()
     if (executable == null) {
       throw RunBuildException("Path to tool was not specified")
     }
 
-    return createProgramCommandline(executable, arguments)
+    return builder.createProgramCommandline(executable, arguments)
   }
 
-  protected abstract fun getToolPath() : String?
-  protected abstract fun getToolName() : String
-  protected abstract fun getGeneratedScriptExt() : String
-
-  private fun getGeneratedScriptExtImpl() : String {
-    var ext = getGeneratedScriptExt()
-    while(ext.startsWith(".")) ext = ext.substring(1)
-    return "." + ext
-  }
-
-  protected fun disposeLater(action : () -> Unit) {
-    disposables add action
-  }
-
-  public override fun afterProcessFinished() {
-    super<BuildServiceAdapter>.afterProcessFinished()
-
-    disposables.forEach { it() }
-  }
-
-  protected inline fun io<T>(errorMessage: String, body: () -> T): T {
+  inline private fun io<T>(errorMessage: String, body: () -> T): T {
     try {
       return body()
     } catch (e: IOException) {
@@ -128,7 +128,44 @@ public abstract class JsService() : BuildServiceAdapter() {
     }
   }
 
-  protected fun fetchArguments(runnerParametersKey : String) : Collection<String> {
-    return getRunnerParameters().get(runnerParametersKey).fetchArguments()
+  inline private fun getGeneratedScriptExtImpl(): String {
+    var ext = info.getGeneratedScriptExt()
+    while(ext.startsWith(".")) ext = ext.substring(1)
+    return "." + ext
+  }
+
+  inline private fun fetchArguments(runnerParametersKey: String): Collection<String> {
+    return context.getRunnerParameters().get(runnerParametersKey).fetchArguments()
+  }
+
+}
+
+public abstract class JsService() : BuildServiceAdapter(), NodePhantomInfo {
+  protected val bean: NodeBean = NodeBean()
+  protected val LOG: Logger = log4j(javaClass)
+  private val disposables = linkedListOf<() -> Unit>()
+
+  public override fun makeProgramCommandLine(): ProgramCommandLine {
+    val that = this
+    return NodePhantomStrategy<ProgramCommandLine>(
+      this,
+      object:NodePhantomContext {
+        override fun getRunnerParameters(): Map<String, String> = that.getRunnerParameters()
+        override fun getCheckoutDirectory(): File = that.getCheckoutDirectory()
+        override fun getAgentTempDirectory(): File = that.getAgentTempDirectory()
+      },
+      object:NodePhantomBuilder<ProgramCommandLine>{
+      override fun createProgramCommandline(file: String, args: List<String>): ProgramCommandLine = that.createProgramCommandline(file, args)
+      override fun disposeLater(action: () -> Unit) {
+          disposables add action
+        }
+      }
+    ).makeProgramCommandLine()
+  }
+
+  public override fun afterProcessFinished() {
+    super<BuildServiceAdapter>.afterProcessFinished()
+
+    disposables.forEach { it() }
   }
 }

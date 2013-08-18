@@ -37,12 +37,12 @@ public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
 }
 
 public class NodeJsService() : JsService() {
-  protected override fun getToolPath(): String? {
+  override fun getToolPath(): String? {
     val path = getRunnerParameters()[bean.toolPathKey]
     if (path == null || path.isEmptyOrSpaces()) return "node"
     return path.trim()
   }
 
-  protected override fun getToolName(): String  = "node"
-  protected override fun getGeneratedScriptExt(): String = ".js"
+  override fun getToolName(): String  = "node"
+  override fun getGeneratedScriptExt(): String = ".js"
 }
