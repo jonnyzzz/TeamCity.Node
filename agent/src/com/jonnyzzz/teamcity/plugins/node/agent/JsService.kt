@@ -105,6 +105,7 @@ public abstract class JsService() : BuildServiceAdapter() {
       val scriptToRun = io("Failed to create temp file") {
         getAgentTempDirectory() tempFile TempFileName(getToolName(), ".sh")
       }
+      disposeLater { scriptToRun.smartDelete() }
       io("Generate wrapping bash script") {
         FileUtil.writeFileAndReportErrors(scriptToRun, "#!/bin/bash\n${executable} \"$@\"");
         FileUtil.setExectuableAttribute(scriptToRun.getPath(), true)
