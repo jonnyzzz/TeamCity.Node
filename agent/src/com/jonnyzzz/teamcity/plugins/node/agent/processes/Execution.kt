@@ -6,8 +6,8 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import jetbrains.buildServer.SimpleCommandLineProcessRunner
 import jetbrains.buildServer.SimpleCommandLineProcessRunner.RunCommandEventsAdapter
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import jetbrains.buildServer.agent.AgentRunningBuild
 import jetbrains.buildServer.util.FileUtil
+import jetbrains.buildServer.agent.BuildRunnerContext
 import com.jonnyzzz.teamcity.plugins.node.common.tempFile
 import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
 import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
@@ -58,21 +58,19 @@ public class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : Ex
   }
 }
 
-public trait ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
-  fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
-  fun disposeLater(action: () -> Unit)
+public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(protected val build: BuildRunnerContext) {
+  protected abstract fun execute(executable: String, args: List<String>): ProgramCommandLine
+  protected abstract fun disposeLater(action: () -> Unit)
 
-  fun generate(build: AgentRunningBuild,
-               executable: String,
-               arguments: List<String>): ProgramCommandLine {
+  public fun generate(executable: String, arguments: List<String>): ProgramCommandLine {
     log4j(javaClass).info("Executing ${executable} via wrapping script")
-    build.getBuildLogger().message("Executing ${executable} via wrapping shell script")
+    build.getBuild().getBuildLogger().message("Executing ${executable} via wrapping shell script")
 
-    if (build.getAgentConfiguration().getSystemInfo().isWindows()) {
-      return createProgramCommandline("cmd", arrayListOf<String>("/c", executable) + arguments)
+    if (build.getBuild().getAgentConfiguration().getSystemInfo().isWindows()) {
+      return execute("cmd", arrayListOf<String>("/c", executable) + arguments)
     } else {
       val scriptToRun = io("Failed to create temp file") {
-        build.getAgentTempDirectory() tempFile TempFileName(executable, ".sh")
+        build.getBuild().getAgentTempDirectory() tempFile TempFileName(executable, ".sh")
       }
       disposeLater { scriptToRun.smartDelete() }
       io("Generate wrapping bash script") {
@@ -80,7 +78,7 @@ public trait ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
         FileUtil.setExectuableAttribute(scriptToRun.getPath(), true)
       }
 
-      return createProgramCommandline(scriptToRun.getPath(), arguments)
+      return execute(scriptToRun.getPath(), arguments)
     }
   }
 }
