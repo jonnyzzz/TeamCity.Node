@@ -20,6 +20,8 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.Execution
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
 import org.apache.log4j.Logger
+import jetbrains.buildServer.agent.runner.BuildServiceAdapter
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
 
 /*
  * Copyright 2000-2013 Eugene Petrenko
@@ -75,7 +77,8 @@ public class NPMSession(val proxy : ExecutorProxy,
                     .map{ NPMCommandExecution(
                     logger,
                     "npm ${it}",
-                    commandline(runner, Execution(npm, extra + it.splitHonorQuotes()))){ exitCode ->
+                    runner,
+                    Execution(npm, extra + it.splitHonorQuotes())){ exitCode ->
                       previousStatus = when {
                         exitCode == 0 && checkExitCode -> BuildFinishedStatus.FINISHED_SUCCESS
                         else -> BuildFinishedStatus.FINISHED_FAILED
@@ -104,11 +107,22 @@ public class NPMSession(val proxy : ExecutorProxy,
 
 public class NPMCommandExecution(val logger : BuildProgressLogger,
                                  val blockName : String,
-                                 val cmd : ProgramCommandLine,
+                                 val runner : BuildRunnerContext,
+                                 val cmd : Execution,
                                  val onFinished : (Int) -> Unit) : LoggingProcessListener(logger), CommandExecution {
   private val OUT_LOG : Logger? = Logger.getLogger("teamcity.out")
+  private val disposables = linkedListOf<() -> Unit>()
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine = cmd
+  public override fun makeProgramCommandLine(): ProgramCommandLine =
+          object:ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
+            override fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
+                    = SimpleProgramCommandLine(runner, executable, args)
+
+            override fun disposeLater(action: () -> Unit) {
+              disposables add action
+            }
+          }.createProgramCommandline(cmd.program, cmd.arguments)
+
 
   public override fun beforeProcessStarted() {
     logger.activityStarted(blockName, "npm");
@@ -135,6 +149,7 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
   public override fun processFinished(exitCode: Int) {
     super<LoggingProcessListener>.processFinished(exitCode)
     logger.activityFinished(blockName, "npm");
+    disposables.forEach { it() }
     onFinished(exitCode)
   }
 

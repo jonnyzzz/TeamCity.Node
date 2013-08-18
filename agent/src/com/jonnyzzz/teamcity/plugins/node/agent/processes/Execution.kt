@@ -1,4 +1,17 @@
 package com.jonnyzzz.teamcity.plugins.node.agent.processes
+
+import com.jonnyzzz.teamcity.plugins.node.agent.*
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import com.intellij.execution.configurations.GeneralCommandLine
+import jetbrains.buildServer.SimpleCommandLineProcessRunner
+import jetbrains.buildServer.SimpleCommandLineProcessRunner.RunCommandEventsAdapter
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
+import jetbrains.buildServer.agent.AgentRunningBuild
+import jetbrains.buildServer.util.FileUtil
+import com.jonnyzzz.teamcity.plugins.node.common.tempFile
+import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
+import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
+
 /*
  * Copyright 2000-2013 Eugene Petrenko
  *
@@ -14,13 +27,6 @@ package com.jonnyzzz.teamcity.plugins.node.agent.processes
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import com.intellij.execution.configurations.GeneralCommandLine
-import jetbrains.buildServer.SimpleCommandLineProcessRunner
-import jetbrains.buildServer.SimpleCommandLineProcessRunner.RunCommandEventsAdapter
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 15.01.13 22:23
@@ -52,6 +58,32 @@ public class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : Ex
   }
 }
 
+public trait ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
+  fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
+  fun disposeLater(action: () -> Unit)
+
+  fun generate(build: AgentRunningBuild,
+               executable: String,
+               arguments: List<String>): ProgramCommandLine {
+    log4j(javaClass).info("Executing ${executable} via wrapping script")
+    build.getBuildLogger().message("Executing ${executable} via wrapping shell script")
+
+    if (build.getAgentConfiguration().getSystemInfo().isWindows()) {
+      return createProgramCommandline("cmd", arrayListOf<String>("/c", executable) + arguments)
+    } else {
+      val scriptToRun = io("Failed to create temp file") {
+        build.getAgentTempDirectory() tempFile TempFileName(executable, ".sh")
+      }
+      disposeLater { scriptToRun.smartDelete() }
+      io("Generate wrapping bash script") {
+        FileUtil.writeFileAndReportErrors(scriptToRun, "#!/bin/bash\n${executable} \"$@\"");
+        FileUtil.setExectuableAttribute(scriptToRun.getPath(), true)
+      }
+
+      return createProgramCommandline(scriptToRun.getPath(), arguments)
+    }
+  }
+}
 
 data public class ExecutionResult(public val stdOut : String,
                                   public val stdErr : String,
