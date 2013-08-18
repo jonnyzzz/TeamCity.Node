@@ -114,14 +114,14 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
   private val disposables = linkedListOf<() -> Unit>()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine =
-          object:ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
-            override fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
-                    = SimpleProgramCommandLine(runner, executable, args)
+          object:ScriptWrappingCommandLineGenerator<ProgramCommandLine>(runner) {
+            override fun execute(executable: String, args: List<String>): ProgramCommandLine
+                    = SimpleProgramCommandLine(build, executable, args)
 
             override fun disposeLater(action: () -> Unit) {
               disposables add action
             }
-          }.createProgramCommandline(cmd.program, cmd.arguments)
+          }.generate(cmd.program, cmd.arguments)
 
 
   public override fun beforeProcessStarted() {

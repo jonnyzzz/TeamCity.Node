@@ -53,12 +53,11 @@ public abstract class BaseService : BuildServiceAdapter() {
 
   protected fun execute(executable:String, arguments:List<String>) : ProgramCommandLine {
     val that = this
-    return object:ScriptWrappingCommandLineGenerator<ProgramCommandLine> {
-      override fun createProgramCommandline(executable: String, args: List<String>): ProgramCommandLine
-              = SimpleProgramCommandLine(getRunnerContext(), executable, args)
-
+    return object:ScriptWrappingCommandLineGenerator<ProgramCommandLine>(getRunnerContext()) {
+      override fun execute(executable: String, args: List<String>): ProgramCommandLine
+              = SimpleProgramCommandLine(build, executable, args)
       override fun disposeLater(action: () -> Unit) = that.disposeLater(action)
-    }.createProgramCommandline(executable, arguments)
+    }.generate(executable, arguments)
   }
 }
 
