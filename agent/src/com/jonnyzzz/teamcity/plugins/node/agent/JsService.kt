@@ -96,8 +96,22 @@ public abstract class JsService() : BuildServiceAdapter() {
     if (executable == null) {
       throw RunBuildException("Path to tool was not specified")
     }
+    LOG.info("Executing ${executable} via wrapping script")
+    getLogger().message("Executing ${executable} via wrapping script")
 
-    return createProgramCommandline(executable, arguments)
+    if (getAgentConfiguration().getSystemInfo().isWindows()) {
+      return createProgramCommandline("cmd", arrayListOf<String>("/c", executable) + arguments)
+    } else {
+      val scriptToRun = io("Failed to create temp file") {
+        getAgentTempDirectory() tempFile TempFileName(getToolName(), ".sh")
+      }
+      io("Generate wrapping bash script") {
+        FileUtil.writeFileAndReportErrors(scriptToRun, "#!/bin/bash\n${executable} \"$@\"");
+        FileUtil.setExectuableAttribute(scriptToRun.getPath(), true)
+      }
+
+      return createProgramCommandline(scriptToRun.getPath(), arguments)
+    }
   }
 
   protected abstract fun getToolPath() : String?
