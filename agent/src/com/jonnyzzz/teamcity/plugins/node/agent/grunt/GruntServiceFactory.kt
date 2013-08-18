@@ -18,6 +18,7 @@ package com.jonnyzzz.teamcity.plugins.node.agent.grunt
 
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ExecutorProxy
 import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
+import com.jonnyzzz.teamcity.plugins.node.agent.*
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import jetbrains.buildServer.agent.BuildAgentConfiguration
 import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
@@ -25,10 +26,14 @@ import jetbrains.buildServer.agent.runner.CommandLineBuildService
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
 import jetbrains.buildServer.RunBuildException
 import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
-import com.jonnyzzz.teamcity.plugins.node.agent.BaseService
 import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import com.jonnyzzz.teamcity.plugins.node.common.resolve
 import com.jonnyzzz.teamcity.plugins.node.common.div
+import java.util.TreeMap
+import com.jonnyzzz.teamcity.plugins.node.common.tempFile
+import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
+import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
+import com.google.gson.Gson
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -92,11 +97,30 @@ public class GruntSession : BaseService() {
       arguments add file.getPath()
     }
 
+    val parameters = TreeMap<String, String>()
+    parameters.putAll(getConfigParameters())
+    parameters.putAll(getBuildParameters().getAllParameters())
+
+    arguments add "--teamcity.properties=" + generateTeamCityProperties { putAll(parameters) }
+
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
 
     return execute(gruntExecutablePath(), arguments)
   }
+
+  private fun generateTeamCityProperties(builder : MutableMap<String,String>.() -> Unit) : String {
+    val file = io("Failed to create temp file") {
+      getAgentTempDirectory() tempFile TempFileName("teamcity", ".json")
+    }
+    disposeLater { file.smartDelete() }
+
+    val map = TreeMap<String, String>()
+    map.builder()
+    val text = Gson().toJson(map)!!
+    io("Failed to create parameters file: ${file}") {
+      writeUTF(file, text)
+    }
+    return file.getPath()
+  }
 }
-
-

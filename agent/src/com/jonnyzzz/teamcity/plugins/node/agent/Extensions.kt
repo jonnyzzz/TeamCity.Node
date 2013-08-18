@@ -20,11 +20,13 @@ import jetbrains.buildServer.agent.BuildProgressLogger
 import jetbrains.buildServer.messages.DefaultMessagesInfo
 import jetbrains.buildServer.agent.BuildRunnerContext
 import jetbrains.buildServer.agent.AgentRunningBuild
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.DelegatingProcessAction
-import jetbrains.buildServer.agent.BuildProcess
 import java.io.IOException
 import jetbrains.buildServer.RunBuildException
-
+import java.io.File
+import java.io.FileOutputStream
+import java.io.BufferedOutputStream
+import java.io.OutputStreamWriter
+import jetbrains.buildServer.util.FileUtil
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -65,3 +67,11 @@ inline fun io<T>(errorMessage: String, body: () -> T): T {
   }
 }
 
+inline fun writeUTF(file:File, text:String) {
+  val writer = OutputStreamWriter(BufferedOutputStream(FileOutputStream(file)), "utf-8")
+  try {
+    writer.write(text)
+  } finally {
+    FileUtil.close(writer)
+  }
+}
