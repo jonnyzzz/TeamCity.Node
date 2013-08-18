@@ -33,16 +33,21 @@ public class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
   private val bean = NVMBean()
 
   public override fun getType(): String = bean.NVMFeatureType
-  public override fun getDisplayName(): String = "Node.js NVM"
+
+  public override fun getDisplayName(): String = "Node.js NVM Installer"
+  public override fun getDescription(): String = "Install Node.js of specified version using NVM"
 
   protected override fun getEditJsp(): String = "node.nvm.edit.jsp"
   protected override fun getViewJsp(): String = "node.nvm.view.jsp"
-  public override fun getDescription(): String = getDisplayName()
 
-  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor{ arrayListOf<InvalidProperty>() }
+  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor
+          = PropertiesProcessor{ arrayListOf<InvalidProperty>() }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf(bean.NVMVersion to "0.10.0")
-  public override fun describeParameters(parameters: Map<String, String>): String = "Node.js v" + parameters[bean.NVMVersion]
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
+          = hashMapOf(bean.NVMVersion to "0.10")
+
+  public override fun describeParameters(parameters: Map<String, String>): String
+          = "Node.js v" + parameters[bean.NVMVersion]
 
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     //TODO: check OS is linux or Mac OS
