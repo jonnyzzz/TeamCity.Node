@@ -98,9 +98,13 @@ public class GruntSession : BaseService() {
     }
 
     val parameters = TreeMap<String, String>()
-    parameters.putAll(getConfigParameters())
-    parameters.putAll(getBuildParameters().getAllParameters())
+    parameters.putAll(getBuildParameters().getSystemProperties())
 
+    val parametersAll = TreeMap<String, String>()
+    parametersAll.putAll(getConfigParameters())
+    parametersAll.putAll(getBuildParameters().getAllParameters())
+
+    arguments add "--teamcity.properties.all=" + generateTeamCityProperties { putAll(parametersAll) }
     arguments add "--teamcity.properties=" + generateTeamCityProperties { putAll(parameters) }
 
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
