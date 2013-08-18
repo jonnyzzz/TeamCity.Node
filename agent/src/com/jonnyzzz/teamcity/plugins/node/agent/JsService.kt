@@ -97,7 +97,7 @@ public abstract class JsService() : BuildServiceAdapter() {
       throw RunBuildException("Path to tool was not specified")
     }
     LOG.info("Executing ${executable} via wrapping script")
-    getLogger().message("Executing ${executable} via wrapping script")
+    getLogger().message("Executing ${executable} via wrapping shell script")
 
     if (getAgentConfiguration().getSystemInfo().isWindows()) {
       return createProgramCommandline("cmd", arrayListOf<String>("/c", executable) + arguments)
