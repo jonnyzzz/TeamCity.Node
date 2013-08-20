@@ -1,14 +1,5 @@
-package com.jonnyzzz.teamcity.plugins.node.common
-
-import java.io.File
-import org.apache.log4j.Logger
-import java.io.IOException
-import jetbrains.buildServer.util.FileUtil
-import java.io.Closeable
-import java.util.HashMap
-
 /*
- * Copyright 2000-2013 Eugene Petrenko
+ * Copyright 2013-2013 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +13,16 @@ import java.util.HashMap
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.jonnyzzz.teamcity.plugins.node.common
+
+import java.io.File
+import org.apache.log4j.Logger
+import java.io.IOException
+import jetbrains.buildServer.util.FileUtil
+import java.io.Closeable
+import java.util.HashMap
+
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 0:41

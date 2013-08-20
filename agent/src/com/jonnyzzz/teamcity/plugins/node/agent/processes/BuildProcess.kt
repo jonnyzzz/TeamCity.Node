@@ -1,10 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
-
-import jetbrains.buildServer.agent.BuildFinishedStatus
-import jetbrains.buildServer.agent.BuildProcess
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicReference
-
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -20,6 +13,14 @@ import java.util.concurrent.atomic.AtomicReference
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
+
+import jetbrains.buildServer.agent.BuildFinishedStatus
+import jetbrains.buildServer.agent.BuildProcess
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+
 public abstract class BuildProcessBase: BuildProcess {
   private val myIsInterrupted: AtomicBoolean = AtomicBoolean()
   private val myIsFinished: AtomicBoolean = AtomicBoolean()

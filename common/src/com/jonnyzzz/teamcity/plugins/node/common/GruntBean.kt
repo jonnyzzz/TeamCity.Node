@@ -1,5 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.common
-
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -15,6 +13,9 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.jonnyzzz.teamcity.plugins.node.common
+
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)

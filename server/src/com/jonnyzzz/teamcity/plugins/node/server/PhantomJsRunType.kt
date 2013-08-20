@@ -1,5 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.server
-
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -15,6 +13,9 @@ package com.jonnyzzz.teamcity.plugins.node.server
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.jonnyzzz.teamcity.plugins.node.server
+
 
 import jetbrains.buildServer.serverSide.InvalidProperty
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces

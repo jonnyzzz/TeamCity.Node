@@ -1,11 +1,3 @@
-package com.jonnyzzz.teamcity.plugins.node.agent.processes
-
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.atomic.AtomicReference
-import jetbrains.buildServer.agent.BuildFinishedStatus
-import jetbrains.buildServer.agent.BuildProcess
-
 /*
  * Copyright 2013-2013 Eugene Petrenko
  *
@@ -21,6 +13,15 @@ import jetbrains.buildServer.agent.BuildProcess
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.jonnyzzz.teamcity.plugins.node.agent.processes
+
+import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.atomic.AtomicReference
+import jetbrains.buildServer.agent.BuildFinishedStatus
+import jetbrains.buildServer.agent.BuildProcess
+
 
 public trait BuildProcessContinuation {
   fun pushBuildProcess(process: BuildProcess)
