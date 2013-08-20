@@ -70,7 +70,7 @@ public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(pro
       return execute("cmd", arrayListOf<String>("/c", executable) + arguments)
     } else {
       val scriptToRun = io("Failed to create temp file") {
-        build.getBuild().getAgentTempDirectory() tempFile TempFileName(executable, ".sh")
+        build.getBuild().getAgentTempDirectory() tempFile TempFileName("wrapper", ".sh")
       }
       disposeLater { scriptToRun.smartDelete() }
       io("Generate wrapping bash script") {
