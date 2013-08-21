@@ -22,7 +22,7 @@ package com.jonnyzzz.teamcity.plugins.node.common
  */
 public class NVMBean {
   public val NVMUsed : String = "Use_NodeJS_Install_Runner"
-  public val NVMAvailable : String = "node.nvm"
+  public val NVMAvailable : String = "node.js.nvm"
   public val NVMFeatureType: String = "jonnyzzz.nvm"
   public val NVMVersion : String = "version"
 }
