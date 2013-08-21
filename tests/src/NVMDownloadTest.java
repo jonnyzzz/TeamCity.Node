@@ -17,6 +17,7 @@
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl;
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader;
 import jetbrains.buildServer.BaseTestCase;
+import jetbrains.buildServer.RunBuildException;
 import junit.framework.Assert;
 import org.testng.annotations.Test;
 
@@ -41,5 +42,11 @@ public class NVMDownloadTest extends BaseTestCase {
 
     Assert.assertTrue(files.length > 0);
     Assert.assertTrue(new File(dir, "nvm.sh").isFile());
+  }
+
+  @Test(expectedExceptions = RunBuildException.class)
+  public void error() throws IOException {
+    File dir = createTempDir();
+    new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir, "http://blog.jonnyzzz.name");
   }
 }

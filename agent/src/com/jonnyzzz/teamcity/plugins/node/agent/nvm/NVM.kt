@@ -44,16 +44,21 @@ public class NVMDownloader(val http:HttpClientWrapper) {
   private val LOG = log4j(javaClass<NVMDownloader>())
   private val url = "https://github.com/creationix/nvm/archive/master.zip"
 
-  private fun error(message:String, e:Throwable? = null) : Throwable {
-    if (e == null) {
-      throw RunBuildException("Failed to download NVM from ${url}. ${message}")
-    } else {
-      throw RunBuildException("Failed to download NVM from ${url}. ${message}. ${e.getMessage()}", e)
-    }
+  private fun error(message:String) : Throwable {
+    throw RunBuildException("Failed to download NVM from ${url}. ${message}")
+  }
+
+  private fun error(message:String, e:Throwable) : Throwable {
+    throw RunBuildException("Failed to download NVM from ${url}. ${message}. ${e.getMessage()}", e)
   }
 
   public fun downloadNVM(dest : File) {
-    http.execute(HttpGet(url)) {
+    downloadNVM(dest, url)
+  }
+
+  public fun downloadNVM(dest : File, fetchUrl : String) {
+    val httpGet = HttpGet(fetchUrl)
+    http.execute(httpGet) {
       val status = getStatusLine()!!.getStatusCode()
       if (status != 200) throw error("${status} returned")
       val entity = getEntity()
