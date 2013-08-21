@@ -23,5 +23,5 @@
 <jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NVMBean"/>
 
 <div class="parameter">
-  Version: <strong><props:displayValue name="${bean.NVMVersion}"/></strong>
+  Node.js version: <strong><props:displayValue name="${bean.NVMVersion}"/></strong>
 </div>

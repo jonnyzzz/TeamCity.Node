@@ -23,19 +23,12 @@
 <jsp:useBean id="bean" class="com.jonnyzzz.teamcity.plugins.node.common.NVMBean"/>
 
 <tr>
-  <td colspan="2">
-    Installs and configures specified Node.js version via NVM. Only for Linux and Mac OS
-  </td>
-</tr>
-<tr>
-  <th><label for="${bean.NVMVersion}">Version:</label><l:star/></th>
+  <th><label for="${bean.NVMVersion}">Node.js version:</label><l:star/></th>
   <td>
     <props:textProperty name="${bean.NVMVersion}" className="longField"/>
-    <span class="smallNote">Specify version of Node.js and NPM</span>
+    <span class="smallNote">
+      Specify version of Node.js to install via <a href="https://github.com/creationix/nvm" target="_blank">creatonix/nvm</a>
+    </span>
   </td>
 </tr>
-<tr>
-  <td colspan="2">
-    Feature is powered by <a href="https://github.com/creationix/nvm" target="_blank">creatonix/nvm</a>
-  </td>
-</tr>
+
