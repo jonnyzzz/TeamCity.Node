@@ -17,13 +17,15 @@
 package com.jonnyzzz.teamcity.plugins.node.server
 
 import jetbrains.buildServer.web.openapi.PluginDescriptor
-import jetbrains.buildServer.serverSide.parameters.AbstractBuildParametersProvider
-import jetbrains.buildServer.serverSide.SBuild
 import com.jonnyzzz.teamcity.plugins.node.common.*
 import jetbrains.buildServer.serverSide.PropertiesProcessor
 import jetbrains.buildServer.serverSide.InvalidProperty
 import jetbrains.buildServer.requirements.Requirement
-import jetbrains.buildServer.agent.AgentRuntimeProperties
+import jetbrains.buildServer.serverSide.buildDistribution.StartingBuildAgentsFilter
+import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterContext
+import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterResult
+import jetbrains.buildServer.serverSide.BuildPromotionManager
+import jetbrains.buildServer.requirements.RequirementType
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -47,34 +49,48 @@ public class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
           = hashMapOf(bean.NVMVersion to "0.10")
 
   public override fun describeParameters(parameters: Map<String, String>): String
-          = "Node.js v" + parameters[bean.NVMVersion]
+          = "Install Node.js v" + parameters[bean.NVMVersion]
 
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
-    //TODO: check OS is linux or Mac OS
-    return arrayListOf()
+    return arrayListOf(Requirement(bean.NVMAvailable, null, RequirementType.EXISTS))
   }
 }
 
-public class NVMParametersProvider() : AbstractBuildParametersProvider() {
-  private val bean = NVMBean()
+public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : StartingBuildAgentsFilter {
+  private val nodeBean = NodeBean()
+  private val npmBean = NPMBean()
+  private val nvmBean = NVMBean()
 
-  public override fun getParameters(build: SBuild, emulationMode: Boolean): MutableMap<String, String> {
-    val def = super<AbstractBuildParametersProvider>.getParameters(build, emulationMode)
+  public override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
+    val result = AgentsFilterResult()
+    val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
+    val version = promos.findPromotionById(promoId)
+           ?.getBuildType()
+           ?.getResolvedSettings()
+           ?.getBuildRunners()
+           ?.find{ it.getType() == nvmBean.NVMFeatureType }
+           ?.getParameters()
+           ?.get(nvmBean.NVMVersion)
 
-    val bt = build.getBuildType()
-    if (bt == null) return def
+    //skip checks if NVM feature version was specified
+    if (version != null) return result
 
-    val feature = bt.getResolvedSettings().getBuildRunners().find { it.getType() == bean.NVMFeatureType }
-    if (feature == null) return def
+    //if not, let's filter unwanted agents
+    val agents = context.getAgentsForStartingBuild() filter { agent ->
+      //allow only if there were truly-detected NVM/NPM on the agent
+      with(agent.getConfigurationParameters()) {
+        get(nodeBean.nodeJSConfigurationParameter) != nvmBean.NVMUsed
+        &&
+        get(npmBean.nodeJSNPMConfigurationParameter) != nvmBean.NVMUsed
+      }
+    }
 
-    val version = feature.getParameters()[bean.NVMVersion]
-    if (version == null) return def
+    if (agents.isEmpty()) {
+      result.setWaitReason { "Please add Node.js NVM Installer build runner" }
+    } else {
+      result.setFilteredConnectedAgents(agents)
+    }
 
-    val v : String = version
-    return hashMapOf(
-            bean.NVMUsed to v,
-            NodeBean().nodeJSConfigurationParameter to v,
-            NPMBean().nodeJSNPMConfigurationParameter to v
-    ) + def
+    return result
   }
 }

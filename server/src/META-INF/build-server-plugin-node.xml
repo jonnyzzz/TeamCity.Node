@@ -12,6 +12,6 @@
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.NPMRunType"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.PhantomJsRunType"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.GruntRunType"/>
-  <bean class="com.jonnyzzz.teamcity.plugins.node.server.NVMParametersProvider"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.server.NVMRunType"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.server.NVMBuildStartPrecondition"/>
 </beans>
