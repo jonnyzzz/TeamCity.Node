@@ -21,7 +21,8 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Date: 16.08.13 21:42
  */
 public class NVMBean {
-  public val NVMUsed : String = "Use.Install.NodeJS.NVM.Build.Runner"
+  public val NVMUsed : String = "Use_NodeJS_Install_Runner"
+  public val NVMAvailable : String = "node.nvm"
   public val NVMFeatureType: String = "jonnyzzz.nvm"
   public val NVMVersion : String = "version"
 }
