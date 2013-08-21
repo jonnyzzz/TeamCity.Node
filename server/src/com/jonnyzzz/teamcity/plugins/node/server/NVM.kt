@@ -26,6 +26,7 @@ import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterContext
 import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterResult
 import jetbrains.buildServer.serverSide.BuildPromotionManager
 import jetbrains.buildServer.requirements.RequirementType
+import jetbrains.buildServer.serverSide.buildDistribution.SimpleWaitReason
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -60,15 +61,23 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
   private val nodeBean = NodeBean()
   private val npmBean = NPMBean()
   private val nvmBean = NVMBean()
+  private val runTypes = hashSetOf(nodeBean.runTypeNameNodeJs, npmBean.runTypeName)
 
   public override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
     val result = AgentsFilterResult()
     val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
-    val version = promos.findPromotionById(promoId)
-           ?.getBuildType()
-           ?.getResolvedSettings()
-           ?.getBuildRunners()
-           ?.find{ it.getType() == nvmBean.NVMFeatureType }
+    val runners = promos.findPromotionById(promoId)
+               ?.getBuildType()
+               ?.getResolvedSettings()
+               ?.getBuildRunners()
+
+    //if nothing found => skip
+    if (runners == null) return result
+
+    //if our nodeJS and NPM runners are not used
+    if (!runners.any { runner -> runTypes.contains(runner.getType())}) return result
+
+    val version = runners.find { it.getType() == nvmBean.NVMFeatureType }
            ?.getParameters()
            ?.get(nvmBean.NVMVersion)
 
@@ -86,9 +95,9 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
     }
 
     if (agents.isEmpty()) {
-      result.setWaitReason { "Please add Node.js NVM Installer build runner" }
+      result setWaitReason SimpleWaitReason("Please add Node.js NVM Installer build runner")
     } else {
-      result.setFilteredConnectedAgents(agents)
+      result setFilteredConnectedAgents agents
     }
 
     return result
