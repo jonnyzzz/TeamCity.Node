@@ -85,7 +85,7 @@ public abstract class JsService() : BaseService() {
 
       val file = getCheckoutDirectory().resolve(filePath)
       if (!file.isFile()) {
-        throw RunBuildException("Failed to find File at path: ${filePath}")
+        throw RunBuildException("Failed to find File at path: ${file}")
       }
 
       arguments.add(file.getPath())
