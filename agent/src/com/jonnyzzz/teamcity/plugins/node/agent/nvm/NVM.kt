@@ -114,17 +114,6 @@ public class NVMRunner(val downloader : NVMDownloader,
   public override fun getRunnerInfo(): AgentBuildRunnerInfo = object:AgentBuildRunnerInfo {
     public override fun getType(): String = bean.NVMFeatureType
 
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean =
-            with(agentConfiguration.getSystemInfo()) {
-              if (!(isMac() || isUnix())) {
-                log4j(javaClass).info("Node NVM installer runner is not availabe")
-                false
-              } else {
-                val ref = ReferencesResolverUtil.makeReference(bean.NVMUsed)
-                agentConfiguration.addConfigurationParameter(NPMBean().nodeJSNPMConfigurationParameter, ref)
-                agentConfiguration.addConfigurationParameter(NodeBean().nodeJSConfigurationParameter, ref)
-                true
-              }
-            }
+    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }
