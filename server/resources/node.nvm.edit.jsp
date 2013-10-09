@@ -33,7 +33,7 @@
 </tr>
 
 <tr>
-  <th><label for="${bean.NVMURL}">NVM URL</label><l:star/></th>
+  <th><label for="${bean.NVMURL}">NVM URL:</label></th>
   <td>
     <props:textProperty name="${bean.NVMURL}" className="longField"/>
     <span class="smallNote">
