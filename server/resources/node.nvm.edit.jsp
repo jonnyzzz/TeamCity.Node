@@ -27,7 +27,29 @@
   <td>
     <props:textProperty name="${bean.NVMVersion}" className="longField"/>
     <span class="smallNote">
-      Specify version of Node.js to install via <a href="https://github.com/creationix/nvm" target="_blank">creatonix/nvm</a>
+      Specify version of Node.js to install
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <th><label for="${bean.NVMURL}">NVM URL</label><l:star/></th>
+  <td>
+    <props:textProperty name="${bean.NVMURL}" className="longField"/>
+    <span class="smallNote">
+      Specify custom URL for NVM download as <em>.zip</em> archive.
+      Leave blank to use default <a href="https://github.com/creationix/nvm" target="_blank">creatonix/nvm</a>
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <th>Options:</th>
+  <td>
+    <props:checkboxProperty name="${bean.NVMSource}" />
+    <label for="${bean.NVMSource}">Install from source</label>
+    <span class="smallNote">
+      Adds <em>-s</em> commandline parameter to make it install node.js from source
     </span>
   </td>
 </tr>

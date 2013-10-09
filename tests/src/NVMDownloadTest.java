@@ -16,6 +16,7 @@
 
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.HttpClientWrapperImpl;
 import com.jonnyzzz.teamcity.plugins.node.agent.nvm.NVMDownloader;
+import com.jonnyzzz.teamcity.plugins.node.common.NVMBean;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.RunBuildException;
 import junit.framework.Assert;
@@ -33,7 +34,7 @@ public class NVMDownloadTest extends BaseTestCase {
   @Test
   public void test() throws IOException {
     File dir = createTempDir();
-    new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir);
+    new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir, new NVMBean().getNVM_Creatonix());
 
     File[] files = dir.listFiles();
     Assert.assertNotNull(files);

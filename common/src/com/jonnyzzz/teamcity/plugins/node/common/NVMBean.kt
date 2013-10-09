@@ -25,4 +25,9 @@ public class NVMBean {
   public val NVMAvailable : String = "node.js.nvm"
   public val NVMFeatureType: String = "jonnyzzz.nvm"
   public val NVMVersion : String = "version"
+  public val NVMSource : String = "fromSource"
+  public val NVMURL : String = "fromURL"
+
+
+  public val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/master.zip"
 }

@@ -25,3 +25,9 @@
 <div class="parameter">
   Node.js version: <strong><props:displayValue name="${bean.NVMVersion}"/></strong>
 </div>
+<div class="parameter">
+  Install from sources: <strong><props:displayCheckboxValue name="${bean.NVMSource}"/></strong>
+</div>
+<div class="parameter">
+  Custom NVM URL: <strong><props:displayValue name="${bean.NVMURL}"/></strong>
+</div>
