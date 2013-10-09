@@ -7,8 +7,10 @@ This is a plugin for TeamCity that provides following build runners
 - [Phantom.JS](http://phantomjs.org) 
 - [Grunt](http://gruntjs.com)
 - [NVM](https://github.com/creationix/nvm)
+
+
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
-Release builds are found under releases branch
+
 
 Features
 ========
@@ -30,10 +32,10 @@ Apache 2.0
 Supported Versions
 ==================
 
-Plugin is test to work with TeamCity 7.1 and 8.0. 
+Plugin is test to work with TeamCity 7.1, 8.0 and 8.1.
 It should work with 7.0 (and maybe 6.5)
 
-Agent and server are expected to run JDK 1.6 (or better under JDK 1.7)
+Agent and server are expected to run JRE 1.7 (or maybe JRE 1.6)
 
 Downloading Build
 =================
@@ -44,6 +46,7 @@ Installation
 ============
 To install plugin, put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server.
 Make sure downloaded `.zip` file is not corrupted.
+
 For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
 
@@ -68,3 +71,5 @@ Note
 ====
 
 This plugin was created with [https://github.com/jonnyzzz/TeamCity.PluginTemplate](TeamCity Plugin Template)
+
+This is my (Eugene Petrenko) private home project
