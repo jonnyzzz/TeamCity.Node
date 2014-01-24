@@ -68,7 +68,6 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
     val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
     val runners = promos.findPromotionById(promoId)
                ?.getBuildType()
-               ?.getResolvedSettings()
                ?.getBuildRunners()
 
     //if nothing found => skip
