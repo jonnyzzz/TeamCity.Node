@@ -33,7 +33,7 @@ import jetbrains.buildServer.util.FileUtil
  * Date: 16.08.13 22:40
  */
 
-inline fun BuildProgressLogger.block(name: String, description: String = name): () -> Unit {
+fun BuildProgressLogger.block(name: String, description: String = name): () -> Unit {
   this.logMessage(DefaultMessagesInfo.createBlockStart(name, description, "jonnyzzz"))
 
   return{
@@ -41,7 +41,7 @@ inline fun BuildProgressLogger.block(name: String, description: String = name): 
   }
 }
 
-inline fun <T> BuildProgressLogger.block(name: String, description: String = name, action: BuildProgressLogger.() -> T): T {
+fun <T> BuildProgressLogger.block(name: String, description: String = name, action: BuildProgressLogger.() -> T): T {
   val d = this.block(name, description)
   try {
     return action()
@@ -67,7 +67,7 @@ inline fun io<T>(errorMessage: String, body: () -> T): T {
   }
 }
 
-inline fun writeUTF(file:File, text:String) {
+fun writeUTF(file:File, text:String) {
   val writer = OutputStreamWriter(BufferedOutputStream(FileOutputStream(file)), "utf-8")
   try {
     writer.write(text)

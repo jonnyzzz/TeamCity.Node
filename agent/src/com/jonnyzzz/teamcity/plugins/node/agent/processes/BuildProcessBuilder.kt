@@ -95,14 +95,14 @@ abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
     override fun startImpl(): BuildProcess = p()
   }
 
-  private inline fun BuildProgressLogger.block(name: String,
-                                               description: String = name,
-                                               a: DelegatingProcessAction): DelegatingProcessAction {
+  private fun BuildProgressLogger.block(name: String,
+                                        description: String = name,
+                                        a: DelegatingProcessAction): DelegatingProcessAction {
     return object:DelegatingProcessAction {
       private var action: () -> Unit = { };
       override fun startImpl(): BuildProcess {
         action = block(name, description)
-        a.startImpl()
+        return a.startImpl()
       }
       override fun finishedImpl() {
         action()
