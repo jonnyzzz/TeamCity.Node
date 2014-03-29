@@ -44,8 +44,12 @@ Download the latest build from [TeamCity](http://teamcity.jetbrains.com/viewType
 
 Installation
 ============
-To install plugin, put downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder and restart TeamCity Server.
-Make sure downloaded `.zip` file is not corrupted.
+
+* Download the plugin build (binaries) from http://teamcity.jetbrains.com/guestAuth/repository/download/bt434/.lastSuccessful/jonnyzzz.node.zip
+* Make sure downloaded `.zip` file is not corrupted
+* Put the downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder
+* Restart the TeamCity Server 
+* Open ```Administration | Plugins``` and check you see the plugin listed
 
 For more details, there is [documentation](http://confluence.jetbrains.net/display/TCD7/Installing+Additional+Plugins)
 
