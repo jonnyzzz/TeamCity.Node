@@ -62,6 +62,7 @@ public class NVMDownloader(val http:HttpClientWrapper) {
       catchIO(ZipInputStream(entity.getContent()!!), {error(url, "Failed to extract NVM", it)}) { zip ->
         FileUtil.createEmptyDir(dest)
 
+        var hasFiles = false
         while(true) {
           val ze = zip.getNextEntry()
           if (ze == null) break
@@ -75,8 +76,11 @@ public class NVMDownloader(val http:HttpClientWrapper) {
           val file = dest / name
           catchIO(BufferedOutputStream(FileOutputStream(file)), {error(url, "Failed to create ${file}", it)}) {
             zip.copyTo(it)
+            hasFiles = true
           }
         }
+ª
+        if (!hasFiles) error(url, "Downloaded package contains no files")
       }
     }
   }
