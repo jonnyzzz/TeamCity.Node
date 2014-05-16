@@ -55,11 +55,9 @@ public class NVMDownloader(val http:HttpClientWrapper) {
     http.execute(httpGet) {
       val status = getStatusLine()!!.getStatusCode()
       if (status != 200) throw error(url, "${status} returned")
-      val entity = getEntity()
 
+      val entity = getEntity()
       if (entity == null) throw error(url, "No data was returned")
-      val contentType = entity.getContentType()?.getValue()
-      if ("application/zip" != contentType) throw error(url, "Invalid content-type: ${contentType}")
 
       catchIO(ZipInputStream(entity.getContent()!!), {error(url, "Failed to extract NVM", it)}) { zip ->
         FileUtil.createEmptyDir(dest)
