@@ -28,6 +28,6 @@ public class NVMBean {
   public val NVMSource : String = "fromSource"
   public val NVMURL : String = "fromURL"
 
-
-  public val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/master.zip"
+  public val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/v0.7.0.zip"
+  //"https://github.com/creationix/nvm/archive/master.zip"
 }
