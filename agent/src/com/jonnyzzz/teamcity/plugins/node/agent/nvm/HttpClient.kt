@@ -64,7 +64,7 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     val schemaRegistry = SchemeRegistryFactory.createDefault()!!;
     val sslSocketFactory = SSLSocketFactory(object :TrustStrategy {
       public override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
-        return !TeamCityProperties.getBoolean("teamcity.github.verify.ssl.certificate");
+        return !TeamCityProperties.getBoolean("teamcity.node.verify.ssl.certificate");
       }
     })
 
