@@ -79,7 +79,7 @@ public class NVMDownloader(val http:HttpClientWrapper) {
             hasFiles = true
           }
         }
-ª
+
         if (!hasFiles) error(url, "Downloaded package contains no files")
       }
     }
