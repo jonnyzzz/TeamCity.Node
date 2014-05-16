@@ -67,13 +67,15 @@ public class NVMDownloader(val http:HttpClientWrapper) {
           val ze = zip.getNextEntry()
           if (ze == null) break
           if (ze.isDirectory()) continue
-          val name = ze.getName().replace("\\", "/").trimStart("/").trimStart("nvm-master/")
+          val name = ze.getName().replace("\\", "/").trimStart("/").replaceAll("^nvm-[^/]+/(.*)", "$1")
           LOG.debug("nvm content: ${name}")
 
           if (name startsWith ".") continue
           if (name startsWith "test/") continue
 
           val file = dest / name
+
+          file.getParentFile()?.mkdirs()
           catchIO(BufferedOutputStream(FileOutputStream(file)), {error(url, "Failed to create ${file}", it)}) {
             zip.copyTo(it)
             hasFiles = true

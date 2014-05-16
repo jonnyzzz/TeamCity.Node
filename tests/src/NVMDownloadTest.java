@@ -32,9 +32,18 @@ import java.util.Arrays;
  */
 public class NVMDownloadTest extends BaseTestCase {
   @Test
-  public void test() throws IOException {
-    File dir = createTempDir();
-    new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir, new NVMBean().getNVM_Creatonix());
+  public void test_default() throws IOException {
+    doSuccessfulTest(new NVMBean().getNVM_Creatonix());
+  }
+
+  @Test
+  public void test_master() throws IOException {
+    doSuccessfulTest("https://github.com/creationix/nvm/archive/master.zip");
+  }
+
+  private void doSuccessfulTest(String url) throws IOException {
+    final File dir = createTempDir();
+    new NVMDownloader(new HttpClientWrapperImpl()).downloadNVM(dir, url);
 
     File[] files = dir.listFiles();
     Assert.assertNotNull(files);
