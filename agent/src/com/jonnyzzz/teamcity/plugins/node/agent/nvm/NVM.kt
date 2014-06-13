@@ -111,7 +111,7 @@ public class NVMRunner(val downloader : NVMDownloader,
           ". ${nvmHome}/nvm.sh" n "nvm install ${fromSource} ${version}"
         }
         script("Use", "Selecting Node.js v${version}",nvmHome.getPath()) {
-          ". ${nvmHome}/nvm.sh" n "nvm use ${version}" n "\eval ${TEAMCITY_CAPTURE_ENV}"
+          ". ${nvmHome}/nvm.sh" n "nvm use ${version}" n "eval \${TEAMCITY_CAPTURE_ENV}"
         }
       }
     }
