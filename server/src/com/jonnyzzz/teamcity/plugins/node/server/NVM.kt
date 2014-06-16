@@ -66,12 +66,14 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
   public override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
     val result = AgentsFilterResult()
     val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
-    val runners = promos.findPromotionById(promoId)
-               ?.getBuildType()
-               ?.getBuildRunners()
+    val buildType = promos.findPromotionById(promoId)?.getBuildType()
+
+    if (buildType == null) return result
+
+    val runners = buildType.getBuildRunners() filter { buildType.isEnabled(it.getId()) }
 
     //if nothing found => skip
-    if (runners == null) return result
+    if (runners.isEmpty()) return result
 
     //if our nodeJS and NPM runners are not used
     if (!runners.any { runner -> runTypes.contains(runner.getType())}) return result
@@ -94,7 +96,7 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
     }
 
     if (agents.isEmpty()) {
-      result setWaitReason SimpleWaitReason("Please add Node.js NVM Installer build runner")
+      result setWaitReason SimpleWaitReason("Please add 'Node.js NVM Installer' build runner")
     } else {
       result setFilteredConnectedAgents agents
     }
