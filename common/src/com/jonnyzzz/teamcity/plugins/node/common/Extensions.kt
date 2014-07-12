@@ -32,10 +32,9 @@ fun String?.isEmptyOrSpaces() : Boolean = com.intellij.openapi.util.text.StringU
 
 fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.StringUtil.splitHonorQuotes(this).filterNotNull()
 
-fun Collection<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 fun Array<String>.join(sep : String) : String = jetbrains.buildServer.util.StringUtil.join(sep, this)!!
 
-inline fun String.n(s:String) : String = this + "\n" + s
+fun String.n(s:String) : String = this + "\n" + s
 
 fun String?.fetchArguments() : Collection<String> {
   if (this == null || this.isEmptyOrSpaces()) return listOf<String>()
@@ -56,11 +55,11 @@ fun File.tempFile(details : TempFileName) : File = com.intellij.openapi.util.io.
 fun File.smartDelete() = com.intellij.openapi.util.io.FileUtil.delete(this)
 
 //we define this category to have plugin logging without logger configs patching
-inline fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
+fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
 
-inline fun File.div(child : String) : File = File(this, child)
+fun File.div(child : String) : File = File(this, child)
 
-inline fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()) else this
+fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()) else this
 
 inline fun <T, S:Closeable>using(stream:S, action:(S)->T) : T {
   try {
@@ -79,12 +78,12 @@ inline fun <T, S:Closeable>catchIO(stream:S, error:(IOException) -> Throwable, a
     }
   }
 
-inline fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
+fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
   this.putAll(m)
   return this
 }
 
-inline fun <K, T:Iterable<K>> T.firstOrEmpty() : K? {
+fun <K, T:Iterable<K>> T.firstOrEmpty() : K? {
   for(k in this) return k
   return null
 }
