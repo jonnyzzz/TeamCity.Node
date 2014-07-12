@@ -22,7 +22,6 @@
       <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-cache/src/test/java" />
       <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-contrib/src/main/java" />
       <root url="jar://$PROJECT_DIR$/lib/httpclient/src/httpcomponents-client-4.2.5-src.zip!/httpcomponents-client-4.2.5/httpclient-benchmark/src/main/java" />
-      <root url="jar://$USER_HOME$/.ideaLibSources/httpcore-4.2.4-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
