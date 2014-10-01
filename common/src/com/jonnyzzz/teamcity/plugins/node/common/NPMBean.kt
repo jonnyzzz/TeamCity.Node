@@ -32,7 +32,7 @@ public class NPMBean {
 
   public fun parseCommands(text: String?): Collection<String> {
     if (text == null)
-      return listOf<String>()
+      return listOf()
     else
       return text
               .split("[\r\n]+")

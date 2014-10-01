@@ -20,7 +20,6 @@ import jetbrains.buildServer.requirements.Requirement
 import jetbrains.buildServer.requirements.RequirementType
 import jetbrains.buildServer.serverSide.PropertiesProcessor
 import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
-import com.jonnyzzz.teamcity.plugins.node.common.join
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
 

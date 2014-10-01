@@ -39,7 +39,7 @@ public abstract class JsRunTypeBase : RunTypeBase() {
     val that = this;
     return object : PropertiesProcessor {
       public override fun process(p0: Map<String, String>?): MutableCollection<InvalidProperty>? {
-        if (p0 == null) return arrayListOf<InvalidProperty>()
+        if (p0 == null) return arrayListOf()
         return that.validateParameters(p0)
       }
     }
@@ -75,5 +75,5 @@ public abstract class JsRunTypeBase : RunTypeBase() {
     return builder.toString()
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf<String, String>()
+  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf()
 }

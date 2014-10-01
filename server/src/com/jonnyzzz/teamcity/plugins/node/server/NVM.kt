@@ -78,7 +78,7 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
     //if our nodeJS and NPM runners are not used
     if (!runners.any { runner -> runTypes.contains(runner.getType())}) return result
 
-    val version = runners.find { it.getType() == nvmBean.NVMFeatureType }
+    val version = runners.firstOrNull { it.getType() == nvmBean.NVMFeatureType }
            ?.getParameters()
            ?.get(nvmBean.NVMVersion)
 

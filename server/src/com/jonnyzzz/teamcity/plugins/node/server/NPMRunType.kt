@@ -23,7 +23,6 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor
 import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-import com.jonnyzzz.teamcity.plugins.node.common.join
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)

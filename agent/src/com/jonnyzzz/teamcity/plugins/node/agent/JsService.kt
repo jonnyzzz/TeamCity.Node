@@ -134,6 +134,6 @@ public abstract class JsService() : BaseService() {
   }
 
   protected fun fetchArguments(runnerParametersKey : String) : Collection<String> {
-    return getRunnerParameters().get(runnerParametersKey).fetchArguments()
+    return getRunnerParameters()[runnerParametersKey].fetchArguments()
   }
 }

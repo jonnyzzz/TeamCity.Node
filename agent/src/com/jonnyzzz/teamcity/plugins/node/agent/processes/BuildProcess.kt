@@ -65,9 +65,7 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
   protected override fun interruptImpl() {
     super.interruptImpl()
 
-    val process = myReference.get()
-    if (process != null)
-      process.interrupt()
+    myReference.get()?.interrupt()
   }
 
   protected override fun waitForImpl(): BuildFinishedStatus {

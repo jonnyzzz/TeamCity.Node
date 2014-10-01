@@ -68,7 +68,7 @@ public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(pro
     build.getBuild().getBuildLogger().message("Executing ${executable} via wrapping shell script")
 
     if (build.getBuild().getAgentConfiguration().getSystemInfo().isWindows()) {
-      return execute("cmd", arrayListOf<String>("/c", executable) + arguments)
+      return execute("cmd", arrayListOf("/c", executable) + arguments)
     } else {
       val scriptToRun = io("Failed to create temp file") {
         build.getBuild().getAgentTempDirectory() tempFile TempFileName("wrapper", ".sh")
