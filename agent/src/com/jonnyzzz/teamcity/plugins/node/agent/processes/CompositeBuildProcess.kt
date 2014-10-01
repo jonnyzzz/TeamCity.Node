@@ -32,17 +32,15 @@ public trait CompositeBuildProcess : BuildProcess, BuildProcessContinuation {
 }
 
 public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuildProcess {
-  private val myProcessList: BlockingQueue<BuildProcess> = LinkedBlockingQueue<BuildProcess>()
-  private val myCurrentProcess: AtomicReference<BuildProcess> = AtomicReference<BuildProcess>()
+  private val myProcessList: BlockingQueue<BuildProcess> = LinkedBlockingQueue()
+  private val myCurrentProcess: AtomicReference<BuildProcess> = AtomicReference()
 
   public override fun pushBuildProcess(process: BuildProcess) {
     myProcessList.add(process)
   }
 
   protected override fun interruptImpl() {
-    val process: BuildProcess? = myCurrentProcess.get()
-    if (process != null)
-      process.interrupt()
+    myCurrentProcess.get()?.interrupt()
   }
 
   public override fun start() {
