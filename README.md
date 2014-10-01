@@ -74,7 +74,7 @@ In this repo you will find
 Note
 ====
 
-This plugin was created with [https://github.com/jonnyzzz/TeamCity.PluginTemplate](TeamCity Plugin Template)
+This plugin was created with [TeamCity Plugin Template](https://github.com/jonnyzzz/TeamCity.PluginTemplate)
 
 This is my (Eugene Petrenko) private home project
 
