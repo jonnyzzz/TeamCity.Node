@@ -104,27 +104,12 @@ public class GruntSession : BaseService() {
     parametersAll.putAll(getConfigParameters())
     parametersAll.putAll(getBuildParameters().getAllParameters())
 
-    arguments add "--teamcity.properties.all=" + generateTeamCityProperties { putAll(parametersAll) }
-    arguments add "--teamcity.properties=" + generateTeamCityProperties { putAll(parameters) }
+    arguments add "--teamcity.properties.all=" + generateAllParametersJSON()
+    arguments add "--teamcity.properties=" + generateSystemParametersJSON()
 
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
 
     return execute(gruntExecutablePath(), arguments)
-  }
-
-  private fun generateTeamCityProperties(builder : MutableMap<String,String>.() -> Unit) : String {
-    val file = io("Failed to create temp file") {
-      getAgentTempDirectory() tempFile TempFileName("teamcity", ".json")
-    }
-    disposeLater { file.smartDelete() }
-
-    val map = TreeMap<String, String>()
-    map.builder()
-    val text = Gson().toJson(map)!!
-    io("Failed to create parameters file: ${file}") {
-      writeUTF(file, text)
-    }
-    return file.getPath()
   }
 }

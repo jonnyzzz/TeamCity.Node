@@ -41,7 +41,7 @@ public abstract class BaseService : BuildServiceAdapter() {
   private val disposables = linkedListOf<() -> Unit>()
   protected val LOG : Logger = log4j(this.javaClass)
 
-  protected fun disposeLater(action : () -> Unit) {
+  public fun disposeLater(action : () -> Unit) {
     disposables add action
   }
 
