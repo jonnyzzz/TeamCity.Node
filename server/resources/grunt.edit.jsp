@@ -65,7 +65,12 @@
   <th><label for="${bean.commandLineParameterKey}">Additional command line parameters:</label></th>
   <td>
     <props:multilineProperty name="${bean.commandLineParameterKey}"  cols="58" linkTitle="Expand" rows="5"/>
-    <span class="smallNote">Enter additional command line parameters for Grunt. Put each parameter on a new line</span>
+    <span class="smallNote">
+      Enter additional command line parameters for Grunt. Put each parameter on a new line
+      <br />
+      <em>--teamcity.properties.all</em> and <em>--teamcity.properties</em> parameters are added implicitly
+      pointing to JSON files with all TeamCity properties and system properties respectively
+    </span>
     <span class="error" id="error_${bean.commandLineParameterKey}"></span>
   </td>
 </tr>
