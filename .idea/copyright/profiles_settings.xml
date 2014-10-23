@@ -1,6 +1,5 @@
 <component name="CopyrightManager">
   <settings default="open-sourced">
-    <module2copyright />
     <LanguageOptions name="JSPX">
       <option name="fileTypeOverride" value="1" />
     </LanguageOptions>
