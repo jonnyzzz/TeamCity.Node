@@ -35,7 +35,7 @@ public class GruntBean {
           get() = arrayListOf(*GruntExecutionMode.values())
 
   public fun parseMode(text : String?) : GruntExecutionMode?
-         = gruntModes.find { text == it.value } ?: gruntModeDefault
+         = gruntModes.firstOrNull { text == it.value } ?: gruntModeDefault
 
   public fun parseCommands(text: String?): Collection<String> {
     if (text == null)
