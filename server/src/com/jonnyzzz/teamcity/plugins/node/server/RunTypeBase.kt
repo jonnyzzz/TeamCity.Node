@@ -46,6 +46,7 @@ public abstract class RunTypeBase(): RunType() {
   public override fun getEditRunnerParamsJspFilePath(): String {
     return descriptor?.getPluginResourcesPath(getEditJsp())!!
   }
+
   public override fun getViewRunnerParamsJspFilePath(): String {
     return descriptor?.getPluginResourcesPath(getViewJsp())!!
   }

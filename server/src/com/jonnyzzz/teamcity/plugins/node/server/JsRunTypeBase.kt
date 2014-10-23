@@ -62,7 +62,7 @@ public abstract class JsRunTypeBase : RunTypeBase() {
 
 
   public override fun describeParameters(parameters: Map<String, String>): String {
-    var builder = StringBuilder()
+    val builder = StringBuilder()
     val mode = bean.findExecutionMode(parameters)
     if (mode != null) {
       builder.append("Execute: ${mode.description}\n")

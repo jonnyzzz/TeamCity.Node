@@ -54,9 +54,8 @@ public class GruntRunType : RunTypeBase() {
 
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
 
-  public override fun describeParameters(parameters: Map<String, String>): String {
-    return "Run targets: ${bean.parseCommands(parameters[bean.targets]) join ", "}"
-  }
+  public override fun describeParameters(parameters: Map<String, String>): String
+          = "Run targets: ${bean.parseCommands(parameters[bean.targets]) join ", "}"
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>
           = hashMapOf(bean.gruntMode to bean.gruntModeDefault.value)

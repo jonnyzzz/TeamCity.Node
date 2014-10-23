@@ -45,9 +45,8 @@ public class NPMRunType : RunTypeBase() {
     }
   }
 
-  public override fun describeParameters(parameters: Map<String, String>): String {
-    return "Run targets: ${bean.parseCommands(parameters[bean.npmCommandsKey]) join ", "}"
-  }
+  public override fun describeParameters(parameters: Map<String, String>): String
+          = "Run targets: ${bean.parseCommands(parameters[bean.npmCommandsKey]) join ", "}"
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
           = hashMapOf(bean.npmCommandsKey to bean.npmCommandsDefault)
