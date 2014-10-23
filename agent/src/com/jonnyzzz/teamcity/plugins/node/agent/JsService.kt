@@ -31,6 +31,9 @@ import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import org.apache.log4j.Logger
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine
+import java.io.File
+import java.util.TreeMap
+import com.google.gson.Gson
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -59,6 +62,34 @@ public abstract class BaseService : BuildServiceAdapter() {
       override fun disposeLater(action: () -> Unit) = that.disposeLater(action)
     }.generate(executable, arguments)
   }
+
+  private inline fun generateTeamCityProperties(builder : MutableMap<String,String>.() -> Unit) : File {
+    val file = io("Failed to create temp file") {
+      getAgentTempDirectory() tempFile TempFileName("teamcity", ".json")
+    }
+    disposeLater { file.smartDelete() }
+
+    val map = TreeMap<String, String>()
+    map.builder()
+    val text = Gson().toJson(map)!!
+    io("Failed to create parameters file: ${file}") {
+      writeUTF(file, text)
+    }
+    return file
+  }
+
+  public fun generateSystemParametersJSON() : File
+          = generateTeamCityProperties { putAll(getBuildParameters().getSystemProperties()) }
+
+  public fun generateAllParametersJSON(): File
+          = generateTeamCityProperties {
+    putAll(getConfigParameters())
+    putAll(getBuildParameters().getAllParameters())
+  }
+
+  public fun generateDefaultTeamCityParametersJSON(): List<String> = listOf(
+          "--teamcity.properties.all=" + generateAllParametersJSON(),
+          "--teamcity.properties=" + generateSystemParametersJSON())
 }
 
 public abstract class JsService() : BaseService() {

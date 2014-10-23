@@ -104,8 +104,7 @@ public class GruntSession : BaseService() {
     parametersAll.putAll(getConfigParameters())
     parametersAll.putAll(getBuildParameters().getAllParameters())
 
-    arguments add "--teamcity.properties.all=" + generateAllParametersJSON()
-    arguments add "--teamcity.properties=" + generateSystemParametersJSON()
+    arguments addAll generateDefaultTeamCityParametersJSON()
 
     arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
