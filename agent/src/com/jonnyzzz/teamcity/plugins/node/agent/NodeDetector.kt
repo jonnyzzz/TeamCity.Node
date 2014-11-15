@@ -100,6 +100,10 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         detectNodeTool("grunt", GruntBean().gruntConfigurationParameter) {
           it.trimStart("grunt-cli").trim().trimStart("v")
         }
+
+        detectNodeTool("gulp", GulpBean().gruntConfigurationParameter) {
+          it.substring(it.lastIndexOf(' ')).trim()
+        }
       }
     })
   }
