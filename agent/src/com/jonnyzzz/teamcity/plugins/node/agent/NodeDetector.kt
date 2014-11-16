@@ -102,7 +102,14 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         }
 
         detectNodeTool("gulp", GulpBean().gruntConfigurationParameter) {
-          it.substring(it.lastIndexOf(' ')).trim()
+          val firstLine = it.split("[\r\n]+")[0].trim()
+
+          val lastSpaceIndex = firstLine.lastIndexOf(' ')
+          if (lastSpaceIndex > 0) {
+            firstLine.substring(lastSpaceIndex).trim()
+          } else {
+            firstLine
+          }
         }
       }
     })
