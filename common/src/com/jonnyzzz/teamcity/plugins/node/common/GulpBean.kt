@@ -18,7 +18,7 @@ package com.jonnyzzz.teamcity.plugins.node.common
 
 
 public class GulpBean {
-  public val gruntConfigurationParameter : String = "gulp"
+  public val gulpConfigurationParameter: String = "gulp"
 
   public val runTypeName: String = "jonnyzzz.gulp"
   public val file: String = "jonnyzzz.gulp.file"

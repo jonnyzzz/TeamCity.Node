@@ -46,7 +46,7 @@ public class GulpRunType : RunTypeBase() {
     result add Requirement(NodeBean().nodeJSConfigurationParameter, null, RequirementType.EXISTS)
 
     if (bean.parseMode(runParameters[bean.gulpMode]) == GulpExecutionMode.GLOBAL) {
-      result add Requirement(bean.gruntConfigurationParameter, null, RequirementType.EXISTS)
+      result add Requirement(bean.gulpConfigurationParameter, null, RequirementType.EXISTS)
     }
 
     return result

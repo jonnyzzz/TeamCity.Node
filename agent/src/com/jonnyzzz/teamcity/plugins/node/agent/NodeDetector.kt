@@ -101,7 +101,7 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
           it.trimStart("grunt-cli").trim().trimStart("v")
         }
 
-        detectNodeTool("gulp", GulpBean().gruntConfigurationParameter) {
+        detectNodeTool("gulp", GulpBean().gulpConfigurationParameter) {
           val firstLine = it.split("[\r\n]+")[0].trim()
 
           val lastSpaceIndex = firstLine.lastIndexOf(' ')
