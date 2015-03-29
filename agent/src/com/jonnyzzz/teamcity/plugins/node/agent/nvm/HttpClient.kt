@@ -46,6 +46,8 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.springframework.beans.factory.DisposableBean
 import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLSession
+import javax.net.ssl.SSLSocket
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -74,13 +76,18 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
 
     val cm =
             if (!TeamCityProperties.getBoolean("teamcity.node.verify.ssl.certificate")) {
-              val schemaRegistry = SchemeRegistryFactory.createDefault()!!;
-              val sslSocketFactory =
-                      SSLSocketFactory(object : TrustStrategy {
+              val schemaRegistry = SchemeRegistryFactory.createDefault()
+              val sslSocketFactory = SSLSocketFactory(
+                      object : TrustStrategy {
                         public override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
                           return true;
                         }
-                      }, AllowAllHostnameVerifier())
+                      }, object : X509HostnameVerifier {
+                        override fun verify(host: String?, ssl: SSLSocket?) {}
+                        override fun verify(host: String?, cert: X509Certificate?) { }
+                        override fun verify(host: String?, cns: Array<out String>?, subjectAlts: Array<out String>?) { }
+                        override fun verify(p0: String?, p1: SSLSession?): Boolean = true
+                      })
 
               schemaRegistry.register(Scheme("https", 443, sslSocketFactory));
               PoolingClientConnectionManager(schemaRegistry)
