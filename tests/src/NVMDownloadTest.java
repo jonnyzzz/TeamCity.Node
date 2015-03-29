@@ -34,7 +34,7 @@ import java.util.Arrays;
 public class NVMDownloadTest extends BaseTestCase {
   @BeforeMethod
   public void setup() {
-    System.setProperty("teamcity.node.verify.ssl.certificate", "true");
+    System.setProperty("teamcity.node.verify.ssl.certificate", "false");
   }
   
   @Test
