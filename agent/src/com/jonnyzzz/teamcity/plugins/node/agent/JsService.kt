@@ -119,7 +119,14 @@ public abstract class JsService() : BaseService() {
       }
 
       val tempScript = io("Failed to create temp file") {
-        getAgentTempDirectory() tempFile TempFileName(getToolName(), getGeneratedScriptExtImpl())
+        (
+                ///See issue #66
+                if (getConfigParameters().get("teamcity.node.use.tempDirectory.for.generated.files") != null)
+                  getAgentTempDirectory()
+                else
+                  getWorkingDirectory()
+
+        ) tempFile TempFileName(getToolName(), getGeneratedScriptExtImpl())
       }
 
       disposeLater { tempScript.smartDelete() }
