@@ -7,6 +7,7 @@ This is a plugin for TeamCity that provides following build runners
 - [Phantom.JS](http://phantomjs.org) 
 - [Grunt](http://gruntjs.com)
 - [NVM](https://github.com/creationix/nvm)
+- [Gulp](http://gulpjs.com/)
 
 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
@@ -23,6 +24,7 @@ Features
  - `node.js NVM Installer` build runner to install/update to selected version of Node.js
  - `Phantom.JS` build runner to run `.js`, `.coffee` (or other script) file or source code.
  - `Grunt` build runner to run your grunt scripts. It's assumes you have `grunt` and `grunt-cli` NPM packages installed to local repo
+ - `Gulp` build runner to run you gulp scripts
 
 
 License
