@@ -40,9 +40,12 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.client.protocol.RequestAcceptEncoding
 import org.apache.http.client.protocol.ResponseContentEncoding
 import org.apache.http.conn.params.ConnRoutePNames
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier
+import org.apache.http.conn.ssl.X509HostnameVerifier
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.springframework.beans.factory.DisposableBean
+import javax.net.ssl.HostnameVerifier
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -69,15 +72,22 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     HttpConnectionParams.setSoTimeout(ps, 300 * 1000);
     HttpProtocolParams.setUserAgent(ps, "JetBrains TeamCity " + serverVersion);
 
-    val schemaRegistry = SchemeRegistryFactory.createDefault()!!;
-    val sslSocketFactory = SSLSocketFactory(object :TrustStrategy {
-      public override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
-        return !TeamCityProperties.getBoolean("teamcity.node.verify.ssl.certificate");
-      }
-    })
+    val cm =
+            if (!TeamCityProperties.getBoolean("teamcity.node.verify.ssl.certificate")) {
+              val schemaRegistry = SchemeRegistryFactory.createDefault()!!;
+              val sslSocketFactory =
+                      SSLSocketFactory(object : TrustStrategy {
+                        public override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
+                          return true;
+                        }
+                      }, AllowAllHostnameVerifier())
 
-    schemaRegistry.register(Scheme("https", 443, sslSocketFactory));
-    val cm = PoolingClientConnectionManager(schemaRegistry)
+              schemaRegistry.register(Scheme("https", 443, sslSocketFactory));
+              PoolingClientConnectionManager(schemaRegistry)
+            } else {
+              PoolingClientConnectionManager()
+            }
+
     val httpclient = DefaultHttpClient(cm, ps);
 
     httpclient.setRoutePlanner(ProxySelectorRoutePlanner(
