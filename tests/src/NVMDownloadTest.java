@@ -20,6 +20,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.NVMBean;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.RunBuildException;
 import junit.framework.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -31,6 +32,11 @@ import java.util.Arrays;
  *         Date: 13.08.13 23:18
  */
 public class NVMDownloadTest extends BaseTestCase {
+  @BeforeMethod
+  public void setup() {
+    System.setProperty("teamcity.node.verify.ssl.certificate", "true");
+  }
+  
   @Test
   public void test_default() throws IOException {
     doSuccessfulTest(new NVMBean().getNVM_Creatonix());
