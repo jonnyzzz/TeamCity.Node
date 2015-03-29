@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,8 +106,8 @@ public class GulpSession : BaseService() {
 
     arguments addAll generateDefaultTeamCityParametersJSON()
 
-    arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
     arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
+    arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
 
     return execute(gulpExecutablePath(), arguments)
   }
