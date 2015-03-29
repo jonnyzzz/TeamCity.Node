@@ -16,6 +16,7 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.nvm
 
+import com.jonnyzzz.teamcity.plugins.node.common.log4j
 import jetbrains.buildServer.version.ServerVersionHolder
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
@@ -29,11 +30,16 @@ import org.apache.http.params.HttpConnectionParams
 import org.apache.http.params.HttpProtocolParams
 import java.security.cert.X509Certificate
 import jetbrains.buildServer.serverSide.TeamCityProperties
+import org.apache.http.HttpHost
+import org.apache.http.auth.AuthScope
+import org.apache.http.auth.NTCredentials
+import org.apache.http.auth.UsernamePasswordCredentials
 import java.net.ProxySelector
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.client.protocol.RequestAcceptEncoding
 import org.apache.http.client.protocol.ResponseContentEncoding
+import org.apache.http.conn.params.ConnRoutePNames
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.springframework.beans.factory.DisposableBean
@@ -51,6 +57,8 @@ public trait HttpClientWrapper {
  * Date: 11.08.11 16:24
  */
 public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
+  private val LOG = log4j(javaClass<NVMDownloader>())
+
   private val myClient: HttpClient;
   init {
     val serverVersion = ServerVersionHolder.getVersion().getDisplayVersion();
@@ -80,6 +88,44 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     httpclient.addRequestInterceptor(RequestAcceptEncoding());
     httpclient.addResponseInterceptor(ResponseContentEncoding());
     httpclient.setHttpRequestRetryHandler(DefaultHttpRequestRetryHandler(3, true));
+
+    val PREFIX = "teamcity.http.proxy.";
+    val SUFFIX = ".node";
+
+    val proxyHost = TeamCityProperties.getPropertyOrNull(PREFIX + "host" + SUFFIX)
+    val proxyPort = TeamCityProperties.getInteger(PREFIX + "port" + SUFFIX, 3128)
+
+    val proxyDomain = TeamCityProperties.getPropertyOrNull(PREFIX + "domain" + SUFFIX)
+    val proxyUser = TeamCityProperties.getPropertyOrNull(PREFIX + "user" + SUFFIX)
+    val proxyPassword = TeamCityProperties.getPropertyOrNull(PREFIX + "password" + SUFFIX)
+    val proxyWorkstation = TeamCityProperties.getPropertyOrNull(PREFIX + "workstation" + SUFFIX)
+
+    if (proxyHost != null && proxyPort > 0) {
+      val proxy = HttpHost(proxyHost, proxyPort);
+
+      httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+
+      if (proxyUser != null && proxyPassword != null) {
+        if (proxyDomain != null || proxyWorkstation != null) {
+          LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort, username: ${proxyDomain ?: proxyWorkstation ?: "."}\\$proxyUser")
+
+          httpclient.getCredentialsProvider().setCredentials(
+                  AuthScope(proxyHost, proxyPort),
+                  NTCredentials(proxyUser,
+                          proxyPassword,
+                          proxyWorkstation,
+                          proxyDomain))
+        } else {
+          LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort, username: $proxyUser")
+          httpclient.getCredentialsProvider().setCredentials(
+                  AuthScope(proxyHost, proxyPort),
+                  UsernamePasswordCredentials(proxyUser,
+                          proxyPassword))
+        }
+      } else {
+        LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort")
+      }
+    }
 
     myClient = httpclient;
   }
