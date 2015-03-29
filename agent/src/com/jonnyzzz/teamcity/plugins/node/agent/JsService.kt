@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,7 @@ import jetbrains.buildServer.RunBuildException
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import jetbrains.buildServer.util.FileUtil
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
-import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
-import com.jonnyzzz.teamcity.plugins.node.common.resolve
-import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
-import com.jonnyzzz.teamcity.plugins.node.common.tempFile
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
-import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
+import com.jonnyzzz.teamcity.plugins.node.common.*
 import org.apache.log4j.Logger
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine
@@ -140,7 +132,7 @@ public abstract class JsService() : BaseService() {
       //so add generated script as commandline parameter
       arguments add tempScript.getPath()
     } else {
-      throw RunBuildException("Unknown exection mode: ${mode}")
+      throw RunBuildException("Unknown execution mode: ${mode}")
     }
 
     //add script options
