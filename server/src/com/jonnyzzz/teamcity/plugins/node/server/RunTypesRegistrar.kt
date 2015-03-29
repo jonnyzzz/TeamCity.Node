@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.jonnyzzz.teamcity.plugins.node.server
 import jetbrains.buildServer.serverSide.RunTypeRegistry
 
 public class RunTypesRegistrar(registry: RunTypeRegistry, types: Collection<RunTypeBase?>) {
-  {
+  init {
     types.filterNotNull().forEach { registry.registerRunType(it) }
   }
 }

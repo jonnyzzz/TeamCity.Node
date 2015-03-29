@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,7 @@
 package com.jonnyzzz.teamcity.plugins.node.agent
 
 import com.jonnyzzz.teamcity.plugins.node.common.*
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
-import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter
-import jetbrains.buildServer.agent.AgentLifeCycleListener
-import jetbrains.buildServer.agent.BuildAgent
-import jetbrains.buildServer.agent.BuildAgentConfiguration
+import jetbrains.buildServer.agent.*
 import jetbrains.buildServer.util.EventDispatcher
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutor
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
@@ -40,7 +35,6 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
                                val config: BuildAgentConfiguration,
                                val exec : ProcessExecutor) {
   private val LOG = log4j(this.javaClass)
-  private val bean = NodeBean();
 
   fun detectNVMTool() {
     with(config.getSystemInfo()) {
@@ -86,7 +80,7 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
     }
   }
 
-  {
+  init {
     events.addListener(object : AgentLifeCycleAdapter() {
       public override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
         detectNVMTool()

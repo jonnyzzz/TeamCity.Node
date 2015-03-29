@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public trait HttpClientWrapper {
  */
 public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
   private val myClient: HttpClient;
-  {
+  init {
     val serverVersion = ServerVersionHolder.getVersion().getDisplayVersion();
     val ps = BasicHttpParams();
 
