@@ -70,7 +70,7 @@ public class GulpSession : BaseService() {
 
         if (!gulp.isFile()) {
           throw RunBuildException(
-                  "Failed to find ${gulpExecutable()} under ${getWorkingDirectory()}.\n" +
+                  "Failed to find ${cmd} under ${getWorkingDirectory()}/node_modules/.bin.\n" +
                           "Please install 'gulp' as project-local Node.js NPM package")
         }
         return gulp.getPath()
