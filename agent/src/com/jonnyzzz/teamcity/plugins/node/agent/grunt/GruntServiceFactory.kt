@@ -70,7 +70,7 @@ public class GruntSession : BaseService() {
 
         if (!grunt.isFile()) {
           throw RunBuildException(
-                  "Failed to find ${gruntExecutable()} under ${getWorkingDirectory()}.\n" +
+                  "Failed to find ${cmd} under ${getWorkingDirectory()}/node_modules/.bin.\n" +
                   "Please install grunt and grunt-cli as project-local Node.js NPM packages")
         }
         return grunt.getPath()
