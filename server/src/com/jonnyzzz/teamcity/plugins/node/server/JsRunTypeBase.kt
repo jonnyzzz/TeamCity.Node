@@ -54,7 +54,7 @@ public abstract class JsRunTypeBase : RunTypeBase() {
     } else {
       val content = parameters[mode.parameter]
       if (content.isEmptyOrSpaces()) {
-        result.add(InvalidProperty(mode.parameter, "${mode.description} sbould not be empty"))
+        result.add(InvalidProperty(mode.parameter, "${mode.description} should not be empty"))
       }
     }
     return result;
