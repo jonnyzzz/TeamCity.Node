@@ -47,7 +47,7 @@ Download the latest build from [TeamCity](http://teamcity.jetbrains.com/viewType
 Installation
 ============
 
-* Download the plugin build (binaries) from http://teamcity.jetbrains.com/guestAuth/repository/download/bt434/.lastSuccessful/jonnyzzz.node.zip
+* Download the plugin build (binaries) from https://teamcity.jetbrains.com/guestAuth/repository/download/bt434/89315:id/jonnyzzz.node.zip
 * Make sure downloaded `.zip` file is not corrupted
 * Put the downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder
 * Restart the TeamCity Server 
