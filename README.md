@@ -34,7 +34,7 @@ Apache 2.0
 Supported Versions
 ==================
 
-Plugin is test to work with TeamCity 7.1, 8.0 and 8.1.
+Plugin is tested to work with TeamCity 7.1, 8.0, 8.1, 9.0 and 9.1.
 It should work with 7.0 (and maybe 6.5)
 
 Agent and server are expected to run JRE 1.7 (or maybe JRE 1.6)
