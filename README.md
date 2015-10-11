@@ -42,12 +42,13 @@ Agent and server are expected to run JRE 1.7 (or maybe JRE 1.6)
 Downloading Build
 =================
 
-Download the latest build from [TeamCity](http://teamcity.jetbrains.com/viewType.html?buildTypeId=bt434) 
+Download the latest build from [TeamCity](https://teamcity.jetbrains.com/viewType.html?buildTypeId=bt434) 
 
 Installation
 ============
 
-* Download the plugin build (binaries) from http://teamcity.jetbrains.com/guestAuth/repository/download/bt434/.lastSuccessful/jonnyzzz.node.zip
+* Download the plugin build (binaries) from https://teamcity.jetbrains.com/guestAuth/repository/download/bt434/.lastSuccessful/jonnyzzz.node.zip
+** If the link does not work, select latest successful build here https://teamcity.jetbrains.com/viewType.html?buildTypeId=bt434
 * Make sure downloaded `.zip` file is not corrupted
 * Put the downloaded plugin `.zip` file into `<TeamCity Data Directory>/plugins` folder
 * Restart the TeamCity Server 
