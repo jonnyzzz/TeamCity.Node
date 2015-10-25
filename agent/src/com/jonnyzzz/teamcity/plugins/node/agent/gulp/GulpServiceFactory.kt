@@ -57,11 +57,12 @@ public class GulpSession : BaseService() {
 
     when(mode) {
       GulpExecutionMode.NPM -> {
-        val gulp = workingDirectory / "node_modules" / ".bin" / cmd
+        val wd = workingDirectory / "node_modules" / ".bin"
+        val gulp = wd / cmd
 
         if (!gulp.isFile) {
           throw RunBuildException(
-                  "Failed to find ${gulpExecutable()} under $workingDirectory.\n" +
+                  "Failed to find $cmd under $wd.\n" +
                           "Please install 'gulp' as project-local Node.js NPM package")
         }
         return gulp.path
