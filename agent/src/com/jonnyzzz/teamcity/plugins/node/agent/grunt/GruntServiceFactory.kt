@@ -57,11 +57,12 @@ public class GruntSession : BaseService() {
 
     when(mode) {
       GruntExecutionMode.NPM -> {
-        val grunt = workingDirectory / "node_modules" / ".bin" / cmd
+        val wd = workingDirectory / "node_modules" / ".bin"
+        val grunt = wd / cmd
 
         if (!grunt.isFile) {
           throw RunBuildException(
-                  "Failed to find ${gruntExecutable()} under $workingDirectory.\n" +
+                  "Failed to find $cmd under $wd.\n" +
                   "Please install grunt and grunt-cli as project-local Node.js NPM packages")
         }
         return grunt.path
