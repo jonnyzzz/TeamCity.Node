@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import org.apache.log4j.Logger
 import java.io.IOException
 import jetbrains.buildServer.util.FileUtil
 import java.io.Closeable
-import java.util.HashMap
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -32,7 +31,7 @@ fun String?.isEmptyOrSpaces() : Boolean = com.intellij.openapi.util.text.StringU
 
 fun String.splitHonorQuotes() : List<String> = jetbrains.buildServer.util.StringUtil.splitHonorQuotes(this).filterNotNull()
 
-fun String.n(s:String) : String = this + "\n" + s
+infix fun String.n(s:String) : String = this + "\n" + s
 
 fun String?.fetchArguments() : Collection<String> {
   if (this == null || this.isEmptyOrSpaces()) return listOf()
@@ -45,7 +44,7 @@ fun String?.fetchArguments() : Collection<String> {
 }
 
 
-fun File.resolve(relativePath : String) : File = jetbrains.buildServer.util.FileUtil.resolvePath(this, relativePath)
+fun File.resolveEx(relativePath : String) : File = jetbrains.buildServer.util.FileUtil.resolvePath(this, relativePath)
 
 data class TempFileName(val prefix : String, val suffix : String)
 fun File.tempFile(details : TempFileName) : File = com.intellij.openapi.util.io.FileUtil.createTempFile(this, details.prefix, details.suffix, true) ?: throw IOException("Failed to create temp file under ${this}")
@@ -53,9 +52,9 @@ fun File.tempFile(details : TempFileName) : File = com.intellij.openapi.util.io.
 fun File.smartDelete() = com.intellij.openapi.util.io.FileUtil.delete(this)
 
 //we define this category to have plugin logging without logger configs patching
-fun log4j<T>(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.getName()}")!!
-fun File.div(child : String) : File = File(this, child)
-fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length()) else this
+fun <T> log4j(clazz : Class<T>) : Logger = Logger.getLogger("jetbrains.buildServer.${clazz.name}")!!
+operator fun File.div(child : String) : File = File(this, child)
+fun String.trimStart(x : String) : String = if (startsWith(x)) substring(x.length) else this
 
 inline fun <T, S:Closeable>using(stream:S, action:(S)->T) : T {
   try {
@@ -77,9 +76,4 @@ inline fun <T, S:Closeable>catchIO(stream:S, error:(IOException) -> Throwable, a
 fun <K,V,T:MutableMap<K, V>> T.plus(m:Map<K, V>) : T {
   this.putAll(m)
   return this
-}
-
-fun <K : Any, T:Iterable<K>> T.firstOrEmpty() : K? {
-  for(k in this) return k
-  return null
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,7 @@ package com.jonnyzzz.teamcity.plugins.node.server
 
 import jetbrains.buildServer.requirements.Requirement
 import jetbrains.buildServer.requirements.RequirementType
-import jetbrains.buildServer.serverSide.InvalidProperty
-import jetbrains.buildServer.serverSide.PropertiesProcessor
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
-import java.util.InvalidPropertiesFormatException
-import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
 
 public class NodeJsRunType : JsRunTypeBase() {
   public override fun getType(): String = bean.runTypeNameNodeJs
@@ -35,7 +30,7 @@ public class NodeJsRunType : JsRunTypeBase() {
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
     val list = super.getRunnerSpecificRequirements(runParameters)
-    if (list != null) result addAll list
+    result.addAll( list)
 
     if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
       //for now there is the only option to use detected node.js

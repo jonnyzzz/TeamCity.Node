@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,17 +41,8 @@ fun BuildProgressLogger.block(name: String, description: String = name): () -> U
   }
 }
 
-fun <T> BuildProgressLogger.block(name: String, description: String = name, action: BuildProgressLogger.() -> T): T {
-  val d = this.block(name, description)
-  try {
-    return action()
-  } finally {
-    d()
-  }
-}
-
-inline fun <T> AgentRunningBuild.logging(f: BuildProgressLogger.() -> T): T = getBuildLogger().f()
-inline fun <T> BuildRunnerContext.logging(f: BuildProgressLogger.() -> T): T = getBuild().logging(f)
+inline fun <T> AgentRunningBuild.logging(f: BuildProgressLogger.() -> T): T = buildLogger.f()
+inline fun <T> BuildRunnerContext.logging(f: BuildProgressLogger.() -> T): T = build.logging(f)
 
 
 /**
@@ -59,11 +50,11 @@ inline fun <T> BuildRunnerContext.logging(f: BuildProgressLogger.() -> T): T = g
  * Date: 18.08.13 22:38
  */
 
-inline fun io<T>(errorMessage: String, body: () -> T): T {
+inline fun <T> io(errorMessage: String, body: () -> T): T {
   try {
     return body()
   } catch (e: IOException) {
-    throw RunBuildException("${errorMessage}. ${e.getMessage()}", e)
+    throw RunBuildException("$errorMessage. ${e.message}", e)
   }
 }
 

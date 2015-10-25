@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import jetbrains.buildServer.runner.SimpleRunnerConstants
  * Date: 17.08.13 12:31
  */
 
-public trait CompositeProcessFactory {
+public interface CompositeProcessFactory {
   fun compositeBuildProcess(build: AgentRunningBuild,
                             builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess
 }
@@ -48,7 +48,7 @@ public class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : Compo
   }
 }
 
-public trait CompositeProcessBuilder<R> {
+public interface CompositeProcessBuilder<R> {
   fun execute(blockName: String, blockDescription: String = blockName, p: () -> Unit): R
   fun delegate(blockName: String, blockDescription: String = blockName, p: () -> BuildProcess): R
   fun script(blockName: String, blockDescription: String = blockName, workingDir: String, script: () -> String): R
@@ -57,17 +57,17 @@ public trait CompositeProcessBuilder<R> {
 abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
                                               val facade: BuildProcessFacade) : CompositeProcessBuilder<R> {
   private val logger: BuildProgressLogger
-    get() = build.getBuildLogger()
+    get() = build.buildLogger
 
   override fun script(blockName: String, blockDescription: String, workingDir: String, script: () -> String) =
           delegate(blockName, blockDescription) {
             val commandLine = (
-            if(build.getAgentConfiguration().getSystemInfo().isWindows())
+            if(build.agentConfiguration.systemInfo.isWindows)
               ""
             else "#!/bin/bash\n\n"
             ) + script()
 
-            log4j(javaClass).info("Executing shell command:\n${commandLine}")
+            log4j(javaClass).info("Executing shell command:\n$commandLine")
             val ctx = facade.createBuildRunnerContext(build, SimpleRunnerConstants.TYPE, workingDir)
             ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
             ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);

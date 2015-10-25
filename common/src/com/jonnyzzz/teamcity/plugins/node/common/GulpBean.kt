@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ public class GulpBean {
   public val gulpModeDefault : GulpExecutionMode = GulpExecutionMode.NPM
 
   public val gulpModes : List<GulpExecutionMode>
-    get() = arrayListOf(*GulpExecutionMode.values())
+    get() = arrayListOf(*GulpExecutionMode.values)
 
   public fun parseMode(text : String?) : GulpExecutionMode?
           = gulpModes.firstOrNull { text == it.value } ?: gulpModeDefault
@@ -46,6 +46,6 @@ public class GulpBean {
 
 public enum class GulpExecutionMode(val title : String,
                                      val value : String) {
-  NPM : GulpExecutionMode("NPM package from project", "npm")
-  GLOBAL : GulpExecutionMode("System-wide gulp", "global")
+  NPM("NPM package from project", "npm"),
+  GLOBAL("System-wide gulp", "global"),
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ public abstract class BuildProcessBase: BuildProcess {
   public override fun waitFor(): BuildFinishedStatus {
     try
     {
-      if (isInterrupted())
+      if (isInterrupted)
         return BuildFinishedStatus.INTERRUPTED
 
       val status = waitForImpl()
-      if (isInterrupted())
+      if (isInterrupted)
         return BuildFinishedStatus.INTERRUPTED
 
       return status
@@ -73,7 +73,7 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
     {
       val process = action.startImpl()
       myReference.set(process)
-      if (isInterrupted())
+      if (isInterrupted)
         return BuildFinishedStatus.INTERRUPTED
 
       process.start()
@@ -85,7 +85,7 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
   }
 }
 
-public trait DelegatingProcessAction {
+public interface DelegatingProcessAction {
   open fun startImpl(): BuildProcess
   open fun finishedImpl() { }
 }

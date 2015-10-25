@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,25 +33,20 @@ import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
  * Date: 15.01.13 22:23
  */
 
-public trait ExecutorProxy {
+public interface ExecutorProxy {
   ///proxy execution, for example by adding cmd call on windows or /bin/sh on linux or mac
   fun proxy(e : Execution) : Execution
 }
 
 data public class Execution(public val program : String, public val arguments : List<String>)
 fun execution(program : String, vararg arguments : String) : Execution = Execution(program, arguments.toList())
-fun execution(program : String, base : List<String>, vararg arguments : String) : Execution = Execution(program, base + arguments.toList())
 
 fun Execution.shift(newProgram : String, vararg arguments : String)
         = Execution(newProgram, arguments.toList() + listOf(this.program) + this.arguments)
 
-public class IdenticalExecutionProxy : ExecutorProxy {
-  override fun proxy(e: Execution): Execution = e
-}
-
 public class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : ExecutorProxy {
   override fun proxy(e: Execution): Execution {
-    if (config.getSystemInfo().isWindows()) {
+    if (config.systemInfo.isWindows) {
       return e.shift("cmd.exe", "/c")
     }
 
@@ -64,22 +59,22 @@ public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(pro
   protected abstract fun disposeLater(action: () -> Unit)
 
   public fun generate(executable: String, arguments: List<String>): ProgramCommandLine {
-    log4j(javaClass).info("Executing ${executable} via wrapping script")
-    build.getBuild().getBuildLogger().message("Executing ${executable} via wrapping shell script")
+    log4j(javaClass).info("Executing $executable via wrapping script")
+    build.build.buildLogger.message("Executing $executable via wrapping shell script")
 
-    if (build.getBuild().getAgentConfiguration().getSystemInfo().isWindows()) {
+    if (build.build.agentConfiguration.systemInfo.isWindows) {
       return execute("cmd", arrayListOf("/c", executable) + arguments)
     } else {
       val scriptToRun = io("Failed to create temp file") {
-        build.getBuild().getAgentTempDirectory() tempFile TempFileName("wrapper", ".sh")
+        build.build.agentTempDirectory.tempFile(TempFileName("wrapper", ".sh"))
       }
       disposeLater { scriptToRun.smartDelete() }
       io("Generate wrapping bash script") {
-        FileUtil.writeFileAndReportErrors(scriptToRun, "#!/bin/bash\n${executable} \"$@\"");
-        FileUtil.setExectuableAttribute(scriptToRun.getPath(), true)
+        FileUtil.writeFileAndReportErrors(scriptToRun, "#!/bin/bash\n$executable \"$@\"");
+        FileUtil.setExectuableAttribute(scriptToRun.path, true)
       }
 
-      return execute(scriptToRun.getPath(), arguments)
+      return execute(scriptToRun.path, arguments)
     }
   }
 }
@@ -91,7 +86,7 @@ data public class ExecutionResult(public val stdOut : String,
 
 fun ExecutionResult.succeeded() : Boolean = this.error == null && exitCode == 0
 
-public trait ProcessExecutor {
+public interface ProcessExecutor {
   fun runProcess(p : Execution) : ExecutionResult
 }
 
@@ -100,23 +95,23 @@ public class ProcessExecutorImpl : ProcessExecutor {
   private val LOG = log4j(this.javaClass)
 
   override fun runProcess(p: Execution): ExecutionResult {
-    LOG.info("Starting process: ${p}");
+    LOG.info("Starting process: $p");
 
     val cmd = GeneralCommandLine()
-    cmd.setExePath(p.program)
+    cmd.exePath = p.program
     cmd.addParameters(p.arguments);
     val run = SimpleCommandLineProcessRunner.runCommand(
-            cmd, byteArray(), object : RunCommandEventsAdapter() {
+            cmd, byteArrayOf(), object : RunCommandEventsAdapter() {
       public override fun getOutputIdleSecondsTimeout(): Int? = 239
     })!!
 
     val result = ExecutionResult(
-            run.getStdout().trim(),
-            run.getStderr().trim(),
-            run.getExitCode(),
-            run.getException())
+            run.stdout.trim(),
+            run.stderr.trim(),
+            run.exitCode,
+            run.exception)
 
-    LOG.debug("Execution completed: ${result}")
+    LOG.debug("Execution completed: $result")
     return result;
   }
 }
@@ -124,6 +119,6 @@ public class ProcessExecutorImpl : ProcessExecutor {
 public class ProxyAwareExecutorImpl(val host : ProcessExecutor,
                                     val proxy : ExecutorProxy) : ProcessExecutor {
   override fun runProcess(p: Execution): ExecutionResult {
-    return host runProcess (proxy proxy p)
+    return host.runProcess(proxy.proxy(p))
   }
 }

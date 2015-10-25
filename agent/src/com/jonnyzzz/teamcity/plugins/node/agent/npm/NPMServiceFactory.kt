@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.npm
 
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.ExecutorProxy
 import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import jetbrains.buildServer.agent.BuildAgentConfiguration
@@ -36,7 +35,6 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.Execution
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
 import org.apache.log4j.Logger
-import jetbrains.buildServer.agent.runner.BuildServiceAdapter
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
 
 /**
@@ -44,10 +42,10 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandL
  * Date: 15.01.13 22:55
  */
 
-public class NPMServiceFactory(val proxy : ExecutorProxy) : MultiCommandBuildSessionFactory {
+public class NPMServiceFactory : MultiCommandBuildSessionFactory {
   val bean = NPMBean()
 
-  public override fun createSession(p0: BuildRunnerContext): MultiCommandBuildSession = NPMSession(proxy, p0)
+  public override fun createSession(p0: BuildRunnerContext): MultiCommandBuildSession = NPMSession(p0)
 
   public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
     public override fun getType(): String = bean.runTypeName
@@ -55,29 +53,28 @@ public class NPMServiceFactory(val proxy : ExecutorProxy) : MultiCommandBuildSes
   }
 }
 
-public class NPMSession(val proxy : ExecutorProxy,
-                        val runner : BuildRunnerContext) : MultiCommandBuildSession {
+public class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
   private val bean = NPMBean()
   private var iterator : Iterator<NPMCommandExecution> = listOf<NPMCommandExecution>().iterator()
   private var previousStatus = BuildFinishedStatus.FINISHED_SUCCESS
 
   private fun resolveNpmExecutable() : String {
-    val path = runner.getRunnerParameters()[bean.toolPathKey]
+    val path = runner.runnerParameters[bean.toolPathKey]
     if (path == null || path.isEmptyOrSpaces()) return "npm"
     return path.trim()
   }
 
   public override fun sessionStarted() {
-    val logger = runner.getBuild().getBuildLogger()
-    val extra = runner.getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
-    val checkExitCode = runner.getBuild().getBuildTypeOptionValue(BuildTypeOptions.BT_FAIL_ON_EXIT_CODE) ?: true
+    val logger = runner.build.buildLogger
+    val extra = runner.runnerParameters[bean.commandLineParameterKey].fetchArguments()
+    val checkExitCode = runner.build.getBuildTypeOptionValue(BuildTypeOptions.BT_FAIL_ON_EXIT_CODE) ?: true
     val npm = resolveNpmExecutable()
 
     iterator =
-            bean.parseCommands(runner.getRunnerParameters()[bean.npmCommandsKey])
+            bean.parseCommands(runner.runnerParameters[bean.npmCommandsKey])
                     .map{ NPMCommandExecution(
                     logger,
-                    "npm ${it}",
+                    "npm $it",
                     runner,
                     Execution(npm, extra + it.splitHonorQuotes())){ exitCode ->
                       previousStatus = when {
@@ -86,14 +83,6 @@ public class NPMSession(val proxy : ExecutorProxy,
                       }
                     }
             }.iterator()
-  }
-
-  private fun commandline(runner : BuildRunnerContext, e : Execution) : ProgramCommandLine {
-    val p = proxy.proxy(e)
-    return SimpleProgramCommandLine(
-                runner,
-                p.program,
-                p.arguments)
   }
 
   public override fun getNextCommand(): CommandExecution? =
@@ -120,7 +109,7 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
                     = SimpleProgramCommandLine(build, executable, args)
 
             override fun disposeLater(action: () -> Unit) {
-              disposables add action
+              disposables.add(action)
             }
           }.generate(cmd.program, cmd.arguments)
 
@@ -135,7 +124,7 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
       OUT_LOG?.warn(text)
       return
     }
-    super<LoggingProcessListener>.onStandardOutput(text)
+    super.onStandardOutput(text)
   }
 
   public override fun onErrorOutput(text: String) {
@@ -144,11 +133,11 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
       OUT_LOG?.warn(text)
       return
     }
-    super<LoggingProcessListener>.onErrorOutput(text)
+    super.onErrorOutput(text)
   }
 
   public override fun processFinished(exitCode: Int) {
-    super<LoggingProcessListener>.processFinished(exitCode)
+    super.processFinished(exitCode)
     logger.activityFinished(blockName, "npm");
     disposables.forEach { it() }
     onFinished(exitCode)

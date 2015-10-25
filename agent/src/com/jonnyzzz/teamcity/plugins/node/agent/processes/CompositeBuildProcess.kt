@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.BuildProcess
 
 
-public trait BuildProcessContinuation {
+public interface BuildProcessContinuation {
   fun pushBuildProcess(process: BuildProcess)
 }
 
 
-public trait CompositeBuildProcess : BuildProcess, BuildProcessContinuation {
+public interface CompositeBuildProcess : BuildProcess, BuildProcessContinuation {
 }
 
 public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuildProcess {
@@ -47,7 +47,7 @@ public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuild
   }
 
   protected override fun waitForImpl(): BuildFinishedStatus {
-    if (isInterrupted())
+    if (isInterrupted)
       return BuildFinishedStatus.INTERRUPTED
 
     val proc = myProcessList.poll()
@@ -62,13 +62,13 @@ public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuild
         myCurrentProcess.set(null)
       }
 
-      if (isInterrupted())
+      if (isInterrupted)
         return BuildFinishedStatus.INTERRUPTED
 
       return waitForImpl()
     }
 
-    if (isInterrupted())
+    if (isInterrupted)
       return BuildFinishedStatus.INTERRUPTED
 
     return BuildFinishedStatus.FINISHED_SUCCESS

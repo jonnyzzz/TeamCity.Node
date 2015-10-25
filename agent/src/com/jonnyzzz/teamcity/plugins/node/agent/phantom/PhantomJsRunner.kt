@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,10 @@ public class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
 }
 
 public class PhantomJsService() : JsService() {
-  protected override fun getToolPath(): String? = getRunnerParameters()[bean.toolPathKey]
+  protected override fun getToolPath(): String? = runnerParameters[bean.toolPathKey]
 
   protected override fun getToolName(): String = "phantom"
 
   protected override fun getGeneratedScriptExt(): String
-          = "." + (getRunnerParameters()[bean.phantomJsExtensionKey] ?: bean.phantomJsExtensionDefault)
+          = "." + (runnerParameters[bean.phantomJsExtensionKey] ?: bean.phantomJsExtensionDefault)
 }

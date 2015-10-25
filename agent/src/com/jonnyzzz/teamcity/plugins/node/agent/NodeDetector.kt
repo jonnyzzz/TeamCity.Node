@@ -37,18 +37,18 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
   private val LOG = log4j(this.javaClass)
 
   fun detectNVMTool() {
-    with(config.getSystemInfo()) {
+    with(config.systemInfo) {
       when {
-        isWindows() -> {
-          log4j(javaClass).info("Node NVM installer runner is not availabe: Windows is not supported")
+        isWindows -> {
+          log4j(javaClass).info("Node NVM installer runner is not available: Windows is not supported")
         }
 
-        !(isMac() || isUnix()) -> {
-          log4j(javaClass).info("Node NVM installer runner is not availabe")
+        !(isMac || isUnix) -> {
+          log4j(javaClass).info("Node NVM installer runner is not available")
         }
 
-        !File("/bin/bash").isFile() -> {
-          log4j(javaClass).info("Node NVM installer runner is not availabe: /bin/bash not found")
+        !File("/bin/bash").isFile -> {
+          log4j(javaClass).info("Node NVM installer runner is not available: /bin/bash not found")
         }
 
         else -> {
@@ -63,17 +63,17 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
     }
   }
 
-  fun detectNodeTool(executable: String, configParameterName: String, versionPreprocess : (String) -> String = {it}) {
-    val run = exec runProcess execution(executable, "--version")
+  fun detectNodeTool(executable: String, configParameterName: String, versionPreProcess: (String) -> String = {it}) {
+    val run = exec.runProcess(execution(executable, "--version"))
     when {
       run.succeeded() -> {
-        val version = versionPreprocess(run.stdOut.trim())
-        LOG.info("${executable} ${version} was detected")
+        val version = versionPreProcess(run.stdOut.trim())
+        LOG.info("$executable $version was detected")
         config.addConfigurationParameter(configParameterName, version)
         return
       }
       else -> {
-        LOG.info("${executable} was not found or failed, exitcode: ${run.exitCode}")
+        LOG.info("$executable was not found or failed, exitcode: ${run.exitCode}")
         LOG.info("StdOut: ${run.stdOut}")
         LOG.info("StdErr: ${run.stdErr}")
       }
@@ -86,7 +86,7 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         detectNVMTool()
 
         detectNodeTool("node", NodeBean().nodeJSConfigurationParameter) {
-          it trimStart "v"
+          it.trimStart("v")
         }
 
         detectNodeTool("npm", NPMBean().nodeJSNPMConfigurationParameter)

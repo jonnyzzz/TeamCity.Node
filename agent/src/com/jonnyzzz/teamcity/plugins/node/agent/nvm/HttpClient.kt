@@ -40,12 +40,10 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.client.protocol.RequestAcceptEncoding
 import org.apache.http.client.protocol.ResponseContentEncoding
 import org.apache.http.conn.params.ConnRoutePNames
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier
 import org.apache.http.conn.ssl.X509HostnameVerifier
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.PoolingClientConnectionManager
 import org.springframework.beans.factory.DisposableBean
-import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSession
 import javax.net.ssl.SSLSocket
 
@@ -53,7 +51,7 @@ import javax.net.ssl.SSLSocket
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 13.08.13 22:43
  */
-public trait HttpClientWrapper {
+public interface HttpClientWrapper {
   fun <T> execute(request: HttpUriRequest, action: HttpResponse.() -> T): T
 }
 
@@ -62,11 +60,11 @@ public trait HttpClientWrapper {
  * Date: 11.08.11 16:24
  */
 public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
-  private val LOG = log4j(javaClass<NVMDownloader>())
+  private val LOG = log4j(NVMDownloader::class.java)
 
   private val myClient: HttpClient;
   init {
-    val serverVersion = ServerVersionHolder.getVersion().getDisplayVersion();
+    val serverVersion = ServerVersionHolder.getVersion().displayVersion;
     val ps = BasicHttpParams();
 
     DefaultHttpClient.setDefaultHttpParams(ps);
@@ -97,14 +95,14 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
 
     val httpclient = DefaultHttpClient(cm, ps);
 
-    httpclient.setRoutePlanner(ProxySelectorRoutePlanner(
-            httpclient.getConnectionManager()!!.getSchemeRegistry(),
-            ProxySelector.getDefault()));
+    httpclient.routePlanner = ProxySelectorRoutePlanner(
+            httpclient.connectionManager!!.schemeRegistry,
+            ProxySelector.getDefault());
 
 
     httpclient.addRequestInterceptor(RequestAcceptEncoding());
     httpclient.addResponseInterceptor(ResponseContentEncoding());
-    httpclient.setHttpRequestRetryHandler(DefaultHttpRequestRetryHandler(3, true));
+    httpclient.httpRequestRetryHandler = DefaultHttpRequestRetryHandler(3, true);
 
     val PREFIX = "teamcity.http.proxy.";
     val SUFFIX = ".node";
@@ -120,13 +118,13 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     if (proxyHost != null && proxyPort > 0) {
       val proxy = HttpHost(proxyHost, proxyPort);
 
-      httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+      httpclient.params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
       if (proxyUser != null && proxyPassword != null) {
         if (proxyDomain != null || proxyWorkstation != null) {
           LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort, username: ${proxyDomain ?: proxyWorkstation ?: "."}\\$proxyUser")
 
-          httpclient.getCredentialsProvider().setCredentials(
+          httpclient.credentialsProvider.setCredentials(
                   AuthScope(proxyHost, proxyPort),
                   NTCredentials(proxyUser,
                           proxyPassword,
@@ -134,7 +132,7 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
                           proxyDomain))
         } else {
           LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort, username: $proxyUser")
-          httpclient.getCredentialsProvider().setCredentials(
+          httpclient.credentialsProvider.setCredentials(
                   AuthScope(proxyHost, proxyPort),
                   UsernamePasswordCredentials(proxyUser,
                           proxyPassword))
@@ -158,7 +156,7 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
 
 
   public override fun destroy() {
-    myClient.getConnectionManager()!!.shutdown();
+    myClient.connectionManager!!.shutdown();
   }
 }
 

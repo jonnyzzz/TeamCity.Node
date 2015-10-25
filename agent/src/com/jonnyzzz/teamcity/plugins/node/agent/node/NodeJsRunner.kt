@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
 
 public class NodeJsService() : JsService() {
   protected override fun getToolPath(): String? {
-    val path = getRunnerParameters()[bean.toolPathKey]
+    val path = runnerParameters[bean.toolPathKey]
     if (path == null || path.isEmptyOrSpaces()) return "node"
     return path.trim()
   }

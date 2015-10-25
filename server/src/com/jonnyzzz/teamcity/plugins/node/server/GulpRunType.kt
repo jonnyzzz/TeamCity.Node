@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,20 +33,19 @@ public class GulpRunType : RunTypeBase() {
   public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
 
   public override fun describeParameters(parameters: Map<String, String>): String
-          = "Run targets: ${bean.parseCommands(parameters[bean.targets]) join ", "}"
+          = "Run targets: ${bean.parseCommands(parameters[bean.targets]).joinToString(", ")}"
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>
           = hashMapOf(bean.gulpMode to bean.gulpModeDefault.value)
 
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
-    val list = super.getRunnerSpecificRequirements(runParameters)
-    if (list != null) result addAll list
+    result.addAll(super.getRunnerSpecificRequirements(runParameters))
 
-    result add Requirement(NodeBean().nodeJSConfigurationParameter, null, RequirementType.EXISTS)
+    result.add(Requirement(NodeBean().nodeJSConfigurationParameter, null, RequirementType.EXISTS))
 
     if (bean.parseMode(runParameters[bean.gulpMode]) == GulpExecutionMode.GLOBAL) {
-      result add Requirement(bean.gulpConfigurationParameter, null, RequirementType.EXISTS)
+      result.add(Requirement(bean.gulpConfigurationParameter, null, RequirementType.EXISTS))
     }
 
     return result

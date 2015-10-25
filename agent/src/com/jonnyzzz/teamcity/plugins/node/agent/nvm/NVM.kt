@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import jetbrains.buildServer.agent.BuildProcess
 import com.jonnyzzz.teamcity.plugins.node.agent.logging
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeProcessFactory
+import kotlin.text.Regex
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -40,43 +41,41 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeProcessFactor
 ///https://github.com/creationix/nvm
 ///http://ghb.freshblurbs.com/blog/2011/05/07/install-node-js-and-express-js-nginx-debian-lenny.html
 public class NVMDownloader(val http:HttpClientWrapper) {
-  private val LOG = log4j(javaClass<NVMDownloader>())
+  private val LOG = log4j(NVMDownloader::class.java)
 
   private fun error(url:String, message:String) : Throwable {
-    throw RunBuildException("Failed to download NVM from ${url}. ${message}")
+    throw RunBuildException("Failed to download NVM from $url. $message")
   }
 
   private fun error(url:String, message:String, e:Throwable) : Throwable {
-    throw RunBuildException("Failed to download NVM from ${url}. ${message}. ${e.getMessage()}", e)
+    throw RunBuildException("Failed to download NVM from $url. $message. ${e.message}", e)
   }
 
   public fun downloadNVM(dest : File, url : String) {
     val httpGet = HttpGet(url)
     http.execute(httpGet) {
-      val status = getStatusLine()!!.getStatusCode()
-      if (status != 200) throw error(url, "${status} returned")
+      val status = statusLine!!.statusCode
+      if (status != 200) throw error(url, "$status returned")
 
-      val entity = getEntity()
-      if (entity == null) throw error(url, "No data was returned")
+      val entity = entity ?: throw error(url, "No data was returned")
 
-      catchIO(ZipInputStream(entity.getContent()!!), {error(url, "Failed to extract NVM", it)}) { zip ->
+      catchIO(ZipInputStream(entity.content!!), {error(url, "Failed to extract NVM", it)}) { zip ->
         FileUtil.createEmptyDir(dest)
 
         var hasFiles = false
         while(true) {
-          val ze = zip.getNextEntry()
-          if (ze == null) break
-          if (ze.isDirectory()) continue
-          val name = ze.getName().replace("\\", "/").trimStart("/").replaceAll("^nvm-[^/]+/(.*)", "$1")
-          LOG.debug("nvm content: ${name}")
+          val ze = zip.nextEntry ?: break
+          if (ze.isDirectory) continue
+          val name = ze.name.replace("\\", "/").trimStart("/").replace(Regex("^nvm-[^/]+/(.*)"), "$1")
+          LOG.debug("nvm content: $name")
 
-          if (name startsWith ".") continue
-          if (name startsWith "test/") continue
+          if (name.startsWith(".")) continue
+          if (name.startsWith("test/")) continue
 
           val file = dest / name
 
-          file.getParentFile()?.mkdirs()
-          catchIO(BufferedOutputStream(FileOutputStream(file)), {error(url, "Failed to create ${file}", it)}) {
+          file.parentFile?.mkdirs()
+          catchIO(BufferedOutputStream(FileOutputStream(file)), {error(url, "Failed to create $file", it)}) {
             zip.copyTo(it)
             hasFiles = true
           }
@@ -91,27 +90,26 @@ public class NVMDownloader(val http:HttpClientWrapper) {
 public class NVMRunner(val downloader : NVMDownloader,
                        val facade : CompositeProcessFactory) : AgentBuildRunner {
   private val bean = NVMBean();
-  private val LOG = log4j(javaClass<NVMRunner>());
 
   public override fun createBuildProcess(runningBuild: AgentRunningBuild, context: BuildRunnerContext): BuildProcess {
-    val nvmHome = runningBuild.getAgentConfiguration().getCacheDirectory("jonnyzzz.nvm")
-    val version = context.getRunnerParameters()[bean.NVMVersion]
-    val fromSource = if(!context.getRunnerParameters()[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
-    val url = context.getRunnerParameters()[bean.NVMURL] ?: bean.NVM_Creatonix
+    val nvmHome = runningBuild.agentConfiguration.getCacheDirectory("jonnyzzz.nvm")
+    val version = context.runnerParameters[bean.NVMVersion]
+    val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
+    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
 
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
         execute("Download", "Fetching NVM") {
           message("Downloading creatonix/nvm...")
-          message("from ${url}")
+          message("from $url")
           downloader.downloadNVM(nvmHome, url)
-          message("NVM downloaded into ${nvmHome}")
+          message("NVM downloaded into $nvmHome")
         }
-        script("Install", "Installing Node.js v${version}",nvmHome.getPath()) {
-          ". ${nvmHome}/nvm.sh" n "nvm install ${fromSource} ${version}"
+        script("Install", "Installing Node.js v$version",nvmHome.path) {
+          ". $nvmHome/nvm.sh" n "nvm install $fromSource $version"
         }
-        script("Use", "Selecting Node.js v${version}",nvmHome.getPath()) {
-          ". ${nvmHome}/nvm.sh" n "nvm use ${version}" n "eval \${TEAMCITY_CAPTURE_ENV}"
+        script("Use", "Selecting Node.js v$version", nvmHome.path) {
+          ". $nvmHome/nvm.sh" n "nvm use $version" n "eval \${TEAMCITY_CAPTURE_ENV}"
         }
       }
     }

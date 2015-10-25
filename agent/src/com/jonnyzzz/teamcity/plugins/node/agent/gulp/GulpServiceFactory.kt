@@ -16,7 +16,6 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.gulp
 
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.ExecutorProxy
 import com.jonnyzzz.teamcity.plugins.node.agent.*
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import jetbrains.buildServer.agent.BuildAgentConfiguration
@@ -24,23 +23,15 @@ import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
 import jetbrains.buildServer.agent.runner.CommandLineBuildService
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
 import jetbrains.buildServer.RunBuildException
-import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
-import com.jonnyzzz.teamcity.plugins.node.common.resolve
-import com.jonnyzzz.teamcity.plugins.node.common.div
 import java.util.TreeMap
-import com.jonnyzzz.teamcity.plugins.node.common.tempFile
-import com.jonnyzzz.teamcity.plugins.node.common.TempFileName
-import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
-import com.google.gson.Gson
-import com.jonnyzzz.teamcity.plugins.node.common.GulpBean
-import com.jonnyzzz.teamcity.plugins.node.common.GulpExecutionMode
+import com.jonnyzzz.teamcity.plugins.node.common.*
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 27.04.13 10:20
  */
 
-public class GulpServiceFactory(val proxy: ExecutorProxy): CommandLineBuildServiceFactory {
+public class GulpServiceFactory: CommandLineBuildServiceFactory {
   private val bean = GulpBean()
 
   public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo {
@@ -55,59 +46,59 @@ public class GulpSession : BaseService() {
   private val bean = GulpBean()
 
   private fun gulpExecutable() : String =
-          if (getAgentConfiguration().getSystemInfo().isWindows())
+          if (agentConfiguration.systemInfo.isWindows)
             "gulp.cmd"
           else
             "gulp"
 
   private fun gulpExecutablePath() : String {
-    val mode = bean.parseMode(getRunnerParameters()[bean.gulpMode])
+    val mode = bean.parseMode(runnerParameters[bean.gulpMode])
     val cmd = gulpExecutable()
 
     when(mode) {
       GulpExecutionMode.NPM -> {
-        val gulp = getWorkingDirectory() / "node_modules" / ".bin" / cmd
+        val gulp = workingDirectory / "node_modules" / ".bin" / cmd
 
-        if (!gulp.isFile()) {
+        if (!gulp.isFile) {
           throw RunBuildException(
-                  "Failed to find ${gulpExecutable()} under ${getWorkingDirectory()}.\n" +
+                  "Failed to find ${gulpExecutable()} under $workingDirectory.\n" +
                           "Please install 'gulp' as project-local Node.js NPM package")
         }
-        return gulp.getPath()
+        return gulp.path
       }
 
       GulpExecutionMode.GLOBAL -> return cmd
 
       else ->
-        throw RunBuildException("Unexpected execution mode ${mode}")
+        throw RunBuildException("Unexpected execution mode $mode")
     }
   }
 
   public override fun makeProgramCommandLine(): ProgramCommandLine {
     val arguments = arrayListOf<String>()
-    arguments add "--no-color"
+    arguments.add("--no-color")
 
-    val filePath = getRunnerParameters()[bean.file]
+    val filePath = runnerParameters[bean.file]
     if (filePath != null) {
-      val file = getCheckoutDirectory().resolve(filePath)
-      if (!file.isFile()) {
-        throw RunBuildException("Failed to find file at path: ${file}")
+      val file = checkoutDirectory.resolveEx(filePath)
+      if (!file.isFile) {
+        throw RunBuildException("Failed to find file at path: $file")
       }
-      arguments add "--gulpfile"
-      arguments add file.getPath()
+      arguments.add("--gulpfile")
+      arguments.add(file.path)
     }
 
     val parameters = TreeMap<String, String>()
-    parameters.putAll(getBuildParameters().getSystemProperties())
+    parameters.putAll(buildParameters.systemProperties)
 
     val parametersAll = TreeMap<String, String>()
-    parametersAll.putAll(getConfigParameters())
-    parametersAll.putAll(getBuildParameters().getAllParameters())
+    parametersAll.putAll(configParameters)
+    parametersAll.putAll(buildParameters.allParameters)
 
-    arguments addAll generateDefaultTeamCityParametersJSON()
+    arguments.addAll(generateDefaultTeamCityParametersJSON())
 
-    arguments addAll bean.parseCommands(getRunnerParameters()[bean.targets])
-    arguments addAll getRunnerParameters()[bean.commandLineParameterKey].fetchArguments()
+    arguments.addAll(bean.parseCommands(runnerParameters[bean.targets]))
+    arguments.addAll(runnerParameters[bean.commandLineParameterKey].fetchArguments())
 
     return execute(gulpExecutablePath(), arguments)
   }

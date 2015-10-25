@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import jetbrains.buildServer.requirements.Requirement
 import jetbrains.buildServer.requirements.RequirementType
 import jetbrains.buildServer.serverSide.InvalidProperty
 import jetbrains.buildServer.serverSide.PropertiesProcessor
-import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 
@@ -46,15 +45,14 @@ public class NPMRunType : RunTypeBase() {
   }
 
   public override fun describeParameters(parameters: Map<String, String>): String
-          = "Run targets: ${bean.parseCommands(parameters[bean.npmCommandsKey]) join ", "}"
+          = "Run targets: ${bean.parseCommands(parameters[bean.npmCommandsKey]).joinToString(", ")}"
 
   public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
           = hashMapOf(bean.npmCommandsKey to bean.npmCommandsDefault)
 
   public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
-    val list = super.getRunnerSpecificRequirements(runParameters)
-    if (list != null) result addAll list
+    result.addAll(super.getRunnerSpecificRequirements(runParameters))
 
     if (runParameters[bean.toolPathKey].isEmptyOrSpaces()) {
       //for now there is the only option to use detected node.js

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,25 +70,25 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
 
     if (buildType == null) return result
 
-    val runners = buildType.getBuildRunners() filter { buildType.isEnabled(it.getId()) }
+    val runners = buildType.buildRunners.filter { buildType.isEnabled(it.getId()) }
 
     //if nothing found => skip
     if (runners.isEmpty()) return result
 
     //if our nodeJS and NPM runners are not used
-    if (!runners.any { runner -> runTypes.contains(runner.getType())}) return result
+    if (!runners.any { runner -> runTypes.contains(runner.type)}) return result
 
-    val version = runners.firstOrNull { it.getType() == nvmBean.NVMFeatureType }
-           ?.getParameters()
+    val version = runners.firstOrNull { it.type == nvmBean.NVMFeatureType }
+           ?.parameters
            ?.get(nvmBean.NVMVersion)
 
     //skip checks if NVM feature version was specified
     if (version != null) return result
 
     //if not, let's filter unwanted agents
-    val agents = context.getAgentsForStartingBuild() filter { agent ->
+    val agents = context.agentsForStartingBuild.filter { agent ->
       //allow only if there were truly-detected NVM/NPM on the agent
-      with(agent.getConfigurationParameters()) {
+      with(agent.configurationParameters) {
         get(nodeBean.nodeJSConfigurationParameter) != nvmBean.NVMUsed
         &&
         get(npmBean.nodeJSNPMConfigurationParameter) != nvmBean.NVMUsed
@@ -96,9 +96,9 @@ public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : Sta
     }
 
     if (agents.isEmpty()) {
-      result setWaitReason SimpleWaitReason("Please add 'Node.js NVM Installer' build runner")
+      result.waitReason = SimpleWaitReason("Please add 'Node.js NVM Installer' build runner")
     } else {
-      result setFilteredConnectedAgents agents
+      result.filteredConnectedAgents = agents
     }
 
     return result

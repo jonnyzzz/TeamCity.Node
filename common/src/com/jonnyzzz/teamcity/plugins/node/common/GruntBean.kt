@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class GruntBean {
   public val gruntModeDefault : GruntExecutionMode = GruntExecutionMode.NPM
 
   public val gruntModes : List<GruntExecutionMode>
-          get() = arrayListOf(*GruntExecutionMode.values())
+          get() = arrayListOf(*GruntExecutionMode.values)
 
   public fun parseMode(text : String?) : GruntExecutionMode?
          = gruntModes.firstOrNull { text == it.value } ?: gruntModeDefault
@@ -50,6 +50,6 @@ public class GruntBean {
 
 public enum class GruntExecutionMode(val title : String,
                                      val value : String) {
-  NPM : GruntExecutionMode("NPM package from project", "npm")
-  GLOBAL : GruntExecutionMode("System-wide grunt", "global")
+  NPM("NPM package from project", "npm"),
+  GLOBAL("System-wide grunt", "global"),
 }

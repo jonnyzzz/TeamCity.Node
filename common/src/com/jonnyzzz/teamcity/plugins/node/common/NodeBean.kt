@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2013 Eugene Petrenko
+ * Copyright 2013-2015 Eugene Petrenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@ package com.jonnyzzz.teamcity.plugins.node.common
 
 public class NodeBean {
   public val executionModeKey: String = "node_execution_mode"
-  public val executionModeValues: Array<ExecutionModes> = ExecutionModes.values()
+  public val executionModeValues: Array<ExecutionModes> = ExecutionModes.values
   public val executionModeFile: ExecutionModes = ExecutionModes.File
-  public val executionModeScript: ExecutionModes = ExecutionModes.Script
   public val commandLineParameterKey: String = "node_execution_args"
   public val scriptParameterKey: String = "node_script_args"
   public val toolPathKey: String = "node_toolPath"
@@ -46,6 +45,6 @@ public enum class ExecutionModes(public val value: String,
                                  public val parameter : String,
                                  public val description : String)
 {
-  File : ExecutionModes("file", "node_file", "File");
-  Script : ExecutionModes("script", "node_script_text", "Source Code")
+  File("file", "node_file", "File"),
+  Script("script", "node_script_text", "Source Code"),
 }
