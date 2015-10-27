@@ -25,6 +25,7 @@ public class NodeBean {
   public val executionModeKey: String = "node_execution_mode"
   public val executionModeValues: Array<ExecutionModes> = ExecutionModes.values
   public val executionModeFile: ExecutionModes = ExecutionModes.File
+  public val executionModeScript: ExecutionModes = ExecutionModes.Script
   public val commandLineParameterKey: String = "node_execution_args"
   public val scriptParameterKey: String = "node_script_args"
   public val toolPathKey: String = "node_toolPath"
