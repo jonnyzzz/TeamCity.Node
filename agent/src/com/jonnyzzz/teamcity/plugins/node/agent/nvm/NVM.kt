@@ -16,23 +16,22 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.nvm
 
-import java.io.File
-import org.apache.http.client.methods.HttpGet
-import jetbrains.buildServer.RunBuildException
-import java.util.zip.ZipInputStream
-import jetbrains.buildServer.util.FileUtil
-import java.io.FileOutputStream
-import java.io.BufferedOutputStream
-import jetbrains.buildServer.agent.AgentRunningBuild
-import jetbrains.buildServer.agent.BuildRunnerContext
-import com.jonnyzzz.teamcity.plugins.node.common.*
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import jetbrains.buildServer.agent.AgentBuildRunner
-import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import jetbrains.buildServer.agent.BuildProcess
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.stream.JsonReader
 import com.jonnyzzz.teamcity.plugins.node.agent.logging
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.CompositeProcessFactory
-import kotlin.text.Regex
+import com.jonnyzzz.teamcity.plugins.node.common.*
+import jetbrains.buildServer.RunBuildException
+import jetbrains.buildServer.agent.*
+import jetbrains.buildServer.util.FileUtil
+import org.apache.http.client.methods.HttpGet
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStreamReader
+import java.util.*
+import java.util.zip.ZipInputStream
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -88,14 +87,15 @@ class NVMDownloader(val http:HttpClientWrapper) {
 }
 
 class NVMRunner(val downloader : NVMDownloader,
-                       val facade : CompositeProcessFactory) : AgentBuildRunner {
+                val latest: NVMLatestReleaseFetcher,
+                val facade: CompositeProcessFactory) : AgentBuildRunner {
   private val bean = NVMBean();
 
   override fun createBuildProcess(runningBuild: AgentRunningBuild, context: BuildRunnerContext): BuildProcess {
     val nvmHome = runningBuild.agentConfiguration.getCacheDirectory("jonnyzzz.nvm")
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
-    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
+    val url = context.runnerParameters[bean.NVMURL] ?: (latest.getVersion()?.let { "https://github.com/creationix/nvm/archive/$it.zip" }) ?: bean.NVM_Creatonix
 
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
@@ -119,5 +119,89 @@ class NVMRunner(val downloader : NVMDownloader,
     override fun getType(): String = bean.NVMFeatureType
 
     override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  }
+}
+
+class NVMLatestReleaseFetcher(val http: HttpClientWrapper) {
+  companion object {
+    private val LOG = log4j(NVMLatestReleaseFetcher::class.java)
+    private val URL = "https://api.github.com/repos/creationix/nvm/releases/latest"
+    private val ONE_HOUR_SECONDS = 60 * 60
+    private val HALF_DAY_SECONDS = 12 * ONE_HOUR_SECONDS
+  }
+
+  @Transient private var version: String? = null
+  @Transient private var etag: String? = null
+  @Transient private var error: Boolean = false
+  @Transient private var nextCheckTime: Long = 0
+
+
+  fun getVersion(): String? {
+    if (nextCheckTime > Date().time) {
+      if (error) return null
+      if (version != null) return version
+    }
+
+    // Do actual check
+    synchronized(this) {
+      if (nextCheckTime > Date().time) {
+        if (error) return null
+        if (version != null) return version
+      }
+      doGetVersion()
+    }
+
+    return version
+  }
+
+  private fun error(message: String) {
+    LOG.error(message)
+    error = true
+    version = null
+    etag = null
+    nextCheckTime = Date().time + ONE_HOUR_SECONDS
+  }
+
+  private fun success(version: String, etag: String?) {
+    LOG.info("Fetched latest version of nvm: $version")
+    error = false
+    this.version = version
+    this.etag = etag
+    nextCheckTime = Date().time + HALF_DAY_SECONDS
+  }
+
+  private fun doGetVersion() {
+    error = false
+
+    val request = HttpGet(URL)
+    request.setHeader("Accept", "application/json")
+    etag?.let { request.setHeader("If-None-Match", etag) }
+
+    http.execute(request) {
+      val status = statusLine!!.statusCode
+      if (status == 304) {
+        nextCheckTime = Date().time + HALF_DAY_SECONDS
+        return@execute
+      }
+      if (status != 200) {
+        return@execute error("Cannot check latest release: $status returned")
+      }
+
+      val entity = entity ?: return@execute error("No data was returned")
+
+      val etag = getFirstHeader("ETag")?.value
+
+      entity.content.use {
+        val reader = JsonReader(InputStreamReader(it))
+        val json: JsonObject
+        try {
+          json = Gson().fromJson<JsonObject>(reader, JsonObject::class.java)
+        } catch(e: Exception) {
+          return@execute error("Cannot parse response json")
+        }
+        val tag_name = json.get("tag_name")?.asString ?: return@execute error("'tag_name' is empty")
+        return@execute success(tag_name, etag)
+      }
+    }
   }
 }
