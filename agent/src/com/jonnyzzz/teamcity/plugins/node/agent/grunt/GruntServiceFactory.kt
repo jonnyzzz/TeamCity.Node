@@ -31,18 +31,18 @@ import com.jonnyzzz.teamcity.plugins.node.common.*
  * Date: 27.04.13 10:20
  */
 
-public class GruntServiceFactory : CommandLineBuildServiceFactory {
+class GruntServiceFactory : CommandLineBuildServiceFactory {
   private val bean = GruntBean()
 
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo {
-    public override fun getType(): String = bean.runTypeName
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo {
+    override fun getType(): String = bean.runTypeName
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 
-  public override fun createService(): CommandLineBuildService = GruntSession()
+  override fun createService(): CommandLineBuildService = GruntSession()
 }
 
-public class GruntSession : BaseService() {
+class GruntSession : BaseService() {
   private val bean = GruntBean()
 
   private fun gruntExecutable() : String =
@@ -75,7 +75,7 @@ public class GruntSession : BaseService() {
     }
   }
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine {
+  override fun makeProgramCommandLine(): ProgramCommandLine {
     val arguments = arrayListOf<String>()
     arguments.add("--no-color")
 

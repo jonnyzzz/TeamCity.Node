@@ -21,23 +21,23 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 27.04.13 9:58
  */
-public class GruntBean {
-  public val gruntConfigurationParameter : String = "grunt"
+class GruntBean {
+  val gruntConfigurationParameter : String = "grunt"
 
-  public val runTypeName: String = "jonnyzzz.grunt"
-  public val file: String = "jonnyzzz.grunt.file"
-  public val targets: String = "jonnyzzz.grunt.tasks"
-  public val commandLineParameterKey : String = "jonnyzzz.commandLine"
-  public val gruntMode : String = "jonnyzzz.grunt.mode"
-  public val gruntModeDefault : GruntExecutionMode = GruntExecutionMode.NPM
+  val runTypeName: String = "jonnyzzz.grunt"
+  val file: String = "jonnyzzz.grunt.file"
+  val targets: String = "jonnyzzz.grunt.tasks"
+  val commandLineParameterKey : String = "jonnyzzz.commandLine"
+  val gruntMode : String = "jonnyzzz.grunt.mode"
+  val gruntModeDefault : GruntExecutionMode = GruntExecutionMode.NPM
 
-  public val gruntModes : List<GruntExecutionMode>
-          get() = arrayListOf(*GruntExecutionMode.values)
+  val gruntModes : List<GruntExecutionMode>
+          get() = arrayListOf(*GruntExecutionMode.values())
 
-  public fun parseMode(text : String?) : GruntExecutionMode?
+  fun parseMode(text : String?) : GruntExecutionMode?
          = gruntModes.firstOrNull { text == it.value } ?: gruntModeDefault
 
-  public fun parseCommands(text: String?): Collection<String> {
+  fun parseCommands(text: String?): Collection<String> {
     if (text == null)
       return listOf()
     else
@@ -48,7 +48,7 @@ public class GruntBean {
   }
 }
 
-public enum class GruntExecutionMode(val title : String,
+enum class GruntExecutionMode(val title : String,
                                      val value : String) {
   NPM("NPM package from project", "npm"),
   GLOBAL("System-wide grunt", "global"),

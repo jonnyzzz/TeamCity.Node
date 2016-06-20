@@ -42,18 +42,18 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandL
  * Date: 15.01.13 22:55
  */
 
-public class NPMServiceFactory : MultiCommandBuildSessionFactory {
+class NPMServiceFactory : MultiCommandBuildSessionFactory {
   val bean = NPMBean()
 
-  public override fun createSession(p0: BuildRunnerContext): MultiCommandBuildSession = NPMSession(p0)
+  override fun createSession(p0: BuildRunnerContext): MultiCommandBuildSession = NPMSession(p0)
 
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
-    public override fun getType(): String = bean.runTypeName
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
+    override fun getType(): String = bean.runTypeName
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }
 
-public class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
+class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
   private val bean = NPMBean()
   private var iterator : Iterator<NPMCommandExecution> = listOf<NPMCommandExecution>().iterator()
   private var previousStatus = BuildFinishedStatus.FINISHED_SUCCESS
@@ -64,7 +64,7 @@ public class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSess
     return path.trim()
   }
 
-  public override fun sessionStarted() {
+  override fun sessionStarted() {
     val logger = runner.build.buildLogger
     val extra = runner.runnerParameters[bean.commandLineParameterKey].fetchArguments()
     val checkExitCode = runner.build.getBuildTypeOptionValue(BuildTypeOptions.BT_FAIL_ON_EXIT_CODE) ?: true
@@ -85,25 +85,25 @@ public class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSess
             }.iterator()
   }
 
-  public override fun getNextCommand(): CommandExecution? =
+  override fun getNextCommand(): CommandExecution? =
           when {
             previousStatus != BuildFinishedStatus.FINISHED_SUCCESS -> null
             iterator.hasNext() -> iterator.next()
             else -> null
           }
 
-  public override fun sessionFinished(): BuildFinishedStatus? = previousStatus
+  override fun sessionFinished(): BuildFinishedStatus? = previousStatus
 }
 
-public class NPMCommandExecution(val logger : BuildProgressLogger,
+class NPMCommandExecution(val logger : BuildProgressLogger,
                                  val blockName : String,
                                  val runner : BuildRunnerContext,
                                  val cmd : Execution,
                                  val onFinished : (Int) -> Unit) : LoggingProcessListener(logger), CommandExecution {
   private val OUT_LOG : Logger? = Logger.getLogger("teamcity.out")
-  private val disposables = linkedListOf<() -> Unit>()
+  private val disposables = arrayListOf<() -> Unit>()
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine =
+  override fun makeProgramCommandLine(): ProgramCommandLine =
           object:ScriptWrappingCommandLineGenerator<ProgramCommandLine>(runner) {
             override fun execute(executable: String, args: List<String>): ProgramCommandLine
                     = SimpleProgramCommandLine(build, executable, args)
@@ -114,11 +114,11 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
           }.generate(cmd.program, cmd.arguments)
 
 
-  public override fun beforeProcessStarted() {
+  override fun beforeProcessStarted() {
     logger.activityStarted(blockName, "npm");
   }
 
-  public override fun onStandardOutput(text: String) {
+  override fun onStandardOutput(text: String) {
     if (text.contains("npm ERR!")){
       logger.error(text)
       OUT_LOG?.warn(text)
@@ -127,7 +127,7 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
     super.onStandardOutput(text)
   }
 
-  public override fun onErrorOutput(text: String) {
+  override fun onErrorOutput(text: String) {
     if (text.contains("npm ERR!")){
       logger.error(text)
       OUT_LOG?.warn(text)
@@ -136,13 +136,13 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
     super.onErrorOutput(text)
   }
 
-  public override fun processFinished(exitCode: Int) {
+  override fun processFinished(exitCode: Int) {
     super.processFinished(exitCode)
     logger.activityFinished(blockName, "npm");
     disposables.forEach { it() }
     onFinished(exitCode)
   }
 
-  public override fun interruptRequested(): TerminationAction = TerminationAction.KILL_PROCESS_TREE
-  public override fun isCommandLineLoggingEnabled(): Boolean = true
+  override fun interruptRequested(): TerminationAction = TerminationAction.KILL_PROCESS_TREE
+  override fun isCommandLineLoggingEnabled(): Boolean = true
 }

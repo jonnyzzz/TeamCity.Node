@@ -43,24 +43,24 @@ import com.jonnyzzz.teamcity.plugins.node.common.GruntExecutionMode
  * Date: 14.01.13 21:57
  */
 
-public class GruntRunType : RunTypeBase() {
+class GruntRunType : RunTypeBase() {
   private val bean = GruntBean()
 
-  public override fun getType(): String = bean.runTypeName
-  public override fun getDisplayName(): String = "Grunt"
-  public override fun getDescription(): String = "Executes Grunt tasks"
-  protected override fun getEditJsp(): String = "grunt.edit.jsp"
-  protected override fun getViewJsp(): String = "grunt.view.jsp"
+  override fun getType(): String = bean.runTypeName
+  override fun getDisplayName(): String = "Grunt"
+  override fun getDescription(): String = "Executes Grunt tasks"
+  override fun getEditJsp(): String = "grunt.edit.jsp"
+  override fun getViewJsp(): String = "grunt.view.jsp"
 
-  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
+  override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
 
-  public override fun describeParameters(parameters: Map<String, String>): String
+  override fun describeParameters(parameters: Map<String, String>): String
           = "Run targets: ${bean.parseCommands(parameters[bean.targets]).joinToString(", ")}"
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>
+  override fun getDefaultRunnerProperties(): MutableMap<String, String>
           = hashMapOf(bean.gruntMode to bean.gruntModeDefault.value)
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
+  override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
     result.addAll(super.getRunnerSpecificRequirements(runParameters))
 

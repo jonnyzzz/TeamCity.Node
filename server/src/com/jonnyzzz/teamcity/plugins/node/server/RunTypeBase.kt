@@ -19,18 +19,18 @@ import jetbrains.buildServer.serverSide.RunType
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import org.springframework.beans.factory.annotation.Autowired
 
-public abstract class RunTypeBase(): RunType() {
+abstract class RunTypeBase(): RunType() {
   @Autowired
-  public lateinit var descriptor: PluginDescriptor
+  lateinit var descriptor: PluginDescriptor
 
   protected abstract fun getEditJsp(): String
   protected abstract fun getViewJsp(): String
 
-  public override fun getEditRunnerParamsJspFilePath(): String {
+  override fun getEditRunnerParamsJspFilePath(): String {
     return descriptor.getPluginResourcesPath(getEditJsp())
   }
 
-  public override fun getViewRunnerParamsJspFilePath(): String {
+  override fun getViewRunnerParamsJspFilePath(): String {
     return descriptor.getPluginResourcesPath(getViewJsp())
   }
 }

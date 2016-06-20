@@ -20,14 +20,14 @@ import jetbrains.buildServer.requirements.Requirement
 import jetbrains.buildServer.requirements.RequirementType
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 
-public class NodeJsRunType : JsRunTypeBase() {
-  public override fun getType(): String = bean.runTypeNameNodeJs
-  public override fun getDisplayName(): String = "Node.js"
-  public override fun getDescription(): String = "Starts javascript files under Node.js runtime"
-  protected override fun getEditJsp(): String = "node.edit.jsp"
-  protected override fun getViewJsp(): String = "node.view.jsp"
+class NodeJsRunType : JsRunTypeBase() {
+  override fun getType(): String = bean.runTypeNameNodeJs
+  override fun getDisplayName(): String = "Node.js"
+  override fun getDescription(): String = "Starts javascript files under Node.js runtime"
+  override fun getEditJsp(): String = "node.edit.jsp"
+  override fun getViewJsp(): String = "node.view.jsp"
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
+  override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
     val list = super.getRunnerSpecificRequirements(runParameters)
     result.addAll( list)

@@ -23,30 +23,30 @@ import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.BuildProcess
 
 
-public interface BuildProcessContinuation {
+interface BuildProcessContinuation {
   fun pushBuildProcess(process: BuildProcess)
 }
 
 
-public interface CompositeBuildProcess : BuildProcess, BuildProcessContinuation {
+interface CompositeBuildProcess : BuildProcess, BuildProcessContinuation {
 }
 
-public open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuildProcess {
+open class CompositeBuildProcessImpl : BuildProcessBase(), CompositeBuildProcess {
   private val myProcessList: BlockingQueue<BuildProcess> = LinkedBlockingQueue()
   private val myCurrentProcess: AtomicReference<BuildProcess> = AtomicReference()
 
-  public override fun pushBuildProcess(process: BuildProcess) {
+  override fun pushBuildProcess(process: BuildProcess) {
     myProcessList.add(process)
   }
 
-  protected override fun interruptImpl() {
+  override fun interruptImpl() {
     myCurrentProcess.get()?.interrupt()
   }
 
-  public override fun start() {
+  override fun start() {
   }
 
-  protected override fun waitForImpl(): BuildFinishedStatus {
+  override fun waitForImpl(): BuildFinishedStatus {
     if (isInterrupted)
       return BuildFinishedStatus.INTERRUPTED
 

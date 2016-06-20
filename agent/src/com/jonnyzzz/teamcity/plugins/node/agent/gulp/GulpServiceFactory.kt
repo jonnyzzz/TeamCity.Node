@@ -31,18 +31,18 @@ import com.jonnyzzz.teamcity.plugins.node.common.*
  * Date: 27.04.13 10:20
  */
 
-public class GulpServiceFactory: CommandLineBuildServiceFactory {
+class GulpServiceFactory: CommandLineBuildServiceFactory {
   private val bean = GulpBean()
 
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo {
-    public override fun getType(): String = bean.runTypeName
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo {
+    override fun getType(): String = bean.runTypeName
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 
-  public override fun createService(): CommandLineBuildService = GulpSession()
+  override fun createService(): CommandLineBuildService = GulpSession()
 }
 
-public class GulpSession : BaseService() {
+class GulpSession : BaseService() {
   private val bean = GulpBean()
 
   private fun gulpExecutable() : String =
@@ -75,7 +75,7 @@ public class GulpSession : BaseService() {
     }
   }
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine {
+  override fun makeProgramCommandLine(): ProgramCommandLine {
     val arguments = arrayListOf<String>()
     arguments.add("--no-color")
 

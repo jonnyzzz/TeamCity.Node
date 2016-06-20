@@ -33,18 +33,18 @@ import com.jonnyzzz.teamcity.plugins.node.common.smartDelete
  * Date: 15.01.13 22:23
  */
 
-public interface ExecutorProxy {
+interface ExecutorProxy {
   ///proxy execution, for example by adding cmd call on windows or /bin/sh on linux or mac
   fun proxy(e : Execution) : Execution
 }
 
-data public class Execution(public val program : String, public val arguments : List<String>)
+data public class Execution(val program : String, public val arguments : List<String>)
 fun execution(program : String, vararg arguments : String) : Execution = Execution(program, arguments.toList())
 
 fun Execution.shift(newProgram : String, vararg arguments : String)
         = Execution(newProgram, arguments.toList() + listOf(this.program) + this.arguments)
 
-public class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : ExecutorProxy {
+class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : ExecutorProxy {
   override fun proxy(e: Execution): Execution {
     if (config.systemInfo.isWindows) {
       return e.shift("cmd.exe", "/c")
@@ -54,11 +54,11 @@ public class ShellBasedExecutionProxy(val config : BuildAgentConfiguration) : Ex
   }
 }
 
-public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(protected val build: BuildRunnerContext) {
+abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(protected val build: BuildRunnerContext) {
   protected abstract fun execute(executable: String, args: List<String>): ProgramCommandLine
   protected abstract fun disposeLater(action: () -> Unit)
 
-  public fun generate(executable: String, arguments: List<String>): ProgramCommandLine {
+  fun generate(executable: String, arguments: List<String>): ProgramCommandLine {
     log4j(javaClass).info("Executing $executable via wrapping script")
     build.build.buildLogger.message("Executing $executable via wrapping shell script")
 
@@ -79,19 +79,19 @@ public abstract class ScriptWrappingCommandLineGenerator<ProgramCommandLine>(pro
   }
 }
 
-data public class ExecutionResult(public val stdOut : String,
-                                  public val stdErr : String,
-                                  public val exitCode : Int,
-                                  public val error : Throwable?)
+data public class ExecutionResult(val stdOut : String,
+                                  val stdErr : String,
+                                  val exitCode : Int,
+                                  val error : Throwable?)
 
 fun ExecutionResult.succeeded() : Boolean = this.error == null && exitCode == 0
 
-public interface ProcessExecutor {
+interface ProcessExecutor {
   fun runProcess(p : Execution) : ExecutionResult
 }
 
 
-public class ProcessExecutorImpl : ProcessExecutor {
+class ProcessExecutorImpl : ProcessExecutor {
   private val LOG = log4j(this.javaClass)
 
   override fun runProcess(p: Execution): ExecutionResult {
@@ -102,7 +102,7 @@ public class ProcessExecutorImpl : ProcessExecutor {
     cmd.addParameters(p.arguments);
     val run = SimpleCommandLineProcessRunner.runCommand(
             cmd, byteArrayOf(), object : RunCommandEventsAdapter() {
-      public override fun getOutputIdleSecondsTimeout(): Int? = 239
+      override fun getOutputIdleSecondsTimeout(): Int? = 239
     })!!
 
     val result = ExecutionResult(
@@ -116,7 +116,7 @@ public class ProcessExecutorImpl : ProcessExecutor {
   }
 }
 
-public class ProxyAwareExecutorImpl(val host : ProcessExecutor,
+class ProxyAwareExecutorImpl(val host : ProcessExecutor,
                                     val proxy : ExecutorProxy) : ProcessExecutor {
   override fun runProcess(p: Execution): ExecutionResult {
     return host.runProcess(proxy.proxy(p))

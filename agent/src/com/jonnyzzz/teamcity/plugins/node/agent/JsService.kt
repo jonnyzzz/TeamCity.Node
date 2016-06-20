@@ -32,11 +32,11 @@ import com.google.gson.Gson
  * Date: 15.01.13 1:00
  */
 
-public abstract class BaseService : BuildServiceAdapter() {
-  private val disposables = linkedListOf<() -> Unit>()
+abstract class BaseService : BuildServiceAdapter() {
+  private val disposables = arrayListOf<() -> Unit>()
   protected val LOG : Logger = log4j(this.javaClass)
 
-  public fun disposeLater(action : () -> Unit) {
+  fun disposeLater(action : () -> Unit) {
     disposables.add(action)
   }
 
@@ -70,24 +70,24 @@ public abstract class BaseService : BuildServiceAdapter() {
     return file
   }
 
-  public fun generateSystemParametersJSON() : File
+  fun generateSystemParametersJSON() : File
           = generateTeamCityProperties { putAll(buildParameters.systemProperties) }
 
-  public fun generateAllParametersJSON(): File
+  fun generateAllParametersJSON(): File
           = generateTeamCityProperties {
     putAll(configParameters)
     putAll(buildParameters.allParameters)
   }
 
-  public fun generateDefaultTeamCityParametersJSON(): List<String> = listOf(
+  fun generateDefaultTeamCityParametersJSON(): List<String> = listOf(
           "--teamcity.properties.all=" + generateAllParametersJSON(),
           "--teamcity.properties=" + generateSystemParametersJSON())
 }
 
-public abstract class JsService() : BaseService() {
+abstract class JsService() : BaseService() {
   protected val bean : NodeBean = NodeBean()
 
-  public override fun makeProgramCommandLine(): ProgramCommandLine {
+  override fun makeProgramCommandLine(): ProgramCommandLine {
     val mode = bean.findExecutionMode(runnerParameters) ?: throw RunBuildException("Execution mode was not specified")
 
     val arguments = arrayListOf<String>()

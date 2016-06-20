@@ -31,7 +31,7 @@ import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 12.01.13 1:04
  */
-public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
+class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
                                val config: BuildAgentConfiguration,
                                val exec : ProcessExecutor) {
   private val LOG = log4j(this.javaClass)
@@ -82,7 +82,7 @@ public class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
 
   init {
     events.addListener(object : AgentLifeCycleAdapter() {
-      public override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
+      override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
         detectNVMTool()
 
         detectNodeTool("node", NodeBean().nodeJSConfigurationParameter) {

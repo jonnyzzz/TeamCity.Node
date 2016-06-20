@@ -40,7 +40,7 @@ import kotlin.text.Regex
  */
 ///https://github.com/creationix/nvm
 ///http://ghb.freshblurbs.com/blog/2011/05/07/install-node-js-and-express-js-nginx-debian-lenny.html
-public class NVMDownloader(val http:HttpClientWrapper) {
+class NVMDownloader(val http:HttpClientWrapper) {
   private val LOG = log4j(NVMDownloader::class.java)
 
   private fun error(url:String, message:String) : Throwable {
@@ -51,7 +51,7 @@ public class NVMDownloader(val http:HttpClientWrapper) {
     throw RunBuildException("Failed to download NVM from $url. $message. ${e.message}", e)
   }
 
-  public fun downloadNVM(dest : File, url : String) {
+  fun downloadNVM(dest : File, url : String) {
     val httpGet = HttpGet(url)
     http.execute(httpGet) {
       val status = statusLine!!.statusCode
@@ -87,11 +87,11 @@ public class NVMDownloader(val http:HttpClientWrapper) {
   }
 }
 
-public class NVMRunner(val downloader : NVMDownloader,
+class NVMRunner(val downloader : NVMDownloader,
                        val facade : CompositeProcessFactory) : AgentBuildRunner {
   private val bean = NVMBean();
 
-  public override fun createBuildProcess(runningBuild: AgentRunningBuild, context: BuildRunnerContext): BuildProcess {
+  override fun createBuildProcess(runningBuild: AgentRunningBuild, context: BuildRunnerContext): BuildProcess {
     val nvmHome = runningBuild.agentConfiguration.getCacheDirectory("jonnyzzz.nvm")
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
@@ -115,9 +115,9 @@ public class NVMRunner(val downloader : NVMDownloader,
     }
   }
 
-  public override fun getRunnerInfo(): AgentBuildRunnerInfo = object:AgentBuildRunnerInfo {
-    public override fun getType(): String = bean.NVMFeatureType
+  override fun getRunnerInfo(): AgentBuildRunnerInfo = object:AgentBuildRunnerInfo {
+    override fun getType(): String = bean.NVMFeatureType
 
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }

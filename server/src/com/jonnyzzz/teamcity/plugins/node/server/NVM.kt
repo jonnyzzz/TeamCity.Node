@@ -32,38 +32,38 @@ import jetbrains.buildServer.serverSide.buildDistribution.SimpleWaitReason
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 16.08.13 21:43
  */
-public class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
+class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
   private val bean = NVMBean()
 
-  public override fun getType(): String = bean.NVMFeatureType
+  override fun getType(): String = bean.NVMFeatureType
 
-  public override fun getDisplayName(): String = "Node.js NVM Installer"
-  public override fun getDescription(): String = "Install Node.js of specified version using NVM"
+  override fun getDisplayName(): String = "Node.js NVM Installer"
+  override fun getDescription(): String = "Install Node.js of specified version using NVM"
 
-  protected override fun getEditJsp(): String = "node.nvm.edit.jsp"
-  protected override fun getViewJsp(): String = "node.nvm.view.jsp"
+  override fun getEditJsp(): String = "node.nvm.edit.jsp"
+  override fun getViewJsp(): String = "node.nvm.view.jsp"
 
-  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor
+  override fun getRunnerPropertiesProcessor(): PropertiesProcessor
           = PropertiesProcessor{ arrayListOf<InvalidProperty>() }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
+  override fun getDefaultRunnerProperties(): MutableMap<String, String>?
           = hashMapOf(bean.NVMVersion to "0.10")
 
-  public override fun describeParameters(parameters: Map<String, String>): String
+  override fun describeParameters(parameters: Map<String, String>): String
           = "Install Node.js v" + parameters[bean.NVMVersion]
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
+  override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     return arrayListOf(Requirement(bean.NVMAvailable, null, RequirementType.EXISTS))
   }
 }
 
-public class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : StartingBuildAgentsFilter {
+class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : StartingBuildAgentsFilter {
   private val nodeBean = NodeBean()
   private val npmBean = NPMBean()
   private val nvmBean = NVMBean()
   private val runTypes = hashSetOf(nodeBean.runTypeNameNodeJs, npmBean.runTypeName)
 
-  public override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
+  override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
     val result = AgentsFilterResult()
     val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
     val buildType = promos.findPromotionById(promoId)?.getBuildType()

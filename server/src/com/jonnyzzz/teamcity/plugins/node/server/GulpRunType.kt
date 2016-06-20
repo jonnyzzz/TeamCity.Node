@@ -21,24 +21,24 @@ import jetbrains.buildServer.requirements.RequirementType
 import jetbrains.buildServer.serverSide.PropertiesProcessor
 import com.jonnyzzz.teamcity.plugins.node.common.*
 
-public class GulpRunType : RunTypeBase() {
+class GulpRunType : RunTypeBase() {
   private val bean = GulpBean()
 
-  public override fun getType(): String = bean.runTypeName
-  public override fun getDisplayName(): String = "Gulp"
-  public override fun getDescription(): String = "Executes Gulp tasks"
-  protected override fun getEditJsp(): String = "gulp.edit.jsp"
-  protected override fun getViewJsp(): String = "gulp.view.jsp"
+  override fun getType(): String = bean.runTypeName
+  override fun getDisplayName(): String = "Gulp"
+  override fun getDescription(): String = "Executes Gulp tasks"
+  override fun getEditJsp(): String = "gulp.edit.jsp"
+  override fun getViewJsp(): String = "gulp.view.jsp"
 
-  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
+  override fun getRunnerPropertiesProcessor(): PropertiesProcessor = PropertiesProcessor { arrayListOf() }
 
-  public override fun describeParameters(parameters: Map<String, String>): String
+  override fun describeParameters(parameters: Map<String, String>): String
           = "Run targets: ${bean.parseCommands(parameters[bean.targets]).joinToString(", ")}"
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>
+  override fun getDefaultRunnerProperties(): MutableMap<String, String>
           = hashMapOf(bean.gulpMode to bean.gulpModeDefault.value)
 
-  public override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
+  override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
     val result = arrayListOf<Requirement>()
     result.addAll(super.getRunnerSpecificRequirements(runParameters))
 
