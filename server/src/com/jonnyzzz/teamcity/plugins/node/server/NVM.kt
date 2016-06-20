@@ -53,7 +53,7 @@ class NVMRunType(val plugin : PluginDescriptor) : RunTypeBase() {
           = "Install Node.js v" + parameters[bean.NVMVersion]
 
   override fun getRunnerSpecificRequirements(runParameters: Map<String, String>): MutableList<Requirement> {
-    return arrayListOf(Requirement(bean.NVMAvailable, null, RequirementType.EXISTS))
+    return arrayListOf(Requirement(bean.NVMInstallable, null, RequirementType.EXISTS))
   }
 }
 

@@ -22,11 +22,19 @@ package com.jonnyzzz.teamcity.plugins.node.common
  */
 class NVMBean {
   val NVMUsed : String = "Use_NodeJS_Install_Runner"
-  val NVMAvailable : String = "node.js.nvm"
+  // Whether nvm can be installed on agent
+  val NVMInstallable: String = "node.js.nvm.installable"
   val NVMFeatureType: String = "jonnyzzz.nvm"
   val NVMVersion : String = "version"
   val NVMSource : String = "fromSource"
   val NVMURL : String = "fromURL"
+
+  // Comma separated list of installed node.js versions
+  val InstalledVersions: String = "node.js.nvm.installed.versions"
+  // NVM_DIR
+  val Path : String = "node.js.nvm.dir"
+  // NVM version (`nvm --version`)
+  val Version : String = "node.js.nvm.version"
 
   val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/v0.7.0.zip"
   //"https://github.com/creationix/nvm/archive/master.zip"

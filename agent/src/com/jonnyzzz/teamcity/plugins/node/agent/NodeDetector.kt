@@ -16,16 +16,16 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent
 
-import com.jonnyzzz.teamcity.plugins.node.common.*
-import jetbrains.buildServer.agent.*
-import jetbrains.buildServer.util.EventDispatcher
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutor
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.succeeded
+import com.jonnyzzz.teamcity.plugins.node.common.*
+import jetbrains.buildServer.agent.AgentLifeCycleAdapter
+import jetbrains.buildServer.agent.AgentLifeCycleListener
+import jetbrains.buildServer.agent.BuildAgent
+import jetbrains.buildServer.agent.BuildAgentConfiguration
+import jetbrains.buildServer.util.EventDispatcher
 import java.io.File
-import com.jonnyzzz.teamcity.plugins.node.common.NVMBean
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-import com.jonnyzzz.teamcity.plugins.node.common.GruntBean
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -40,15 +40,15 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
     with(config.systemInfo) {
       when {
         isWindows -> {
-          log4j(javaClass).info("Node NVM installer runner is not available: Windows is not supported")
+          LOG.info("Node NVM installer runner is not available: Windows is not supported")
         }
 
         !(isMac || isUnix) -> {
-          log4j(javaClass).info("Node NVM installer runner is not available")
+          LOG.info("Node NVM installer runner is not available")
         }
 
         !File("/bin/bash").isFile -> {
-          log4j(javaClass).info("Node NVM installer runner is not available: /bin/bash not found")
+          LOG.info("Node NVM installer runner is not available: /bin/bash not found")
         }
 
         else -> {
@@ -56,12 +56,26 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
           with(config) {
             addConfigurationParameter(NPMBean().nodeJSNPMConfigurationParameter, ref)
             addConfigurationParameter(NodeBean().nodeJSConfigurationParameter, ref)
-            addConfigurationParameter(NVMBean().NVMAvailable, "yes")
+            addConfigurationParameter(NVMBean().NVMInstallable, "yes")
           }
         }
       }
     }
+
+    val nvm_dir = locateInstalledNVM()
+    if (nvm_dir != null) {
+      val version = getNVMVersion(nvm_dir) ?: "N/A"
+      LOG.info("NVM installation detected at '$nvm_dir' with version '$version'")
+      val versions = getNVMInstalledNodeVersions(nvm_dir)?.joinToString(",").orEmpty()
+      LOG.info("NVM installed versions are: '$versions'")
+      with(config) {
+        addConfigurationParameter(NVMBean().Path, nvm_dir)
+        addConfigurationParameter(NVMBean().InstalledVersions, versions)
+        addConfigurationParameter(NVMBean().Version, version)
+      }
+    }
   }
+
 
   fun detectNodeTool(executable: String, configParameterName: String, versionPreProcess: (String) -> String = {it}) {
     val run = exec.runProcess(execution(executable, "--version"))
@@ -107,5 +121,50 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         }
       }
     })
+  }
+
+  private fun locateInstalledNVM(): String? {
+    if (!(config.systemInfo.isUnix || config.systemInfo.isMac)) {
+      LOG.info("NVM supported only on Unix and Mac OSX")
+      return null
+    }
+
+    val nvm_home = System.getenv("NVM_HOME")
+    if (nvm_home != null && isNVMInstallation(File(nvm_home))) return nvm_home
+
+    val home = System.getProperty("user.home")
+    if (home != null) {
+      val candidate = File(home, ".nvm")
+      if (isNVMInstallation(candidate)) return candidate.absolutePath
+    }
+
+    return null
+  }
+
+  private fun getNVMInstalledNodeVersions(nvm_dir: String): List<String>? {
+    // Use next command (checked with nvm 0.7.0, 0.31.1) instead of 'nvm ls' as it returns simple list without any colors
+    // bash -c ". $NVM_DIR/nvm.sh; echo \"\$(nvm_ls)\""
+    val run = runNVMAware(nvm_dir, "echo \"$(nvm_ls)\"")
+    if (!run.succeeded()) {
+      LOG.warn("Failed to detect installed nvm node.js versions: ${run.stdErr}")
+      return null
+    }
+    return run.stdOut.lineSequence().filter { !it.isEmptyOrSpaces() }.toList()
+  }
+
+  private fun getNVMVersion(nvm_dir: String): String? {
+    // bash -c ". $NVM_DIR/nvm.sh && nvm --version"
+    val run = runNVMAware(nvm_dir, "nvm --version")
+    if (!run.succeeded()) {
+      LOG.warn("Failed to detect version of nvm at '$nvm_dir': ${run.stdErr}")
+      return null
+    }
+    return run.stdOut.lineSequence().first { !it.isEmptyOrSpaces() }.orEmpty()
+  }
+
+  private fun runNVMAware(nvm_dir: String, command: String) = exec.runProcess(execution("bash", "-c", "source \"${nvm_dir.removeSuffix("/")}/nvm.sh\" && $command"))
+
+  private fun isNVMInstallation(root: File): Boolean {
+    return root.isDirectory && File(root, "nvm.sh").isFile && File(root, "nvm-exec").isFile
   }
 }
