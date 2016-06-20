@@ -33,7 +33,7 @@ import com.google.gson.Gson
  */
 
 public abstract class BaseService : BuildServiceAdapter() {
-  private val disposables = linkedListOf<() -> Unit>()
+  private val disposables = arrayListOf<() -> Unit>()
   protected val LOG : Logger = log4j(this.javaClass)
 
   public fun disposeLater(action : () -> Unit) {

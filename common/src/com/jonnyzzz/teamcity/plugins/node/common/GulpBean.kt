@@ -28,7 +28,7 @@ public class GulpBean {
   public val gulpModeDefault : GulpExecutionMode = GulpExecutionMode.NPM
 
   public val gulpModes : List<GulpExecutionMode>
-    get() = arrayListOf(*GulpExecutionMode.values)
+    get() = arrayListOf(*GulpExecutionMode.values())
 
   public fun parseMode(text : String?) : GulpExecutionMode?
           = gulpModes.firstOrNull { text == it.value } ?: gulpModeDefault

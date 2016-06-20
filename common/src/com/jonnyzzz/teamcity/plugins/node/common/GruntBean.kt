@@ -32,7 +32,7 @@ public class GruntBean {
   public val gruntModeDefault : GruntExecutionMode = GruntExecutionMode.NPM
 
   public val gruntModes : List<GruntExecutionMode>
-          get() = arrayListOf(*GruntExecutionMode.values)
+          get() = arrayListOf(*GruntExecutionMode.values())
 
   public fun parseMode(text : String?) : GruntExecutionMode?
          = gruntModes.firstOrNull { text == it.value } ?: gruntModeDefault

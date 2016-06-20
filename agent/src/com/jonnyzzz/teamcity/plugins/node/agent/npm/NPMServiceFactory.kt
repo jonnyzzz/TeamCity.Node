@@ -101,7 +101,7 @@ public class NPMCommandExecution(val logger : BuildProgressLogger,
                                  val cmd : Execution,
                                  val onFinished : (Int) -> Unit) : LoggingProcessListener(logger), CommandExecution {
   private val OUT_LOG : Logger? = Logger.getLogger("teamcity.out")
-  private val disposables = linkedListOf<() -> Unit>()
+  private val disposables = arrayListOf<() -> Unit>()
 
   public override fun makeProgramCommandLine(): ProgramCommandLine =
           object:ScriptWrappingCommandLineGenerator<ProgramCommandLine>(runner) {
