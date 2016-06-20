@@ -21,24 +21,24 @@ import jetbrains.buildServer.agent.BuildProcess
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-public abstract class BuildProcessBase: BuildProcess {
+abstract class BuildProcessBase: BuildProcess {
   private val myIsInterrupted: AtomicBoolean = AtomicBoolean()
   private val myIsFinished: AtomicBoolean = AtomicBoolean()
 
-  public override fun isInterrupted(): Boolean {
+  override fun isInterrupted(): Boolean {
     return myIsInterrupted.get()
   }
 
-  public override fun isFinished(): Boolean {
+  override fun isFinished(): Boolean {
     return myIsFinished.get()
   }
 
-  public override fun interrupt() {
+  override fun interrupt() {
     myIsInterrupted.set(true)
     interruptImpl()
   }
 
-  public override fun waitFor(): BuildFinishedStatus {
+  override fun waitFor(): BuildFinishedStatus {
     try
     {
       if (isInterrupted)
@@ -56,19 +56,19 @@ public abstract class BuildProcessBase: BuildProcess {
   protected abstract fun waitForImpl(): BuildFinishedStatus
 
   protected open fun interruptImpl() { }
-  public override fun start() { }
+  override fun start() { }
 }
 
-public open class DelegatingBuildProcess(val action: DelegatingProcessAction): BuildProcessBase() {
+open class DelegatingBuildProcess(val action: DelegatingProcessAction): BuildProcessBase() {
   private val myReference = AtomicReference<BuildProcess>()
 
-  protected override fun interruptImpl() {
+  override fun interruptImpl() {
     super.interruptImpl()
 
     myReference.get()?.interrupt()
   }
 
-  protected override fun waitForImpl(): BuildFinishedStatus {
+  override fun waitForImpl(): BuildFinishedStatus {
     try
     {
       val process = action.startImpl()
@@ -85,7 +85,7 @@ public open class DelegatingBuildProcess(val action: DelegatingProcessAction): B
   }
 }
 
-public interface DelegatingProcessAction {
+interface DelegatingProcessAction {
   open fun startImpl(): BuildProcess
   open fun finishedImpl() { }
 }

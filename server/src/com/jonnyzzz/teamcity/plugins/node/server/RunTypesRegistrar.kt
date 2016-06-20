@@ -18,7 +18,7 @@ package com.jonnyzzz.teamcity.plugins.node.server
 
 import jetbrains.buildServer.serverSide.RunTypeRegistry
 
-public class RunTypesRegistrar(registry: RunTypeRegistry, types: Collection<RunTypeBase?>) {
+class RunTypesRegistrar(registry: RunTypeRegistry, types: Collection<RunTypeBase?>) {
   init {
     types.filterNotNull().forEach { registry.registerRunType(it) }
   }

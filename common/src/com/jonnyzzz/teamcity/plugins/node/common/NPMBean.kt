@@ -21,16 +21,16 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Date: 14.01.13 22:02
  */
 
-public class NPMBean {
-  public val nodeJSNPMConfigurationParameter: String = "node.js.npm"
+class NPMBean {
+  val nodeJSNPMConfigurationParameter: String = "node.js.npm"
 
-  public val runTypeName: String = "jonnyzzz.npm"
-  public val commandLineParameterKey: String = "npm_execution_args"
-  public val npmCommandsKey: String = "npm_commands"
-  public val npmCommandsDefault: String = "install\r\ntest"
-  public val toolPathKey : String = "npm_toolPath"
+  val runTypeName: String = "jonnyzzz.npm"
+  val commandLineParameterKey: String = "npm_execution_args"
+  val npmCommandsKey: String = "npm_commands"
+  val npmCommandsDefault: String = "install\r\ntest"
+  val toolPathKey : String = "npm_toolPath"
 
-  public fun parseCommands(text: String?): Collection<String> {
+  fun parseCommands(text: String?): Collection<String> {
     if (text == null)
       return listOf()
     else

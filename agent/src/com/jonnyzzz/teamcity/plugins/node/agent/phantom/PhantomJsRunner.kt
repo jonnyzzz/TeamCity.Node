@@ -27,24 +27,24 @@ import com.jonnyzzz.teamcity.plugins.node.agent.JsService
  * Date: 12.01.13 0:52
  */
 
-public class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
+class PhantomJsRunnerService() : CommandLineBuildServiceFactory {
   val bean = NodeBean()
 
-  public override fun createService(): CommandLineBuildService {
+  override fun createService(): CommandLineBuildService {
     return PhantomJsService()
   }
 
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
-    public override fun getType(): String = bean.runTypeNamePhantomJs
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
+    override fun getType(): String = bean.runTypeNamePhantomJs
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }
 
-public class PhantomJsService() : JsService() {
-  protected override fun getToolPath(): String? = runnerParameters[bean.toolPathKey]
+class PhantomJsService() : JsService() {
+  override fun getToolPath(): String? = runnerParameters[bean.toolPathKey]
 
-  protected override fun getToolName(): String = "phantom"
+  override fun getToolName(): String = "phantom"
 
-  protected override fun getGeneratedScriptExt(): String
+  override fun getGeneratedScriptExt(): String
           = "." + (runnerParameters[bean.phantomJsExtensionKey] ?: bean.phantomJsExtensionDefault)
 }

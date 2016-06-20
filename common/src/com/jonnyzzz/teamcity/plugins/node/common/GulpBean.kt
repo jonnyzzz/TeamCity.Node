@@ -17,23 +17,23 @@
 package com.jonnyzzz.teamcity.plugins.node.common
 
 
-public class GulpBean {
-  public val gulpConfigurationParameter: String = "gulp"
+class GulpBean {
+  val gulpConfigurationParameter: String = "gulp"
 
-  public val runTypeName: String = "jonnyzzz.gulp"
-  public val file: String = "jonnyzzz.gulp.file"
-  public val targets: String = "jonnyzzz.gulp.tasks"
-  public val commandLineParameterKey : String = "jonnyzzz.commandLine"
-  public val gulpMode : String = "jonnyzzz.gulp.mode"
-  public val gulpModeDefault : GulpExecutionMode = GulpExecutionMode.NPM
+  val runTypeName: String = "jonnyzzz.gulp"
+  val file: String = "jonnyzzz.gulp.file"
+  val targets: String = "jonnyzzz.gulp.tasks"
+  val commandLineParameterKey : String = "jonnyzzz.commandLine"
+  val gulpMode : String = "jonnyzzz.gulp.mode"
+  val gulpModeDefault : GulpExecutionMode = GulpExecutionMode.NPM
 
-  public val gulpModes : List<GulpExecutionMode>
+  val gulpModes : List<GulpExecutionMode>
     get() = arrayListOf(*GulpExecutionMode.values())
 
-  public fun parseMode(text : String?) : GulpExecutionMode?
+  fun parseMode(text : String?) : GulpExecutionMode?
           = gulpModes.firstOrNull { text == it.value } ?: gulpModeDefault
 
-  public fun parseCommands(text: String?): Collection<String> {
+  fun parseCommands(text: String?): Collection<String> {
     if (text == null)
       return listOf()
     else
@@ -44,7 +44,7 @@ public class GulpBean {
   }
 }
 
-public enum class GulpExecutionMode(val title : String,
+enum class GulpExecutionMode(val title : String,
                                      val value : String) {
   NPM("NPM package from project", "npm"),
   GLOBAL("System-wide gulp", "global"),

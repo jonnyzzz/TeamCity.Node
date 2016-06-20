@@ -30,12 +30,12 @@ import jetbrains.buildServer.runner.SimpleRunnerConstants
  * Date: 17.08.13 12:31
  */
 
-public interface CompositeProcessFactory {
+interface CompositeProcessFactory {
   fun compositeBuildProcess(build: AgentRunningBuild,
                             builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess
 }
 
-public class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : CompositeProcessFactory {
+class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : CompositeProcessFactory {
   override fun compositeBuildProcess(build: AgentRunningBuild,
                                      builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
     val proc = CompositeBuildProcessImpl()
@@ -48,7 +48,7 @@ public class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : Compo
   }
 }
 
-public interface CompositeProcessBuilder<R> {
+interface CompositeProcessBuilder<R> {
   fun execute(blockName: String, blockDescription: String = blockName, p: () -> Unit): R
   fun delegate(blockName: String, blockDescription: String = blockName, p: () -> BuildProcess): R
   fun script(blockName: String, blockDescription: String = blockName, workingDir: String, script: () -> String): R
@@ -88,7 +88,7 @@ abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
   protected abstract fun push(p: BuildProcess): R
 
   private fun process(p: () -> Unit): BuildProcess = object:BuildProcessBase() {
-    protected override fun waitForImpl(): BuildFinishedStatus = with(p()) { BuildFinishedStatus.FINISHED_SUCCESS }
+    override fun waitForImpl(): BuildFinishedStatus = with(p()) { BuildFinishedStatus.FINISHED_SUCCESS }
   }
 
   private fun action(p: () -> BuildProcess): DelegatingProcessAction = object:DelegatingProcessAction {

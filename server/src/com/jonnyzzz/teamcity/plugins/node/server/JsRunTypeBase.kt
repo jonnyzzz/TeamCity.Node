@@ -26,17 +26,17 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
  * Date: 15.01.13 22:06
  */
 
-public abstract class JsRunTypeBase : RunTypeBase() {
+abstract class JsRunTypeBase : RunTypeBase() {
   protected val bean : NodeBean = NodeBean()
 
-  public abstract override fun getType(): String
-  public abstract override fun getDisplayName(): String
-  public abstract override fun getDescription(): String
+  abstract override fun getType(): String
+  abstract override fun getDisplayName(): String
+  abstract override fun getDescription(): String
 
-  public override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
+  override fun getRunnerPropertiesProcessor(): PropertiesProcessor {
     val that = this;
     return object : PropertiesProcessor {
-      public override fun process(p0: Map<String, String>?): MutableCollection<InvalidProperty>? {
+      override fun process(p0: Map<String, String>?): MutableCollection<InvalidProperty>? {
         if (p0 == null) return arrayListOf()
         return that.validateParameters(p0)
       }
@@ -59,7 +59,7 @@ public abstract class JsRunTypeBase : RunTypeBase() {
   }
 
 
-  public override fun describeParameters(parameters: Map<String, String>): String {
+  override fun describeParameters(parameters: Map<String, String>): String {
     val builder = StringBuilder()
     val mode = bean.findExecutionMode(parameters)
     if (mode != null) {
@@ -73,5 +73,5 @@ public abstract class JsRunTypeBase : RunTypeBase() {
     return builder.toString()
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf()
+  override fun getDefaultRunnerProperties(): MutableMap<String, String>? = hashMapOf()
 }

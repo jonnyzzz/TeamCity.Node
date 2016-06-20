@@ -20,14 +20,14 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 16.08.13 21:42
  */
-public class NVMBean {
-  public val NVMUsed : String = "Use_NodeJS_Install_Runner"
-  public val NVMAvailable : String = "node.js.nvm"
-  public val NVMFeatureType: String = "jonnyzzz.nvm"
-  public val NVMVersion : String = "version"
-  public val NVMSource : String = "fromSource"
-  public val NVMURL : String = "fromURL"
+class NVMBean {
+  val NVMUsed : String = "Use_NodeJS_Install_Runner"
+  val NVMAvailable : String = "node.js.nvm"
+  val NVMFeatureType: String = "jonnyzzz.nvm"
+  val NVMVersion : String = "version"
+  val NVMSource : String = "fromSource"
+  val NVMURL : String = "fromURL"
 
-  public val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/v0.7.0.zip"
+  val NVM_Creatonix : String = "https://github.com/creationix/nvm/archive/v0.7.0.zip"
   //"https://github.com/creationix/nvm/archive/master.zip"
 }

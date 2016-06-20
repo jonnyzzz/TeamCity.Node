@@ -21,30 +21,30 @@ package com.jonnyzzz.teamcity.plugins.node.common
  * Date: 11.01.13 23:44
  */
 
-public class NodeBean {
-  public val executionModeKey: String = "node_execution_mode"
-  public val executionModeValues: Array<ExecutionModes> = ExecutionModes.values()
-  public val executionModeFile: ExecutionModes = ExecutionModes.File
-  public val executionModeScript: ExecutionModes = ExecutionModes.Script
-  public val commandLineParameterKey: String = "node_execution_args"
-  public val scriptParameterKey: String = "node_script_args"
-  public val toolPathKey: String = "node_toolPath"
+class NodeBean {
+  val executionModeKey: String = "node_execution_mode"
+  val executionModeValues: Array<ExecutionModes> = ExecutionModes.values()
+  val executionModeFile: ExecutionModes = ExecutionModes.File
+  val executionModeScript: ExecutionModes = ExecutionModes.Script
+  val commandLineParameterKey: String = "node_execution_args"
+  val scriptParameterKey: String = "node_script_args"
+  val toolPathKey: String = "node_toolPath"
 
-  public val phantomJsExtensionKey : String = "phantom_extension"
-  public val phantomJsExtensionDefault : String = "js"
+  val phantomJsExtensionKey : String = "phantom_extension"
+  val phantomJsExtensionDefault : String = "js"
 
-  public val runTypeNameNodeJs: String = "jonnyzzz.node"
-  public val runTypeNamePhantomJs: String = "jonnyzzz.phantom"
+  val runTypeNameNodeJs: String = "jonnyzzz.node"
+  val runTypeNamePhantomJs: String = "jonnyzzz.phantom"
 
-  public val nodeJSConfigurationParameter: String = "node.js"
+  val nodeJSConfigurationParameter: String = "node.js"
 
-  public fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
+  fun findExecutionMode(parameters : Map<String, String>) : ExecutionModes?
           = executionModeValues.firstOrNull { it.value == parameters[executionModeKey] }
 }
 
-public enum class ExecutionModes(public val value: String,
-                                 public val parameter : String,
-                                 public val description : String)
+public enum class ExecutionModes(val value: String,
+                                 val parameter : String,
+                                 val description : String)
 {
   File("file", "node_file", "File"),
   Script("script", "node_script_text", "Source Code"),

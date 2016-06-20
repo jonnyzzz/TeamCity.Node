@@ -21,14 +21,14 @@ import jetbrains.buildServer.serverSide.InvalidProperty
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.ExecutionModes
 
-public class PhantomJsRunType : JsRunTypeBase() {
-  public override fun getType(): String = bean.runTypeNamePhantomJs
-  public override fun getDisplayName(): String = "Phantom.JS"
-  public override fun getDescription(): String = "Starts javascript files under Phantom.JS runtime"
-  protected override fun getEditJsp(): String = "phantom.edit.jsp"
-  protected override fun getViewJsp(): String = "phantom.view.jsp"
+class PhantomJsRunType : JsRunTypeBase() {
+  override fun getType(): String = bean.runTypeNamePhantomJs
+  override fun getDisplayName(): String = "Phantom.JS"
+  override fun getDescription(): String = "Starts javascript files under Phantom.JS runtime"
+  override fun getEditJsp(): String = "phantom.edit.jsp"
+  override fun getViewJsp(): String = "phantom.view.jsp"
 
-  protected override fun validateParameters(parameters: Map<String, String>): MutableCollection<InvalidProperty> {
+  override fun validateParameters(parameters: Map<String, String>): MutableCollection<InvalidProperty> {
     val result = super.validateParameters(parameters)
 
     if (parameters[bean.toolPathKey].isEmptyOrSpaces()) {
@@ -43,6 +43,6 @@ public class PhantomJsRunType : JsRunTypeBase() {
     return result;
   }
 
-  public override fun getDefaultRunnerProperties(): MutableMap<String, String>?
+  override fun getDefaultRunnerProperties(): MutableMap<String, String>?
           = hashMapOf(bean.phantomJsExtensionKey to bean.phantomJsExtensionDefault)
 }

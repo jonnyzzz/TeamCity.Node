@@ -51,7 +51,7 @@ import javax.net.ssl.SSLSocket
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 13.08.13 22:43
  */
-public interface HttpClientWrapper {
+interface HttpClientWrapper {
   fun <T> execute(request: HttpUriRequest, action: HttpResponse.() -> T): T
 }
 
@@ -59,7 +59,7 @@ public interface HttpClientWrapper {
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 11.08.11 16:24
  */
-public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
+class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
   private val LOG = log4j(NVMDownloader::class.java)
 
   private val myClient: HttpClient;
@@ -77,7 +77,7 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
               val schemaRegistry = SchemeRegistryFactory.createDefault()
               val sslSocketFactory = SSLSocketFactory(
                       object : TrustStrategy {
-                        public override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
+                        override fun isTrusted(chain: Array<out X509Certificate>?, authType: String?): Boolean {
                           return true;
                         }
                       }, object : X509HostnameVerifier {
@@ -155,7 +155,7 @@ public class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
   }
 
 
-  public override fun destroy() {
+  override fun destroy() {
     myClient.connectionManager!!.shutdown();
   }
 }

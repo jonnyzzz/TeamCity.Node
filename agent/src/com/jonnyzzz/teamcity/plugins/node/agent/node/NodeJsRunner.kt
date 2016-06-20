@@ -23,26 +23,26 @@ import com.jonnyzzz.teamcity.plugins.node.common.NodeBean
 import com.jonnyzzz.teamcity.plugins.node.agent.JsService
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 
-public class NodeJsRunnerService() : CommandLineBuildServiceFactory {
+class NodeJsRunnerService() : CommandLineBuildServiceFactory {
   val bean = NodeBean()
 
-  public override fun createService(): CommandLineBuildService {
+  override fun createService(): CommandLineBuildService {
     return NodeJsService()
   }
 
-  public override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
-    public override fun getType(): String = bean.runTypeNameNodeJs
-    public override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
+  override fun getBuildRunnerInfo(): AgentBuildRunnerInfo = object : AgentBuildRunnerInfo{
+    override fun getType(): String = bean.runTypeNameNodeJs
+    override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 }
 
-public class NodeJsService() : JsService() {
-  protected override fun getToolPath(): String? {
+class NodeJsService() : JsService() {
+  override fun getToolPath(): String? {
     val path = runnerParameters[bean.toolPathKey]
     if (path == null || path.isEmptyOrSpaces()) return "node"
     return path.trim()
   }
 
-  protected override fun getToolName(): String  = "node"
-  protected override fun getGeneratedScriptExt(): String = ".js"
+  override fun getToolName(): String  = "node"
+  override fun getGeneratedScriptExt(): String = ".js"
 }
