@@ -4,6 +4,7 @@
     <classes>
       <class name="SimpleTest"/>
       <class name="NVMDownloadTest"/>
+      <class name="NPMBeanTest"/>
     </classes>
   </test>
 </suite>
