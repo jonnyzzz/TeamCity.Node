@@ -31,12 +31,12 @@ class NPMBean {
   val toolPathKey : String = "npm_toolPath"
 
   fun parseCommands(text: String?): Collection<String> {
-    if (text == null)
+    if (text == null || text.isEmpty())
       return listOf()
     else
       return text
-              .split("[\r\n]+")
+              .lines()
               .map { it.trim() }
-              .filterNot { it.isEmpty() }
+              .filterNot { it.isEmptyOrSpaces() }
   }
 }
