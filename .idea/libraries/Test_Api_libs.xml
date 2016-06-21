@@ -3,6 +3,9 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/jmock/jmock-core-1.2.0.jar!/" />
       <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/xmlrpc-2.0.1.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/testng-6.8.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/junit-4.11.jar!/" />
+      <root url="jar://$TeamCityDistribution$/devPackage/tests/jmock-1.2.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

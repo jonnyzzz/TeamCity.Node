@@ -12,11 +12,7 @@
     <orderEntry type="module" module-name="server" />
     <orderEntry type="library" name="Test-Api libs" level="project" />
     <orderEntry type="library" name="Test-Api" level="project" />
-    <orderEntry type="library" name="testng" level="project" />
     <orderEntry type="library" name="jmock" level="project" />
-    <orderEntry type="library" name="testng" level="project" />
-    <orderEntry type="library" name="jmock" level="project" />
-    <orderEntry type="library" name="Test-Api" level="project" />
     <orderEntry type="library" name="Common-Api" level="project" />
     <orderEntry type="library" name="Agent-Api" level="project" />
     <orderEntry type="library" name="log4j" level="project" />
@@ -29,4 +25,3 @@
     <orderEntry type="library" name="KotlinRuntime" level="project" />
   </component>
 </module>
-
