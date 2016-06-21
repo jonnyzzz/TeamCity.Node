@@ -20,10 +20,7 @@ import com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutor
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.execution
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.succeeded
 import com.jonnyzzz.teamcity.plugins.node.common.*
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter
-import jetbrains.buildServer.agent.AgentLifeCycleListener
-import jetbrains.buildServer.agent.BuildAgent
-import jetbrains.buildServer.agent.BuildAgentConfiguration
+import jetbrains.buildServer.agent.*
 import jetbrains.buildServer.util.EventDispatcher
 import java.io.File
 
@@ -88,8 +85,8 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
       }
       else -> {
         LOG.info("$executable was not found or failed, exitcode: ${run.exitCode}")
-        LOG.info("StdOut: ${run.stdOut}")
-        LOG.info("StdErr: ${run.stdErr}")
+        if (!run.stdOut.isEmptyOrSpaces()) LOG.info("StdOut: ${run.stdOut}")
+        if (!run.stdErr.isEmptyOrSpaces()) LOG.info("StdErr: ${run.stdErr}")
       }
     }
   }
@@ -97,6 +94,17 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
   init {
     events.addListener(object : AgentLifeCycleAdapter() {
       override fun beforeAgentConfigurationLoaded(agent: BuildAgent) {
+        setVerbose(true)
+        doDetectTools()
+      }
+
+      // Build step may install some tool or new node.js versions, let's update agent properties
+      override fun runnerFinished(runner: BuildRunnerContext, status: BuildFinishedStatus) {
+        setVerbose(false)
+        doDetectTools()
+      }
+
+      fun doDetectTools() {
         detectNVMTool()
 
         detectNodeTool("node", NodeBean().nodeJSConfigurationParameter) {
@@ -121,6 +129,10 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         }
       }
     })
+  }
+
+  private fun setVerbose(verbose: Boolean) {
+    // TODO: either modify logger or add some boolean field which used before all LOG calls
   }
 
   private fun locateInstalledNVM(): String? {
