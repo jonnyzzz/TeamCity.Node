@@ -32,7 +32,7 @@
   </td>
 </tr>
 
-<tr>
+<tr class="advancedSetting">
   <th><label for="${bean.NVMURL}">NVM URL:</label></th>
   <td>
     <props:textProperty name="${bean.NVMURL}" className="longField"/>
@@ -43,7 +43,7 @@
   </td>
 </tr>
 
-<tr>
+<tr class="advancedSetting">
   <th>Options:</th>
   <td>
     <props:checkboxProperty name="${bean.NVMSource}" />
