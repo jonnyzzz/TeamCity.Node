@@ -16,26 +16,16 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.npm
 
-import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
-import jetbrains.buildServer.agent.AgentBuildRunnerInfo
-import jetbrains.buildServer.agent.BuildAgentConfiguration
-import jetbrains.buildServer.agent.runner.MultiCommandBuildSessionFactory
-import jetbrains.buildServer.agent.BuildRunnerContext
-import jetbrains.buildServer.agent.runner.MultiCommandBuildSession
-import jetbrains.buildServer.agent.runner.CommandExecution
-import jetbrains.buildServer.agent.BuildFinishedStatus
-import jetbrains.buildServer.agent.runner.LoggingProcessListener
-import jetbrains.buildServer.agent.BuildProgressLogger
-import jetbrains.buildServer.agent.runner.ProgramCommandLine
-import jetbrains.buildServer.agent.runner.TerminationAction
-import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine
-import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
-import jetbrains.buildServer.serverSide.BuildTypeOptions
 import com.jonnyzzz.teamcity.plugins.node.agent.processes.Execution
+import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
+import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
+import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
+import jetbrains.buildServer.agent.*
+import jetbrains.buildServer.agent.runner.*
+import jetbrains.buildServer.serverSide.BuildTypeOptions
 import org.apache.log4j.Logger
-import com.jonnyzzz.teamcity.plugins.node.agent.processes.ScriptWrappingCommandLineGenerator
 
 /**
  * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -57,6 +47,7 @@ class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
   private val bean = NPMBean()
   private var iterator : Iterator<NPMCommandExecution> = listOf<NPMCommandExecution>().iterator()
   private var previousStatus = BuildFinishedStatus.FINISHED_SUCCESS
+  private val logger = runner.build.buildLogger.getFlowLogger(FlowGenerator.generateNewFlow())
 
   private fun resolveNpmExecutable() : String {
     val path = runner.runnerParameters[bean.toolPathKey]
@@ -65,7 +56,8 @@ class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
   }
 
   override fun sessionStarted() {
-    val logger = runner.build.buildLogger
+    logger.startFlow()
+
     val extra = runner.runnerParameters[bean.commandLineParameterKey].fetchArguments()
     val checkExitCode = runner.build.getBuildTypeOptionValue(BuildTypeOptions.BT_FAIL_ON_EXIT_CODE) ?: true
     val npm = resolveNpmExecutable()
@@ -79,7 +71,7 @@ class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
                     Execution(npm, extra + it.splitHonorQuotes())){ exitCode ->
                       previousStatus = when {
                         exitCode == 0 && checkExitCode -> BuildFinishedStatus.FINISHED_SUCCESS
-                        else -> BuildFinishedStatus.FINISHED_FAILED
+                        else -> BuildFinishedStatus.FINISHED_WITH_PROBLEMS
                       }
                     }
             }.iterator()
@@ -92,7 +84,10 @@ class NPMSession(val runner : BuildRunnerContext) : MultiCommandBuildSession {
             else -> null
           }
 
-  override fun sessionFinished(): BuildFinishedStatus? = previousStatus
+  override fun sessionFinished(): BuildFinishedStatus {
+    logger.disposeFlow()
+    return previousStatus
+  }
 }
 
 class NPMCommandExecution(val logger : BuildProgressLogger,
@@ -100,6 +95,7 @@ class NPMCommandExecution(val logger : BuildProgressLogger,
                                  val runner : BuildRunnerContext,
                                  val cmd : Execution,
                                  val onFinished : (Int) -> Unit) : LoggingProcessListener(logger), CommandExecution {
+  private val bean = NPMBean()
   private val OUT_LOG : Logger? = Logger.getLogger("teamcity.out")
   private val disposables = arrayListOf<() -> Unit>()
 
@@ -138,6 +134,7 @@ class NPMCommandExecution(val logger : BuildProgressLogger,
 
   override fun processFinished(exitCode: Int) {
     super.processFinished(exitCode)
+    logger.logBuildProblem(CommandLineBuildService.createExitCodeBuildProblem(exitCode, bean.runTypeName, logger.flowId))
     logger.activityFinished(blockName, "npm");
     disposables.forEach { it() }
     onFinished(exitCode)
