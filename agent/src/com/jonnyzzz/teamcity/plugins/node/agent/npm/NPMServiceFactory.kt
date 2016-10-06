@@ -136,7 +136,11 @@ class NPMCommandExecution(val logger : BuildProgressLogger,
 
   override fun processFinished(exitCode: Int) {
     super.processFinished(exitCode)
-    logger.logBuildProblem(createExitCodeBuildProblem(exitCode))
+
+    if (exitCode != 0) {
+      logger.logBuildProblem(createExitCodeBuildProblem(exitCode))
+    }
+
     logger.activityFinished(blockName, "npm");
     disposables.forEach { it() }
     onFinished(exitCode)
