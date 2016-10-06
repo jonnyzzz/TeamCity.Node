@@ -22,6 +22,8 @@ import com.jonnyzzz.teamcity.plugins.node.common.NPMBean
 import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
 import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.splitHonorQuotes
+import jetbrains.buildServer.BuildProblemData
+import jetbrains.buildServer.BuildProblemTypes
 import jetbrains.buildServer.agent.*
 import jetbrains.buildServer.agent.runner.*
 import jetbrains.buildServer.serverSide.BuildTypeOptions
@@ -134,10 +136,18 @@ class NPMCommandExecution(val logger : BuildProgressLogger,
 
   override fun processFinished(exitCode: Int) {
     super.processFinished(exitCode)
-    logger.logBuildProblem(CommandLineBuildService.createExitCodeBuildProblem(exitCode, bean.runTypeName, logger.flowId))
+    logger.logBuildProblem(createExitCodeBuildProblem(exitCode))
     logger.activityFinished(blockName, "npm");
     disposables.forEach { it() }
     onFinished(exitCode)
+  }
+
+  // copy of jetbrains.buildServer.agent.runner.CommandLineBuildService.createExitCodeBuildProblem for backward compatibility
+  private fun createExitCodeBuildProblem(exitCode: Int): BuildProblemData {
+    return BuildProblemData.createBuildProblem(
+            bean.runTypeName + exitCode,
+            BuildProblemTypes.TC_EXIT_CODE_TYPE,
+            "Process exited with code " + exitCode, "teamcity.process.flow.id=" + logger.flowId)
   }
 
   override fun interruptRequested(): TerminationAction = TerminationAction.KILL_PROCESS_TREE
