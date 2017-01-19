@@ -90,6 +90,7 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         }
 
         detectNodeTool("npm", NPMBean().nodeJSNPMConfigurationParameter)
+        detectNodeTool("yarn", YarnBean().nodeJSYarnConfigurationParameter)
 
         detectNodeTool("grunt", GruntBean().gruntConfigurationParameter) {
           it.trimStart("grunt-cli").trim().trimStart("v")
