@@ -27,8 +27,8 @@ import jetbrains.buildServer.serverSide.BuildTypeOptions
 import org.apache.log4j.Logger
 
 /**
- * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
- * Date: 15.01.13 22:55
+ * Created by Florian Krauthan (mail@fkrauthan.de)
+ * Date: 19.01.17
  */
 
 class YarnServiceFactory : MultiCommandBuildSessionFactory {

@@ -24,8 +24,8 @@ import com.jonnyzzz.teamcity.plugins.node.common.isEmptyOrSpaces
 import com.jonnyzzz.teamcity.plugins.node.common.YarnBean
 
 /**
- * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
- * Date: 14.01.13 21:57
+ * Created by Florian Krauthan (mail@fkrauthan.de)
+ * Date: 19.01.17
  */
 
 class YarnRunType : RunTypeBase() {

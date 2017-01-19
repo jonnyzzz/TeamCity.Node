@@ -17,8 +17,8 @@
 package com.jonnyzzz.teamcity.plugins.node.common
 
 /**
- * Created by Eugene Petrenko (eugene.petrenko@gmail.com)
- * Date: 14.01.13 22:02
+ * Created by Florian Krauthan (mail@fkrauthan.de)
+ * Date: 19.01.17
  */
 
 class YarnBean {

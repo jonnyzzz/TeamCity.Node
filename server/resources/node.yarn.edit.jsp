@@ -47,7 +47,7 @@
   <th><label for="${bean.commandLineParameterKey}">Additional command line parameters:</label></th>
   <td>
     <props:multilineProperty name="${bean.commandLineParameterKey}"  cols="58" linkTitle="Expand" rows="5"/>
-    <span class="smallNote">Enter additional command line parameters for npm. Put each parameter on a new line</span>
+    <span class="smallNote">Enter additional command line parameters for yarn. Put each parameter on a new line</span>
     <span class="error" id="error_${bean.commandLineParameterKey}"></span>
   </td>
 </tr>
