@@ -8,6 +8,7 @@
         >
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.grunt.GruntServiceFactory"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.bower.BowerServiceFactory"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.gulp.GulpServiceFactory"/>
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.node.NodeJsRunnerService"/>
