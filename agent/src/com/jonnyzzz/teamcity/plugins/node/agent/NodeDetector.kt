@@ -39,17 +39,17 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
   fun detectNVMTool() {
     with(config.systemInfo) {
       when {
-        isWindows -> {
-          log4j(javaClass).info("Node NVM installer runner is not available: Windows is not supported")
+        isWindows && !File(System.getenv("APPDATA") + "\\nvm\\nvm.exe").isFile -> {
+          log4j(javaClass).info("Node NVM installer runner is not available.")
         }
 
-        !(isMac || isUnix) -> {
+        !(isMac || isUnix || isWindows) -> {
           log4j(javaClass).info("Node NVM installer runner is not available")
         }
 
-        !File("/bin/bash").isFile -> {
-          log4j(javaClass).info("Node NVM installer runner is not available: /bin/bash not found")
-        }
+        !isWindows &&!File("/bin/bash").isFile -> {
+            log4j(javaClass).info("Node NVM installer runner is not available: /bin/bash not found")
+          }
 
         else -> {
           val ref = NVMBean().NVMUsed
