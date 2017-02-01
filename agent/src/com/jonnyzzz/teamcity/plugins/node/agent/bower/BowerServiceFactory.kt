@@ -78,16 +78,6 @@ class BowerSession : BaseService() {
   override fun makeProgramCommandLine(): ProgramCommandLine {
     val arguments = arrayListOf<String>()
 
-//    val filePath = runnerParameters[bean.file]
-//    if (filePath != null) {
-//      val file = checkoutDirectory.resolveEx(filePath)
-//      if (!file.isFile) {
-//        throw RunBuildException("Failed to find File at path: $file")
-//      }
-//      arguments.add("--gruntfile")
-//      arguments.add(file.path)
-//    }
-
     val parameters = TreeMap<String, String>()
     parameters.putAll(buildParameters.systemProperties)
 
