@@ -5,7 +5,7 @@
     <option name="COMMON_VM_ARGUMENTS" value="-ea -Xmx384m -XX:MaxPermSize=200m -Ddebug=true -server -XX:+HeapDumpOnOutOfMemoryError -Djava.awt.headless -DTC.res.disableAll=true -Dteamcity.development.mode=true -Dteamcity.development.shadowCopyClasses=true -Dteamcity.data.path=$TeamCityDistribution$/../PluginDev.Data -Dteamcity_logs=$TeamCityDistribution$/logs -Dlog4j.configuration=file:$TeamCityDistribution$/conf/teamcity-server-log4j.xml" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
-      <file path="$APPLICATION_HOME_DIR$/bin/Users/victormosin/Downloads/TeamCity-10.0.4.tar.gz/webapps/ROOT">
+      <file path="$TeamCityDistribution$/webapps/ROOT">
         <settings>
           <option name="CONTEXT_PATH" value="/bs" />
         </settings>
