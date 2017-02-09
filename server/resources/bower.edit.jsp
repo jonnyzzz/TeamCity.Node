@@ -24,7 +24,7 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <tr>
-  <th><label for="${bean.targets}">Grunt:</label></th>
+  <th><label for="${bean.targets}">Type:</label></th>
   <td>
     <props:selectProperty name="${bean.bowerMode}">
       <c:forEach var="it" items="${bean.bowerModes}">
@@ -39,7 +39,7 @@
 </tr>
 
 <tr>
-  <th><label for="${bean.targets}">Bower Tasks:</label></th>
+  <th><label for="${bean.targets}">Tasks:</label></th>
   <td>
     <props:multilineProperty name="${bean.targets}" linkTitle="Commands" cols="58" rows="5" expanded="${true}"/>
     <span class="smallNote">Specify bower tasks to run (new-line separated)</span>
