@@ -16,15 +16,18 @@
 
 package com.jonnyzzz.teamcity.plugins.node.agent.bower
 
-import com.jonnyzzz.teamcity.plugins.node.agent.*
+import com.jonnyzzz.teamcity.plugins.node.agent.BaseService
+import com.jonnyzzz.teamcity.plugins.node.common.BowerBean
+import com.jonnyzzz.teamcity.plugins.node.common.BowerExecutionMode
+import com.jonnyzzz.teamcity.plugins.node.common.div
+import com.jonnyzzz.teamcity.plugins.node.common.fetchArguments
+import jetbrains.buildServer.RunBuildException
 import jetbrains.buildServer.agent.AgentBuildRunnerInfo
 import jetbrains.buildServer.agent.BuildAgentConfiguration
-import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
 import jetbrains.buildServer.agent.runner.CommandLineBuildService
+import jetbrains.buildServer.agent.runner.CommandLineBuildServiceFactory
 import jetbrains.buildServer.agent.runner.ProgramCommandLine
-import jetbrains.buildServer.RunBuildException
-import java.util.TreeMap
-import com.jonnyzzz.teamcity.plugins.node.common.*
+import java.util.*
 
 /**
  * Created by Victor Mosin (vicmosin@gmail.com)
@@ -39,7 +42,7 @@ class BowerServiceFactory : CommandLineBuildServiceFactory {
     override fun canRun(agentConfiguration: BuildAgentConfiguration): Boolean = true
   }
 
-  override fun createService(): CommandLineBuildService = GruntSession()
+  override fun createService(): CommandLineBuildService = BowerSession()
 }
 
 class BowerSession : BaseService() {
@@ -51,8 +54,8 @@ class BowerSession : BaseService() {
           else
             "bower"
 
-  private fun gruntExecutablePath() : String {
-    val mode = bean.parseMode(runnerParameters[bean.bowerModes])
+  private fun bowerExecutablePath() : String {
+    val mode = bean.parseMode(runnerParameters[bean.bowerMode])
     val cmd = bowerExecutable()
 
     when(mode) {
@@ -90,6 +93,6 @@ class BowerSession : BaseService() {
     arguments.addAll(runnerParameters[bean.commandLineParameterKey].fetchArguments())
     arguments.addAll(bean.parseCommands(runnerParameters[bean.targets]))
 
-    return execute(gruntExecutablePath(), arguments)
+    return execute(bowerExecutablePath(), arguments)
   }
 }
