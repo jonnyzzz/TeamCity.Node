@@ -8,6 +8,7 @@ This is a plugin for TeamCity that provides following build runners
 - [Grunt](http://gruntjs.com)
 - [NVM](https://github.com/creationix/nvm)
 - [Gulp](http://gulpjs.com/)
+- [Bower](https://bower.io/)
 
 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
@@ -25,7 +26,7 @@ Features
  - `Phantom.JS` build runner to run `.js`, `.coffee` (or other script) file or source code.
  - `Grunt` build runner to run your grunt scripts. It's assumes you have `grunt` and `grunt-cli` NPM packages installed to local repo
  - `Gulp` build runner to run you gulp scripts
-
+ - `Bower` build runner to run you bower scripts
 
 License
 ==========
