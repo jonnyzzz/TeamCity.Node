@@ -9,6 +9,7 @@ This is a plugin for TeamCity that provides following build runners
 - [NVM](https://github.com/creationix/nvm)
 - [Gulp](http://gulpjs.com/)
 - [Bower](https://bower.io/)
+- [Yarn](https://yarnpkg.com/en/)
 
 
 Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
@@ -27,6 +28,7 @@ Features
  - `Grunt` build runner to run your grunt scripts. It's assumes you have `grunt` and `grunt-cli` NPM packages installed to local repo
  - `Gulp` build runner to run you gulp scripts
  - `Bower` build runner to run you bower scripts
+ - `Yarn` build runner to execute yarn commands
 
 License
 ==========
