@@ -18,10 +18,11 @@ object Project : Project({
     vcsRoot(git___github_com_jonnyzzz_TeamCity_Node_git)
 
     buildType(TeamCityNodePlugin_TeamCityNodeVs90x)
-    buildType(TeamCityNodePlugin_TeamCityNodeGradle)
     buildType(TeamCityNodePlugin_TeamCityNodeVs100x)
-    buildType(bt434)
     buildType(TeamCityNodePlugin_TeamCityNodeVs91x)
+    buildType(TeamCityNodePlugin_TeamCityNodeVs2017_1_x)
+    buildType(TeamCityNodePlugin_TeamCityNodeVs2017_2_x)
+    buildType(bt434)
 
     features {
         versionedSettings {
@@ -29,7 +30,7 @@ object Project : Project({
             mode = VersionedSettings.Mode.ENABLED
             buildSettingsMode = VersionedSettings.BuildSettingsMode.PREFER_SETTINGS_FROM_VCS
             rootExtId = git___github_com_jonnyzzz_TeamCity_Node_git.id
-            showChanges = false
+            showChanges = true
             settingsFormat = VersionedSettings.Format.KOTLIN
         }
     }
