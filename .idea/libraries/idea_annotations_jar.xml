@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="idea annotations.jar">
-    <CLASSES>
-      <root url="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

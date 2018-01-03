@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact name="deploy">
-    <output-path>$TeamCityDistribution$/../PluginDev.Data/plugins</output-path>
-    <root id="root">
-      <element id="artifact" artifact-name="plugin-zip" />
-    </root>
-  </artifact>
-</component>
