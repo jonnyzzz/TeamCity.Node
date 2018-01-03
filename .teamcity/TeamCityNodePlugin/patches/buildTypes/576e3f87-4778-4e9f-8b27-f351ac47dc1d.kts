@@ -42,6 +42,7 @@ changeBuildType("576e3f87-4778-4e9f-8b27-f351ac47dc1d") {
     }
     steps {
         items.removeAt(0)
+        items.removeAt(0)
     }
 
     dependencies {
