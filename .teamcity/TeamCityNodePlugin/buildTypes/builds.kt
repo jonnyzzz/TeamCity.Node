@@ -28,7 +28,7 @@ object bt434 : BuildType({
     name = "TeamCity.Node Build"
 
     artifactRules = "out/artifacts/plugin_zip/*.zip => ."
-    buildNumberPattern = "1.0.%build.counter%"
+    buildNumberPattern = "2.0.%build.counter%"
 
     vcs {
         root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
