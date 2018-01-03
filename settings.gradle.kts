@@ -1,5 +1,4 @@
 
-rootProject.name = "TeamCity.Node"
-
-
-
+include(
+        "agent", "common", "server"
+)
