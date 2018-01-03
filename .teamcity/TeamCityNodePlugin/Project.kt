@@ -18,6 +18,7 @@ object Project : Project({
     vcsRoot(git___github_com_jonnyzzz_TeamCity_Node_git)
 
     buildType(TeamCityNodePlugin_TeamCityNodeVs90x)
+    buildType(TeamCityNodePlugin_TeamCityNodeGradle)
     buildType(TeamCityNodePlugin_TeamCityNodeVs100x)
     buildType(bt434)
     buildType(TeamCityNodePlugin_TeamCityNodeVs91x)
