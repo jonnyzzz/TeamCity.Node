@@ -1,6 +1,7 @@
 package TeamCityNodePlugin.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2017_2.*
+import jetbrains.buildServer.configs.kotlin.v2017_2.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.v2017_2.ideaRunner
 import jetbrains.buildServer.configs.kotlin.v2017_2.triggers.vcs
 
@@ -42,6 +43,13 @@ object TeamCityNodePlugin_TeamCityNodeGradle : BuildType({
             targetJdkHome = "%env.JDK_18_x64%"
             runConfigurations = "All Tests"
             artifactsToBuild = "plugin-zip"
+        }
+        gradle {
+            tasks = "teamcity"
+            buildFile = "build.gradle.kts"
+            useGradleWrapper = true
+            jdkHome = "%env.JDK_18_x64%"
+            param("org.jfrog.artifactory.selectedDeployableServer.defaultModuleVersionConfiguration", "GLOBAL")
         }
     }
 
