@@ -23,3 +23,12 @@ dependencies {
   compile(kotlin("stdlib"))
 }
 
+
+teamcity {
+  version = rootProject.extra["teamcityVersion"] as String
+}
+
+
+tasks.withType<Jar> {
+  baseName = "teamcity-node-common"
+}

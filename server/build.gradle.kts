@@ -1,3 +1,5 @@
+import com.github.rodm.teamcity.TeamCityEnvironment
+
 /*
  * Copyright 2013-2018 Eugene Petrenko
  *
@@ -24,8 +26,45 @@ dependencies {
     compile(kotlin("stdlib"))
     compile(project(":common"))
 
+    ///for BuildProblemManager
     compile("org.jetbrains.teamcity.internal:server:${rootProject.ext["teamcityVersion"]}")
 
+    agent(project(path = ":agent", configuration = "plugin"))
+}
+
+teamcity {
+    // Use TeamCity 8.1 API
+    version = rootProject.ext["teamcityVersion"] as String
+
+    server {
+        descriptor {
+            name = "jonnyzzz.node"
+            displayName = "Node.js build runner"
+            version = rootProject.version as String?
+            vendorName = "Eugene Petrenko"
+            vendorUrl = "http://jonnyzzz.com"
+            description = "A set of runners for Node.js stack"
+            email = "eugene.petrenko@gmail.com"
+            useSeparateClassloader = true
+        }
+    }
+
+    environments {
+        operator fun String.invoke(block: TeamCityEnvironment.() -> Unit) {
+            environments.create(this, closureOf(block))
+        }
+
+        "teamcity2017.1" {
+            version = "2017.1"
+        }
+
+        "teamcity2017.2" {
+            version = "2017.2"
+        }
+    }
 }
 
 
+tasks.withType<Jar> {
+    baseName = "teamcity-node-server"
+}

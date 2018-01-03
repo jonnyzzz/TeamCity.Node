@@ -28,5 +28,21 @@ dependencies {
     compile("org.apache.httpcomponents:httpclient:4.2.6")
 
     /// BuildProcessFacade
-    compile("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
+    compileOnly("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
+}
+
+teamcity {
+    version = rootProject.extra["teamcityVersion"] as String
+
+    agent {
+        descriptor {
+            pluginDeployment {
+                useSeparateClassloader = true
+            }
+        }
+    }
+}
+
+tasks.withType<Jar> {
+    baseName = "teamcity-node-agent"
 }
