@@ -9,8 +9,7 @@ object TeamCityNodePlugin_TeamCityNodeGradle : BuildType({
     id = "TeamCityNodePlugin_TeamCityNodeGradle"
     name = "TeamCity.Node Gradle"
 
-    artifactRules = "out/artifacts/plugin_zip/*.zip => ."
-    buildNumberPattern = "1.0.%build.counter%"
+    buildNumberPattern = "2.0.%build.counter%"
 
     params {
         text("system.path.macro.TeamCityDistribution", "%teamcity.build.checkoutDir%/%teamcity.dist%", display = ParameterDisplay.HIDDEN, allowEmpty = false)
