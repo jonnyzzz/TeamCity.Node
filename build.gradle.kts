@@ -27,3 +27,8 @@ subprojects {
   group = rootProject.group
   version = rootProject.version
 }
+
+task("teamcity") {
+  dependsOn(":tests:test")
+  dependsOn(":server:teamcity")
+}

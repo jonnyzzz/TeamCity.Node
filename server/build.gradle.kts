@@ -1,4 +1,6 @@
 import com.github.rodm.teamcity.TeamCityEnvironment
+import com.github.rodm.teamcity.TeamCityServerPlugin
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 /*
  * Copyright 2013-2018 Eugene Petrenko
@@ -67,4 +69,13 @@ teamcity {
 
 tasks.withType<Jar> {
     baseName = "teamcity-node-server"
+}
+
+
+task("teamcity") {
+    dependsOn("serverPlugin")
+
+    doLast {
+        println("##teamcity[publishArtifacts '${(tasks["serverPlugin"] as Zip).archivePath}']")
+    }
 }
