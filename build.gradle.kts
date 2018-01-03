@@ -6,6 +6,9 @@ plugins {
   kotlin("jvm") version "1.2.10" apply false
 }
 
+ext {
+  set("teamcityVersion", "10.0")
+}
 
 group = "org.jonnyzzz"
 version = System.getenv("BUILD_NUMBER") ?: "2.0-SNAPSHOT"

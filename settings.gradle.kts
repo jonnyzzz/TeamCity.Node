@@ -1,4 +1,4 @@
 
 include(
-        "agent", "common", "server"
+        "agent", "common", "server", "tests"
 )

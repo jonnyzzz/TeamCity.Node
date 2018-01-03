@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.org.testng.TestException
+
 /*
  * Copyright 2013-2018 Eugene Petrenko
  *
@@ -17,15 +19,20 @@
 
 plugins {
     kotlin("jvm")
-    id("com.github.rodm.teamcity-server")
+    id("com.github.rodm.teamcity-common")
 }
 
 dependencies {
     compile(kotlin("stdlib"))
     compile(project(":common"))
+    compile(project(":agent"))
+    compile(project(":server"))
 
-    compile("org.jetbrains.teamcity.internal:server:${rootProject.ext["teamcityVersion"]}")
+    testCompile("org.jetbrains.teamcity:tests-support:${rootProject.ext["teamcityVersion"]}")
 
+    testCompile("org.testng:testng:6.13.1")
 }
 
-
+tasks.withType<Test> {
+    useTestNG()
+}
