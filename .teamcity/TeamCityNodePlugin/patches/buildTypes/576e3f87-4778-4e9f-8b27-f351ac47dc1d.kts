@@ -1,6 +1,7 @@
 package TeamCityNodePlugin.patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2017_2.*
+import jetbrains.buildServer.configs.kotlin.v2017_2.buildSteps.GradleBuildStep
 import jetbrains.buildServer.configs.kotlin.v2017_2.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.v2017_2.ideaRunner
 import jetbrains.buildServer.configs.kotlin.v2017_2.ui.*
@@ -43,6 +44,8 @@ changeBuildType("576e3f87-4778-4e9f-8b27-f351ac47dc1d") {
     steps {
         items.removeAt(0)
         items.removeAt(0)
+        update<GradleBuildStep>(0) {
+        }
     }
 
     dependencies {
