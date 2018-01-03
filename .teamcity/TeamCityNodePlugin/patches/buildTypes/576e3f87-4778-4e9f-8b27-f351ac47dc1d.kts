@@ -10,6 +10,27 @@ accordingly and delete the patch script.
 */
 changeBuildType("576e3f87-4778-4e9f-8b27-f351ac47dc1d") {
     dependencies {
+        remove("TeamCityNodePlugin_TeamCityNodeVs100x") {
+            snapshot {
+                reuseBuilds = ReuseBuilds.ANY
+                onDependencyCancel = FailureAction.ADD_PROBLEM
+            }
+        }
+
+        remove("TeamCityNodePlugin_TeamCityNodeVs90x") {
+            snapshot {
+                reuseBuilds = ReuseBuilds.ANY
+                onDependencyCancel = FailureAction.ADD_PROBLEM
+            }
+        }
+
+        remove("TeamCityNodePlugin_TeamCityNodeVs91x") {
+            snapshot {
+                reuseBuilds = ReuseBuilds.ANY
+                onDependencyCancel = FailureAction.ADD_PROBLEM
+            }
+        }
+
         remove("JetBrainsDependencyRetrieve_TeamCityTrunkEapReleases") {
             artifacts {
                 buildRule = lastSuccessful()
