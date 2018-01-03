@@ -47,7 +47,7 @@ object bt434 : BuildType({
     dependsOn(TeamCityNodePlugin_TeamCityNodeVs91x)
 })
 
-private fun BuildType.dependsOn(T : NodeBuildType, rePublish: Boolean = false) {
+private fun BuildType.dependsOn(T: NodeBuildType, rePublish: Boolean = false) {
     val theId = T.id
     val build = this
 
@@ -57,16 +57,17 @@ private fun BuildType.dependsOn(T : NodeBuildType, rePublish: Boolean = false) {
                 reuseBuilds = ReuseBuilds.ANY
                 onDependencyCancel = FailureAction.ADD_PROBLEM
             }
-        }
 
-        if (rePublish) {
-            val target = "re-publish-$theId"
-            artifacts(theId) {
-                cleanDestination = false
-                artifactRules = "+:**/* => $target"
+            if (rePublish) {
+                val target = "re-publish-$theId"
+                artifacts {
+                    cleanDestination = false
+                    artifactRules = "+:**/* => $target"
+                }
+
+                build.artifactRules += "\n$target/** => ."
             }
-
-            build.artifactRules += "\n$target/** => ."
         }
+
     }
 }
