@@ -83,6 +83,3 @@ Note
 This plugin was created with [TeamCity Plugin Template](https://github.com/jonnyzzz/TeamCity.PluginTemplate)
 
 This is my (Eugene Petrenko) private home project
-
-You may support my home projects:
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Y94ALDEKVZT3Y)
