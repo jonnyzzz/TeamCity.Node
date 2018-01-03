@@ -2,3 +2,4 @@
 out
 .gradle
 *kotlin-runtime*.jar
+*.iml
