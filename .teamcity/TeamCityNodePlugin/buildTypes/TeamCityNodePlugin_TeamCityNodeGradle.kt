@@ -24,26 +24,6 @@ object TeamCityNodePlugin_TeamCityNodeGradle : BuildType({
     }
 
     steps {
-        step {
-            type = "kotlinc"
-            param("KOTLIN_TAG", "1.0.2")
-        }
-        ideaRunner {
-            pathToProject = ""
-            jdk {
-                name = "1.6"
-                path = "%env.JDK_16%"
-                patterns("jre/lib/*.jar")
-                extAnnotationPatterns("%teamcity.tool.idea%/lib/jdkAnnotations.jar")
-            }
-            pathvars {
-                variable("TeamCityDistribution", "%system.path.macro.TeamCityDistribution%")
-            }
-            jvmArgs = "-Xmx256m"
-            targetJdkHome = "%env.JDK_18_x64%"
-            runConfigurations = "All Tests"
-            artifactsToBuild = "plugin-zip"
-        }
         gradle {
             tasks = "teamcity"
             buildFile = "build.gradle.kts"
@@ -56,32 +36,6 @@ object TeamCityNodePlugin_TeamCityNodeGradle : BuildType({
     triggers {
         vcs {
             branchFilter = "+:<default>"
-        }
-    }
-
-    dependencies {
-        dependency(TeamCityNodePlugin.buildTypes.TeamCityNodePlugin_TeamCityNodeVs100x) {
-            snapshot {
-                reuseBuilds = ReuseBuilds.ANY
-                onDependencyCancel = FailureAction.ADD_PROBLEM
-            }
-        }
-        dependency(TeamCityNodePlugin.buildTypes.TeamCityNodePlugin_TeamCityNodeVs90x) {
-            snapshot {
-                reuseBuilds = ReuseBuilds.ANY
-                onDependencyCancel = FailureAction.ADD_PROBLEM
-            }
-        }
-        dependency(TeamCityNodePlugin.buildTypes.TeamCityNodePlugin_TeamCityNodeVs91x) {
-            snapshot {
-                reuseBuilds = ReuseBuilds.ANY
-                onDependencyCancel = FailureAction.ADD_PROBLEM
-            }
-        }
-        artifacts("JetBrainsDependencyRetrieve_TeamCityTrunkEapReleases") {
-            buildRule = lastSuccessful()
-            cleanDestination = true
-            artifactRules = "TeamCity-*.tar.gz!TeamCity/** => %teamcity.dist%"
         }
     }
 })
