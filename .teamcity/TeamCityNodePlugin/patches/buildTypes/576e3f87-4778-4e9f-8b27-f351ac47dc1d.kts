@@ -1,6 +1,8 @@
 package TeamCityNodePlugin.patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2017_2.*
+import jetbrains.buildServer.configs.kotlin.v2017_2.buildSteps.gradle
+import jetbrains.buildServer.configs.kotlin.v2017_2.ideaRunner
 import jetbrains.buildServer.configs.kotlin.v2017_2.ui.*
 
 /*
@@ -9,6 +11,39 @@ To apply the patch, change the buildType with uuid = '576e3f87-4778-4e9f-8b27-f3
 accordingly and delete the patch script.
 */
 changeBuildType("576e3f87-4778-4e9f-8b27-f351ac47dc1d") {
+    expectSteps {
+        step {
+            type = "kotlinc"
+            param("KOTLIN_TAG", "1.0.2")
+        }
+        ideaRunner {
+            pathToProject = ""
+            jdk {
+                name = "1.6"
+                path = "%env.JDK_16%"
+                patterns("jre/lib/*.jar")
+                extAnnotationPatterns("%teamcity.tool.idea%/lib/jdkAnnotations.jar")
+            }
+            pathvars {
+                variable("TeamCityDistribution", "%system.path.macro.TeamCityDistribution%")
+            }
+            jvmArgs = "-Xmx256m"
+            targetJdkHome = "%env.JDK_18_x64%"
+            runConfigurations = "All Tests"
+            artifactsToBuild = "plugin-zip"
+        }
+        gradle {
+            tasks = "teamcity"
+            buildFile = "build.gradle.kts"
+            useGradleWrapper = true
+            jdkHome = "%env.JDK_18_x64%"
+            param("org.jfrog.artifactory.selectedDeployableServer.defaultModuleVersionConfiguration", "GLOBAL")
+        }
+    }
+    steps {
+        items.removeAt(0)
+    }
+
     dependencies {
         remove("TeamCityNodePlugin_TeamCityNodeVs100x") {
             snapshot {
