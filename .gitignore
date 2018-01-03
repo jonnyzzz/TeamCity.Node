@@ -1,3 +1,4 @@
-.idea/workspace.xml
+.idea/
 out
+.gradle
 *kotlin-runtime*.jar
