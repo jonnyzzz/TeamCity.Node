@@ -12,11 +12,6 @@ object TeamCityNodePlugin_TeamCityNodeGradle : BuildType({
 
     buildNumberPattern = "2.0.%build.counter%"
 
-    params {
-        text("system.path.macro.TeamCityDistribution", "%teamcity.build.checkoutDir%/%teamcity.dist%", display = ParameterDisplay.HIDDEN, allowEmpty = false)
-        text("teamcity.dist", "dist/teamcity", display = ParameterDisplay.HIDDEN, allowEmpty = false)
-    }
-
     vcs {
         root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
 
