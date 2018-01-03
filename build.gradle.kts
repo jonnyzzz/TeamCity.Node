@@ -7,6 +7,10 @@ plugins {
 }
 
 
+group = "org.jonnyzzz"
+version = System.getenv("BUILD_NUMBER") ?: "2.0-SNAPSHOT"
+
+
 subprojects {
 
   repositories {
