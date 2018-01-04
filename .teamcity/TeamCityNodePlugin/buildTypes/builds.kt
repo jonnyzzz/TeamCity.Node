@@ -20,14 +20,20 @@ object TeamCityNodePlugin_TeamCityNodeVs91x : NodeBuildType("9.1.6", {
     id = "TeamCityNodePlugin_TeamCityNodeVs91x"
 })
 
-object TeamCityNodePlugin_TeamCityNodeVs100x : NodeBuildType("10.0.6", {
+object TeamCityNodePlugin_TeamCityNodeVs100x : NodeBuildType("10.0.5", {
     uuid = "63558112-92ee-41d6-a7f7-827c633c5325"
     id = "TeamCityNodePlugin_TeamCityNodeVs100x"
 })
 
-object TeamCityNodePlugin_TeamCityNodeVs2017_1_x : NodeBuildType("2017.1.5", { })
+object TeamCityNodePlugin_TeamCityNodeVs2017_1_x : NodeBuildType("2017.1.5", {
+    uuid = "2017_1_63558112-92ee-41d6-a7f7-827c633c5325"
+    id = "TeamCityNodePlugin_TeamCityNodeVs2017_1x"
+})
 
-object TeamCityNodePlugin_TeamCityNodeVs2017_2_x : NodeBuildType("2017.2", { })
+object TeamCityNodePlugin_TeamCityNodeVs2017_2_x : NodeBuildType("2017.2", {
+    uuid = "2017_2_63558112-92ee-41d6-a7f7-827c633c5325"
+    id = "TeamCityNodePlugin_TeamCityNodeVs2017_2x"
+})
 
 object bt434 : BuildType({
     uuid = "0c137359-ef2c-4510-8196-cd5926d6ee0b"
