@@ -54,18 +54,17 @@ object bt434 : BuildType({
 })
 
 private fun BuildType.dependsOn(T: NodeBuildType, rePublish: Boolean = false) {
-    val theId = T.safeVersion
     val build = this
 
     dependencies {
-        dependency(theId) {
+        dependency(T.id) {
             snapshot {
                 reuseBuilds = ReuseBuilds.ANY
                 onDependencyCancel = FailureAction.ADD_PROBLEM
             }
 
             if (rePublish) {
-                val target = "re-publish-$theId"
+                val target = "re-publish-${T.safeVersion}"
                 artifacts {
                     cleanDestination = false
                     artifactRules = "+:**/* => $target"
