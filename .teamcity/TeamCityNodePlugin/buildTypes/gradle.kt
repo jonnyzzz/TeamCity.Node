@@ -31,9 +31,7 @@ open class NodeBuildType(
         id = "TeamCityNodePlugin_TeamCityNodeVs_${safeVersion}"
         name = "TeamCity.Node vs $teamcityVersion"
 
-        vcs {
-            root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
-        }
+        inheritVCS()
 
         steps {
             gradle {
@@ -51,5 +49,12 @@ open class NodeBuildType(
         }
 
         inheritBuildNumber()
+    }
+}
+
+fun BuildType.inheritVCS() {
+    vcs {
+        root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
+        cleanCheckout = true
     }
 }

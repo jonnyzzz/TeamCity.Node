@@ -8,6 +8,8 @@ object BuildNumber : BuildType({
     id = "TeamCityNodePlugin_TeamCityNode_BuildNumber"
     name = "Build Number"
     buildNumberPattern = "2.0.%build.counter%"
+
+    inheritVCS()
 })
 
 object TeamCityNodePlugin_TeamCityNodeVs90x : NodeBuildType("9.0.5", {
@@ -42,9 +44,7 @@ object bt434 : BuildType({
 
     inheritBuildNumber()
 
-    vcs {
-        root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
-    }
+    inheritVCS()
 
     triggers {
         vcs {
