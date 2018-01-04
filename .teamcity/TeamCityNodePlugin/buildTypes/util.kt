@@ -47,5 +47,7 @@ open class NodeBuildType(
         params {
             param("env.DEP_TEAMCITY_VERSION", teamcityVersion)
         }
+
+        inheritBuildNumber()
     }
 }

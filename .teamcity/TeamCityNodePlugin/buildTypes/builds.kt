@@ -3,6 +3,13 @@ package TeamCityNodePlugin.buildTypes
 import jetbrains.buildServer.configs.kotlin.v2017_2.*
 import jetbrains.buildServer.configs.kotlin.v2017_2.triggers.vcs
 
+object BuildNumber : BuildType({
+    uuid = "buildnumber_56017bf7-a20d-4e46-a917-a27c909d6b5a"
+    id = "TeamCityNodePlugin_TeamCityNode_BuildNumber"
+    name = "Build Number"
+    buildNumberPattern = "2.0.%build.counter%"
+})
+
 object TeamCityNodePlugin_TeamCityNodeVs90x : NodeBuildType("9.0.5", {
     uuid = "56017bf7-a20d-4e46-a917-a27c909d6b5a"
     id = "TeamCityNodePlugin_TeamCityNodeVs90x"
@@ -27,8 +34,7 @@ object bt434 : BuildType({
     id = "bt434"
     name = "TeamCity.Node Build"
 
-    artifactRules = "out/artifacts/plugin_zip/*.zip => ."
-    buildNumberPattern = "2.0.%build.counter%"
+    inheritBuildNumber()
 
     vcs {
         root(TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git)
@@ -71,3 +77,15 @@ private fun BuildType.dependsOn(T: NodeBuildType, rePublish: Boolean = false) {
 
     }
 }
+
+fun BuildType.inheritBuildNumber() {
+    buildNumberPattern = "%dep.${BuildNumber.id}.build.number%"
+
+    dependencies {
+        snapshot(BuildNumber.id) {
+            reuseBuilds = ReuseBuilds.ANY
+            onDependencyCancel = FailureAction.ADD_PROBLEM
+        }
+    }
+}
+

@@ -1,9 +1,7 @@
 package TeamCityNodePlugin
 
 import TeamCityNodePlugin.buildTypes.*
-import TeamCityNodePlugin.vcsRoots.*
 import TeamCityNodePlugin.vcsRoots.git___github_com_jonnyzzz_TeamCity_Node_git
-import jetbrains.buildServer.configs.kotlin.v2017_2.*
 import jetbrains.buildServer.configs.kotlin.v2017_2.Project
 import jetbrains.buildServer.configs.kotlin.v2017_2.projectFeatures.VersionedSettings
 import jetbrains.buildServer.configs.kotlin.v2017_2.projectFeatures.versionedSettings
@@ -17,6 +15,7 @@ object Project : Project({
 
     vcsRoot(git___github_com_jonnyzzz_TeamCity_Node_git)
 
+    buildType(BuildNumber)
     buildType(TeamCityNodePlugin_TeamCityNodeVs90x)
     buildType(TeamCityNodePlugin_TeamCityNodeVs100x)
     buildType(TeamCityNodePlugin_TeamCityNodeVs91x)
