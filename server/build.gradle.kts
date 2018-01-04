@@ -29,7 +29,7 @@ dependencies {
     compile(project(":common"))
 
     ///for BuildProblemManager
-    compile("org.jetbrains.teamcity.internal:server:${rootProject.ext["teamcityVersion"]}")
+    compileOnly("org.jetbrains.teamcity.internal:server:${rootProject.ext["teamcityVersion"]}")
 
     agent(project(path = ":agent", configuration = "plugin"))
 }
