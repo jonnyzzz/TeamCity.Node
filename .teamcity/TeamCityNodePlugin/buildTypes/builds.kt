@@ -54,7 +54,7 @@ object bt434 : BuildType({
 })
 
 private fun BuildType.dependsOn(T: NodeBuildType, rePublish: Boolean = false) {
-    val theId = T.id
+    val theId = T.safeVersion
     val build = this
 
     dependencies {

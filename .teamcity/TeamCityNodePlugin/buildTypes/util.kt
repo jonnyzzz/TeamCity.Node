@@ -18,15 +18,17 @@ package TeamCityNodePlugin.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2017_2.BuildType
 import jetbrains.buildServer.configs.kotlin.v2017_2.buildSteps.gradle
-import jetbrains.buildServer.configs.kotlin.v2017_2.triggers.vcs
 
 open class NodeBuildType(
         teamcityVersion : String,
         init: NodeBuildType.() -> Unit) : BuildType() {
+
+    val safeVersion = teamcityVersion.replace(Regex("[^a-zA-Z0-9]+"), "_")
+
     init {
         buildNumberPattern = "2.0.%build.counter%"
-        uuid = "$teamcityVersion-63558112-92ee-41d6-a7f7-827c633c5325"
-        id = "TeamCityNodePlugin_TeamCityNodeVs_${teamcityVersion.replace(Regex("[^a-zA-Z0-9]+"), "_")}"
+        uuid = "$safeVersion-63558112-92ee-41d6-a7f7-827c633c5325"
+        id = "TeamCityNodePlugin_TeamCityNodeVs_${safeVersion}"
         name = "TeamCity.Node vs $teamcityVersion"
 
         vcs {
