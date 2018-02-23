@@ -38,7 +38,7 @@ class GulpBean {
       return listOf()
     else
       return text
-              .split("[\r\n]+")
+              .lines()
               .map { it.trim() }
               .filterNot { it.isEmpty() }
   }

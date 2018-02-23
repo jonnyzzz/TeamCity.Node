@@ -37,7 +37,7 @@ fun String?.fetchArguments() : Collection<String> {
   if (this == null || this.isEmptyOrSpaces()) return listOf()
 
   return this
-          .split("[\\r\\n]+")
+          .lines()
           .map { it.trim() }
           .filter { !it.isEmptyOrSpaces() }
           .flatMap{ it.splitHonorQuotes() }

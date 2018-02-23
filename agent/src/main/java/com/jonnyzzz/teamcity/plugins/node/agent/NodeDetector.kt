@@ -100,7 +100,7 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
         detectNodeTool("bower", BowerBean().bowerConfigurationParameter)
 
         detectNodeTool("gulp", GulpBean().gulpConfigurationParameter) {
-          val firstLine = it.split("[\r\n]+")[0].trim()
+          val firstLine = it.lines()[0].trim()
 
           val lastSpaceIndex = firstLine.lastIndexOf(' ')
           if (lastSpaceIndex > 0) {
