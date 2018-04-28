@@ -28,6 +28,10 @@ dependencies {
     compile(project(":agent"))
     compile(project(":server"))
 
+    //copy-paste from agent module to workaournd duplicate files in .zip
+    testCompile("com.google.code.gson:gson:2.2.4")
+    testCompile("org.apache.httpcomponents:httpclient:4.2.6")
+
     testCompile("org.jetbrains.teamcity:tests-support:${rootProject.ext["teamcityVersion"]}")
 
     testCompile("org.testng:testng:6.13.1")
