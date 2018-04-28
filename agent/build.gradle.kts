@@ -20,12 +20,19 @@ plugins {
     id("com.github.rodm.teamcity-agent")
 }
 
+fun DependencyHandler.compileAndInclude(name: String) {
+    //we do not need the same .jar to be include twice,
+    //thus mark the default one siletly
+    compileOnly(name)
+    agent(name)
+}
+
 dependencies {
     compile(kotlin("stdlib"))
     compile(project(":common"))
 
-    compile("com.google.code.gson:gson:2.2.4")
-    compile("org.apache.httpcomponents:httpclient:4.2.6")
+    compileAndInclude("com.google.code.gson:gson:2.2.4")
+    compileAndInclude("org.apache.httpcomponents:httpclient:4.2.6")
 
     /// BuildProcessFacade
     compileOnly("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
