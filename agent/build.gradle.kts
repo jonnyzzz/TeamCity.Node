@@ -25,6 +25,9 @@ fun DependencyHandler.compileAndInclude(name: String) {
     //thus mark the default one siletly
     compileOnly(name)
     agent(name)
+
+    //we still need the dependency for tests
+    testCompile(name)
 }
 
 dependencies {
