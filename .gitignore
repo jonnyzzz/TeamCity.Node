@@ -6,3 +6,6 @@ out
 build/
 gradle/
 server/data
+server/downloads
+server/servers
+
