@@ -22,6 +22,11 @@ subprojects {
 
   group = rootProject.group
   version = rootProject.version
+
+  // https://github.com/rodm/gradle-teamcity-plugin/issues/30#issuecomment-385382204
+  tasks.withType<Zip> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+  }
 }
 
 task("teamcity") {
