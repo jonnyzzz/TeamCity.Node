@@ -5,3 +5,4 @@ out
 *.iml
 build/
 gradle/
+server/data
