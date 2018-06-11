@@ -46,7 +46,7 @@ teamcity {
         files {
             into("lib") {
                 configurations.compile.dependencies.forEach { dep ->
-                    if (dep.group?.startsWith("org.jetbrains.teamcity.internal") ?: true) {
+                    if (dep.group?.startsWith("org.jetbrains.teamcity.internal") != false) {
                         return@forEach
                     }
 
