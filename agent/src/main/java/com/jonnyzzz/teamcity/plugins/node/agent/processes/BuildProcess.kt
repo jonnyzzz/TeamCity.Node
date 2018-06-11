@@ -86,6 +86,6 @@ open class DelegatingBuildProcess(val action: DelegatingProcessAction): BuildPro
 }
 
 interface DelegatingProcessAction {
-  open fun startImpl(): BuildProcess
-  open fun finishedImpl() { }
+  fun startImpl(): BuildProcess
+  fun finishedImpl() { }
 }
