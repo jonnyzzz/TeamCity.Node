@@ -33,6 +33,22 @@ dependencies {
     compileOnly("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
 }
 
+val fix_dependencies = configurations.create("fix_dependencies")
+
+project.afterEvaluate {
+    configurations.compile.dependencies.forEach { dep ->
+        if (dep.group?.startsWith("org.jetbrains.teamcity.internal") != false) {
+            return@forEach
+        }
+
+        if (dep !is ExternalModuleDependency) {
+            return@forEach
+        }
+
+        fix_dependencies.dependencies.add(dep.copy())
+    }
+}
+
 teamcity {
     version = rootProject.extra["teamcityVersion"] as String
 
@@ -45,17 +61,7 @@ teamcity {
 
         files {
             into("lib") {
-                configurations.compile.dependencies.forEach { dep ->
-                    if (dep.group?.startsWith("org.jetbrains.teamcity.internal") != false) {
-                        return@forEach
-                    }
-
-                    if (dep !is ExternalModuleDependency) {
-                        return@forEach
-                    }
-
-                    from(dep.artifacts)
-                }
+                from(fix_dependencies)
             }
         }
     }
@@ -71,7 +77,7 @@ tasks["agentPlugin"].doLast {
 
     val entries = zipFile.inputStream().use { it ->
         ZipInputStream(it).use { z ->
-            generateSequence<ZipEntry> { z.nextEntry }
+            generateSequence { z.nextEntry }
                     .filterNot { it.isDirectory }
                     .map { it.name }
                     .toList()
@@ -83,6 +89,9 @@ tasks["agentPlugin"].doLast {
 
     val expectedFiles = listOf(
             "lib/annotations-13.0.jar",
+            "lib/commons-codec-1.6.jar",
+            "lib/commons-logging-1.1.1.jar",
+            "lib/gson-2.2.4.jar",
             "lib/httpclient-4.2.6.jar",
             "lib/httpcore-4.2.5.jar",
             "lib/kotlin-stdlib-1.2.41.jar",
