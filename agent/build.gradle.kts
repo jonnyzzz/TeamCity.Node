@@ -1,3 +1,5 @@
+import java.util.zip.*
+
 /*
  * Copyright 2013-2018 Eugene Petrenko
  *
@@ -40,9 +42,58 @@ teamcity {
                 useSeparateClassloader = true
             }
         }
+
+        files {
+            into("lib") {
+                configurations.compile.dependencies.forEach { dep ->
+                    if (dep.group?.startsWith("org.jetbrains.teamcity.internal") ?: true) {
+                        return@forEach
+                    }
+
+                    if (dep !is ExternalModuleDependency) {
+                        return@forEach
+                    }
+
+                    from(dep.artifacts)
+                }
+            }
+        }
     }
 }
 
 tasks.withType<Jar> {
     baseName = "teamcity-node-agent"
+}
+
+tasks["agentPlugin"].doLast {
+    val zipTask = tasks["agentPlugin"] as Zip
+    val zipFile = zipTask.archivePath
+
+    val entries = zipFile.inputStream().use { it ->
+        ZipInputStream(it).use { z ->
+            generateSequence<ZipEntry> { z.nextEntry }
+                    .filterNot { it.isDirectory }
+                    .map { it.name }
+                    .toList()
+                    .sorted()
+        }
+    }
+
+    println("\n\nDetected files under Agent plugin:${entries.joinToString(separator = "\n  - ", prefix = "\n  - ")}\n\n")
+
+    val expectedFiles = listOf(
+            "lib/annotations-13.0.jar",
+            "lib/httpclient-4.2.6.jar",
+            "lib/httpcore-4.2.5.jar",
+            "lib/kotlin-stdlib-1.2.41.jar",
+            "lib/teamcity-node-agent-$version.jar",
+            "lib/teamcity-node-common-$version.jar",
+            "teamcity-plugin.xml"
+    )
+
+    println("\n\nExpected files:${expectedFiles.joinToString(separator = "\n  - ", prefix = "\n  - ")}\n\n")
+
+    if (entries != expectedFiles) {
+        throw Error("agent plugin files does not match")
+    }
 }
