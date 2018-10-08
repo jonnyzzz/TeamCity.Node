@@ -96,6 +96,7 @@ class NVMRunner(val downloader : NVMDownloader,
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
     val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
+    var isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
 
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
@@ -105,11 +106,19 @@ class NVMRunner(val downloader : NVMDownloader,
           downloader.downloadNVM(nvmHome, url)
           message("NVM downloaded into $nvmHome")
         }
+        
         script("Install", "Installing Node.js v$version",nvmHome.path) {
-          ". $nvmHome/nvm.sh" n "nvm install $fromSource $version"
+          if (isWindows)
+            "nvm install $fromSource $version"
+          else
+            ". $nvmHome/nvm.sh" n "nvm install $fromSource $version"
         }
+
         script("Use", "Selecting Node.js v$version", nvmHome.path) {
-          ". $nvmHome/nvm.sh" n "nvm use $version" n "eval \${TEAMCITY_CAPTURE_ENV}"
+          if (isWindows)
+            "nvm use $version"
+          else
+            ". $nvmHome/nvm.sh" n "nvm use $version" n "eval \${TEAMCITY_CAPTURE_ENV}"
         }
       }
     }
