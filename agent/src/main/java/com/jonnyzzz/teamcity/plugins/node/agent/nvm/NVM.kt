@@ -98,6 +98,9 @@ class NVMRunner(val downloader : NVMDownloader,
     val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
     val isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
 
+    val installCmd = "nvm install $fromSource $version"
+    val useCmd = "nvm use $version"
+
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
         execute("Download", "Fetching NVM") {
@@ -109,16 +112,20 @@ class NVMRunner(val downloader : NVMDownloader,
         
         script("Install", "Installing Node.js v$version",nvmHome.path) {
           if (isWindows)
-            "nvm install $fromSource $version"
+              installCmd
           else
-            ". $nvmHome/nvm.sh" n "nvm install $fromSource $version"
+            ". $nvmHome/nvm.sh" n installCmd
         }
 
         script("Use", "Selecting Node.js v$version", nvmHome.path) {
           if (isWindows)
-            "nvm use $version"
+            // executing ${TEAMCITY_CAPTURE_ENV} in Windows has not effect like it does in Linux, as agent parameters
+            // still displays TEAMCITY_CAPTURE_ENV as populated, and its value transfers between build steps without
+            // with the need for an 'eval' substitute in Windows
+
+            useCmd
           else
-            ". $nvmHome/nvm.sh" n "nvm use $version" n "eval \${TEAMCITY_CAPTURE_ENV}"
+            ". $nvmHome/nvm.sh" n useCmd n "eval \${TEAMCITY_CAPTURE_ENV}"
         }
       }
     }
