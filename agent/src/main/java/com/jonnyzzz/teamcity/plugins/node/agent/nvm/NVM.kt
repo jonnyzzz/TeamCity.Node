@@ -96,7 +96,7 @@ class NVMRunner(val downloader : NVMDownloader,
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
     val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
-    var isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
+    val isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
 
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
