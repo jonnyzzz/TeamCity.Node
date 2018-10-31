@@ -40,10 +40,8 @@ class NodeToolsDetector(events: EventDispatcher<AgentLifeCycleListener>,
   fun detectNVMTool() {
     with(config.systemInfo) {
       when {
-        isWindows
-          && System.getenv("APPDATA")?.let { File(it, "\\nvm\\nvm.exe").isFile } != true
-          && System.getenv("NVM_HOME")?.let { File(it, "\\nvm.exe").isFile } != true -> {
-            log4j(javaClass).info("Node NVM installer runner is not available.")
+        isWindows && !File(System.getenv("APPDATA") + "\\nvm\\nvm.exe").isFile -> {
+          log4j(javaClass).info("Node NVM installer runner is not available.")
         }
 
         !(isMac || isUnix || isWindows) -> {
