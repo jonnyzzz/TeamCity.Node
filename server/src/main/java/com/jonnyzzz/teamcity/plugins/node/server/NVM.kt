@@ -26,6 +26,7 @@ import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterContext
 import jetbrains.buildServer.serverSide.buildDistribution.AgentsFilterResult
 import jetbrains.buildServer.serverSide.BuildPromotionManager
 import jetbrains.buildServer.requirements.RequirementType
+import jetbrains.buildServer.serverSide.BuildPromotion
 import jetbrains.buildServer.serverSide.buildDistribution.SimpleWaitReason
 
 /**
@@ -65,8 +66,11 @@ class NVMBuildStartPrecondition(val promos : BuildPromotionManager) : StartingBu
 
   override fun filterAgents(context: AgentsFilterContext): AgentsFilterResult {
     val result = AgentsFilterResult()
-    val promoId = context.getStartingBuild().getBuildPromotionInfo().getId()
-    val buildType = promos.findPromotionById(promoId)?.getBuildType()
+    val promo = context.getStartingBuild().getBuildPromotionInfo()
+
+    if (promo !is BuildPromotion) return result
+
+    val buildType = promo.getBuildType()
 
     if (buildType == null) return result
 
