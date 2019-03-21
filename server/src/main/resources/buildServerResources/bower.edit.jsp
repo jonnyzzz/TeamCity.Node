@@ -32,7 +32,7 @@
       </c:forEach>
     </props:selectProperty>
     <span class="smallNote">
-      Specify weather you like to use system-wide or project's npm installed bower
+      Specify whether to use system-wide or project's npm installed bower
     </span>
     <span class="error" id="error_${bean.bowerMode}"></span>
   </td>
