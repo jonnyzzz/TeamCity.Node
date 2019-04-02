@@ -118,8 +118,8 @@ class HttpClientWrapperImpl : HttpClientWrapper, DisposableBean {
     if (proxyHost != null && proxyPort > 0) {
       val proxy = HttpHost(proxyHost, proxyPort);
 
-      httpclient.params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-
+      httpclient.routePlanner = DefaultProxyRoutePlanner(proxy)
+      
       if (proxyUser != null && proxyPassword != null) {
         if (proxyDomain != null || proxyWorkstation != null) {
           LOG.info("TeamCity.Node.NVM. Using HTTP proxy $proxyHost:$proxyPort, username: ${proxyDomain ?: proxyWorkstation ?: "."}\\$proxyUser")
