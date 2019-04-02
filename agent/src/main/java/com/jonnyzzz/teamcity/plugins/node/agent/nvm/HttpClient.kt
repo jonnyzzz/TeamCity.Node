@@ -39,7 +39,7 @@ import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.client.protocol.RequestAcceptEncoding
 import org.apache.http.client.protocol.ResponseContentEncoding
-import org.apache.http.conn.params.ConnRoutePNames
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner
 import org.apache.http.conn.ssl.X509HostnameVerifier
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.PoolingClientConnectionManager
