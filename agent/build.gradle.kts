@@ -27,7 +27,7 @@ dependencies {
     compile(project(":common"))
 
     compile("com.google.code.gson:gson:2.2.4")
-    compile("org.apache.httpcomponents:httpclient:4.2.6")
+    compile("org.apache.httpcomponents:httpclient:4.3")
 
     /// BuildProcessFacade
     compileOnly("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
