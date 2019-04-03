@@ -90,10 +90,10 @@ tasks["agentPlugin"].doLast {
     val expectedFiles = listOf(
             "lib/annotations-13.0.jar",
             "lib/commons-codec-1.6.jar",
-            "lib/commons-logging-1.1.1.jar",
+            "lib/commons-logging-1.1.3.jar",
             "lib/gson-2.2.4.jar",
-            "lib/httpclient-4.2.6.jar",
-            "lib/httpcore-4.2.5.jar",
+            "lib/httpclient-4.3.jar",
+            "lib/httpcore-4.3.jar",
             "lib/kotlin-stdlib-1.2.41.jar",
             "lib/teamcity-node-agent-$version.jar",
             "lib/teamcity-node-common-$version.jar",
