@@ -12,7 +12,7 @@ This is a plugin for TeamCity that provides following build runners
 - [Yarn](https://yarnpkg.com/en/)
 
 
-Plugin is implemented with [JetBrains Kotlin](http://kotlin.jetbrains.org/)
+Plugin is implemented with [JetBrains Kotlin](https://kotlinlang.org/)
 
 
 Features
