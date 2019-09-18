@@ -76,6 +76,11 @@ In this repo you will find
 - Bunch of libraries for most recent needed TeamCity APIs
 - Module with TestNG tests that uses TeamCity Tests API
 
+Troubleshooting
+===============
+- Unmet requirements: *npm package* exists
+
+When your your NPM packages folder in your PATH system environment variable is pointing to the system profile ("C:\Windows\System32\config\systemprofile\AppData\Roaming\npm") you will get this error. This is because this plugin runs under 32 bit and this folder will redirect 32 bit applications trying to access it to "C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\npm". To resolve this point your NPM packages folder in your PATH environment variable to a different folder (e.g. C:\npm) or point it to the SysWow64 folder above. 
 
 Note
 ====
