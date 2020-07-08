@@ -39,7 +39,7 @@ public class NVMDownloadTest extends BaseTestCase {
   
   @Test
   public void test_default() throws IOException {
-    doSuccessfulTest(new NVMBean().getNVM_Creatonix());
+    doSuccessfulTest(new NVMBean().getNVM_ArchiveUrl());
   }
 
   @Test

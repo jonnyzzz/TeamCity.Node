@@ -95,7 +95,7 @@ class NVMRunner(val downloader : NVMDownloader,
     val nvmHome = runningBuild.agentConfiguration.getCacheDirectory("jonnyzzz.nvm")
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
-    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
+    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_ArchiveUrl
     val isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
     val installCmd = "nvm install $fromSource $version"
     val useCmd = "nvm use $version"
