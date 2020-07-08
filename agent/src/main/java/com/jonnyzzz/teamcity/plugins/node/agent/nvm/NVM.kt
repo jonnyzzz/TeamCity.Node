@@ -38,7 +38,7 @@ import kotlin.text.Regex
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
  * Date: 05.08.13 9:35
  */
-///https://github.com/creationix/nvm
+///https://github.com/nvm-sh/nvm
 ///http://ghb.freshblurbs.com/blog/2011/05/07/install-node-js-and-express-js-nginx-debian-lenny.html
 class NVMDownloader(val http:HttpClientWrapper) {
   private val LOG = log4j(NVMDownloader::class.java)
@@ -95,7 +95,7 @@ class NVMRunner(val downloader : NVMDownloader,
     val nvmHome = runningBuild.agentConfiguration.getCacheDirectory("jonnyzzz.nvm")
     val version = context.runnerParameters[bean.NVMVersion]
     val fromSource = if(!context.runnerParameters[bean.NVMSource].isEmptyOrSpaces()) "-s " else ""
-    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_Creatonix
+    val url = context.runnerParameters[bean.NVMURL] ?: bean.NVM_ArchiveUrl
     val isWindows = runningBuild.agentConfiguration.systemInfo.isWindows
     val installCmd = "nvm install $fromSource $version"
     val useCmd = "nvm use $version"
@@ -103,7 +103,7 @@ class NVMRunner(val downloader : NVMDownloader,
     return context.logging {
       facade.compositeBuildProcess(runningBuild) {
         execute("Download", "Fetching NVM") {
-          message("Downloading creatonix/nvm...")
+          message("Downloading nvm-sh/nvm...")
           message("from $url")
           downloader.downloadNVM(nvmHome, url)
           message("NVM downloaded into $nvmHome")

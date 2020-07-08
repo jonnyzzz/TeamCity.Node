@@ -6,7 +6,7 @@ This is a plugin for TeamCity that provides following build runners
 - [NPM](https://npmjs.org/)
 - [Phantom.JS](http://phantomjs.org) 
 - [Grunt](http://gruntjs.com)
-- [NVM](https://github.com/creationix/nvm)
+- [NVM](https://github.com/nvm-sh/nvm)
 - [Gulp](http://gulpjs.com/)
 - [Bower](https://bower.io/)
 - [Yarn](https://yarnpkg.com/en/)

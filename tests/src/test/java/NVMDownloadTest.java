@@ -39,12 +39,12 @@ public class NVMDownloadTest extends BaseTestCase {
   
   @Test
   public void test_default() throws IOException {
-    doSuccessfulTest(new NVMBean().getNVM_Creatonix());
+    doSuccessfulTest(new NVMBean().getNVM_ArchiveUrl());
   }
 
   @Test
   public void test_master() throws IOException {
-    doSuccessfulTest("https://github.com/creationix/nvm/archive/master.zip");
+    doSuccessfulTest("https://github.com/nvm-sh/nvm/archive/master.zip");
   }
 
   private void doSuccessfulTest(String url) throws IOException {

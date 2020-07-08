@@ -38,7 +38,7 @@
     <props:textProperty name="${bean.NVMURL}" className="longField"/>
     <span class="smallNote">
       Specify custom URL for NVM download as <em>.zip</em> archive.
-      Leave blank to use default <a href="https://github.com/creationix/nvm" target="_blank">creatonix/nvm</a>
+      Leave blank to use default <a href="https://github.com/nvm-sh/nvm" target="_blank">nvm-sh/nvm</a>
     </span>
   </td>
 </tr>
