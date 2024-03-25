@@ -29,7 +29,7 @@ dependencies {
     compile("com.google.code.gson:gson:2.2.4")
     compile("org.apache.httpcomponents:httpclient:4.3")
 
-    /// BuildProcessFacade
+    /// CallRunnerService, RunnerParametersUpdater
     compileOnly("org.jetbrains.teamcity.internal:agent:${rootProject.ext["teamcityVersion"]}")
 }
 
