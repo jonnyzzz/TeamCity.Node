@@ -19,6 +19,7 @@
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.phantom.PhantomJsRunnerService"/>
 
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ShellBasedExecutionProxy"/>
+  <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.CommandRunnerSubProcess"/>
   <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ProxyAwareExecutorImpl">
     <constructor-arg>
       <bean class="com.jonnyzzz.teamcity.plugins.node.agent.processes.ProcessExecutorImpl"/>

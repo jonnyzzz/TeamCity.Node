@@ -7,7 +7,7 @@ plugins {
 }
 
 ext {
-  set("teamcityVersion", System.getenv("DEP_TEAMCITY_VERSION") ?: "2017.2")
+  set("teamcityVersion", System.getenv("DEP_TEAMCITY_VERSION") ?: "2023.11")
 }
 
 group = "org.jonnyzzz.teamcity.node"

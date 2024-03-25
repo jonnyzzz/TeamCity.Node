@@ -21,9 +21,7 @@ import jetbrains.buildServer.agent.BuildFinishedStatus
 import jetbrains.buildServer.agent.AgentRunningBuild
 import com.jonnyzzz.teamcity.plugins.node.agent.block
 import jetbrains.buildServer.agent.BuildProgressLogger
-import jetbrains.buildServer.agent.BuildProcessFacade
 import com.jonnyzzz.teamcity.plugins.node.common.log4j
-import jetbrains.buildServer.runner.SimpleRunnerConstants
 
 /**
  * @author Eugene Petrenko (eugene.petrenko@gmail.com)
@@ -35,11 +33,11 @@ interface CompositeProcessFactory {
                             builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess
 }
 
-class CompositeProcessFactoryImpl(val facade: BuildProcessFacade) : CompositeProcessFactory {
+class CompositeProcessFactoryImpl(val callRunnerService: CommandRunnerSubProcess) : CompositeProcessFactory {
   override fun compositeBuildProcess(build: AgentRunningBuild,
                                      builder: CompositeProcessBuilder<Unit>.() -> Unit): BuildProcess {
     val proc = CompositeBuildProcessImpl()
-    object:CompositeProcessBuilderImpl<Unit>(build, facade) {
+    object:CompositeProcessBuilderImpl<Unit>(build, callRunnerService) {
       override fun push(p: BuildProcess) {
         proc.pushBuildProcess(p)
       }
@@ -55,7 +53,7 @@ interface CompositeProcessBuilder<R> {
 }
 
 abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
-                                              val facade: BuildProcessFacade) : CompositeProcessBuilder<R> {
+                                              private val callRunnerService: CommandRunnerSubProcess) : CompositeProcessBuilder<R> {
   private val logger: BuildProgressLogger
     get() = build.buildLogger
 
@@ -68,11 +66,8 @@ abstract class CompositeProcessBuilderImpl<R>(val build: AgentRunningBuild,
             ) + script()
 
             log4j(javaClass).info("Executing shell command:\n$commandLine")
-            val ctx = facade.createBuildRunnerContext(build, SimpleRunnerConstants.TYPE, workingDir)
-            ctx.addRunnerParameter(SimpleRunnerConstants.USE_CUSTOM_SCRIPT, "true");
-            ctx.addRunnerParameter(SimpleRunnerConstants.SCRIPT_CONTENT, commandLine);
 
-            facade.createExecutable(build, ctx)
+            callRunnerService.createBuildProcess(build, commandLine, workingDir)
           }
 
   override fun execute(blockName: String, blockDescription: String, p: () -> Unit): R =
